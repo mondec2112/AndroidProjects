@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 
 import com.example.monsanity.edusoft.Adapter.MenuListAdapter;
 import com.example.monsanity.edusoft.R;
-import com.example.monsanity.edusoft.Utils.MenuListItem;
+import com.example.monsanity.edusoft.Container.MenuListItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by monsanity on 7/21/18.

@@ -17,6 +17,7 @@ import com.example.monsanity.edusoft.Container.Courses;
 import com.example.monsanity.edusoft.Container.Exam;
 import com.example.monsanity.edusoft.Container.Fee;
 import com.example.monsanity.edusoft.Container.GradePercent;
+import com.example.monsanity.edusoft.Container.HomeListItem;
 import com.example.monsanity.edusoft.Container.Lecturer;
 import com.example.monsanity.edusoft.Container.Semester;
 import com.example.monsanity.edusoft.Container.Student;
@@ -31,7 +32,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.time.Year;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,6 +122,61 @@ public class MainActivity extends AppCompatActivity {
 //        );
 
 //        mData.child("sub_done").child("k14").child("ITITIU14081").push().child("subject_id").setValue("IT097IU");
+
+//        mData.child("announcements").push().setValue(
+//                new HomeListItem("academic",
+//                        getCurrentDate(),
+//                        "THÔNG BÁO HỌC BÙ MÔN WORLD ECONOMIC GEOGRAPHY (GROUP 2)",
+//                        "Môn học: World Economic Geography - nhóm 02\n" +
+//                                "Mã lớp: BABA16IU21\n" +
+//                                "Thời gian: 18/04/2018 (thứ 4 - tiết 123)\n" +
+//                                "Phòng: A1.208"));
+//        mData.child("announcements").push().setValue(
+//                new HomeListItem("linking",
+//                        getCurrentDate(),
+//                        "THÔNG BÁO GẶP GỠ ĐẠI DIỆN TRƯỜNG WEST OF ENGLAND",
+//                        "Phòng Đào tạo Đại học thông báo về kế hoạch tổ chức họp với đại diện trường Đại học West of England:\n" +
+//                                "\n" +
+//                                "1. Buổi giới thiệu chương trình trại hè tại Anh quốc 2018:\n" +
+//                                "\n" +
+//                                "- Thời gian: 8:30 - 10:00, thứ 7, ngày 31/3/2018\n" +
+//                                "\n" +
+//                                "- Địa điểm: Phòng họp B.802, cơ sở Pasteur\n" +
+//                                "\n" +
+//                                "- Thành phần:\n" +
+//                                "\n" +
+//                                "   + TS Hoàng Lan Hoa - Trưởng Văn phòng Đại diện UWE tại Việt Nam\n" +
+//                                "\n" +
+//                                "   + Các sinh viên quan tâm."));
+//        mData.child("announcements").push().setValue(
+//                new HomeListItem("examination",
+//                        getCurrentDate(),
+//                        "THÔNG BÁO THỜI GIAN NHẬN BẰNG TỐT NGHIỆP HỌC KỲ 2 NĂM HỌC 2016 - 2017",
+//                        "Để tạo điều kiện thuận lợi và nhanh chóng trong quá trình phát bằng tốt nghiệp cho sinh viên tốt nghiệp đợt 2 năm 2016-2017, Phòng Đào tạo Đại học thông báo lịch phát bằng như sau:\n" +
+//                                "\n" +
+//                                "1/ Thời gian và đối tượng: sinh viên các Khoa/ Bộ môn\n" +
+//                                "\n" +
+//                                "-          Từ ngày 25/12/2017 đến 29/12/2017: Khoa Công nghệ Sinh học,  Khoa Điện tử - Viễn thông, Bộ Môn Kỹ thuật Hệ thống công nghiệp,  Bộ Môn Kỹ thuật Y Sinh, Bộ Môn Kỹ Thuật Xây dựng\n" +
+//                                "\n" +
+//                                "-          Từ ngày 02/01/2018 đến 05/01/2018: Khoa Quản trị Kinh doanh, Khoa Công nghệ thông tin, Bộ môn Toán:\n" +
+//                                "\n" +
+//                                "-          Thời gian nhận bằng: sáng từ 8h30 đến 11h30; chiều: từ 13h00 đến 15h30."));
+//        mData.child("announcements").push().setValue(
+//                new HomeListItem("affairs",
+//                        getCurrentDate(),
+//                        "[CHUYỂN NGÀNH/CHUYỂN CHƯƠNG TRÌNH_172] THÔNG BÁO CHUYỂN NGÀNH/CHUYỂN CHƯƠNG TRÌNH HKII NĂM HỌC 2017-2018 CẬP NHẬT ĐẾN NGÀY 07/02/2018 ",
+//                        "Phòng Đào tạo Đại học thông báo danh sách chuyển ngành/ chuyển chương trình của sinh viên được duyệt và chuyển đổi vào HKII năm 2017 -2018. \n" +
+//                                "\n" +
+//                                "P.ĐTĐH sẽ tiến hành chuyển đổi MSSV của các bạn trong hệ thống trong vòng 1-2 ngày tới nên khi nào các bạn không thể đăng nhập EduWeb bằng MSSV cũ thì sẽ đăng nhập bằng MSSV mới.\n" +
+//                                "\n" +
+//                                "Lưu ý: Sinh viên chuyển từ chương trình trong nước sang chương trình liên kết có thể sẽ đóng thêm phần bù học phí của chương trình liên kết đã được chuyển."));
+    }
+
+    private String getCurrentDate(){
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        Date todayDate = new Date();
+        String thisDate = currentDate.format(todayDate);
+        return thisDate;
     }
 
     @Override

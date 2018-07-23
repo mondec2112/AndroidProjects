@@ -8,7 +8,8 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_list_menu">
+        android:id="@+id/rv_list_menu"
+        android:background="@color/color_d4d2d2">
     </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
