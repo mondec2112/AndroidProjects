@@ -1,19 +1,20 @@
 package com.example.monsanity.edusoft.Fragments;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.monsanity.edusoft.Adapter.HomeListAdapter;
-import com.example.monsanity.edusoft.Adapter.MenuListAdapter;
 import com.example.monsanity.edusoft.Container.HomeListItem;
-import com.example.monsanity.edusoft.Container.MenuListItem;
 import com.example.monsanity.edusoft.MainActivity;
 import com.example.monsanity.edusoft.R;
 import com.google.firebase.database.ChildEventListener;
@@ -36,6 +37,10 @@ public class HomeFragment extends Fragment {
     LinearLayoutManager layoutManager;
     MainActivity mainActivity;
     public DatabaseReference mData;
+    Dialog dialog;
+    View dialogView;
+    LayoutInflater inflater;
+    final Context context = getActivity();
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -46,6 +51,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        this.inflater = inflater;
 
         initView(view);
 
