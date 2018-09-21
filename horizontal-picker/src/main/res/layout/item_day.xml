@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="30dp"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:id="@+id/base">
+
+    <TextView
+        android:text="JUE"
+        android:id="@+id/tvWeekDay"
+        android:textAllCaps="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:textColor="@color/color_dayOfWeek"
+        android:fontFamily="@font/nanumsquarebold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:text="30"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:id="@+id/tvDay"
+        android:layout_gravity="center"
+        android:textColor="@color/color_dayOfMonth"
+        android:fontFamily="@font/nanumsquareextrabold"/>
+</LinearLayout>

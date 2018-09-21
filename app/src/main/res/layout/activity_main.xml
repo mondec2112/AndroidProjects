@@ -4,8 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.monsanity.edusoft.MainActivity">
+    tools:context="com.example.monsanity.edusoft.main.MainActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_login"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -25,6 +30,7 @@
         android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="username or email... "
+        android:text="mondec2312@gmail.com"
         android:inputType="textPersonName" />
 
     <EditText
@@ -36,7 +42,8 @@
         android:layout_marginTop="28dp"
         android:ems="10"
         android:hint="password"
-        android:inputType="textPersonName" />
+        android:text="phuong2112"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnSignIn"

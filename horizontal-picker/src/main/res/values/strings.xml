@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Horizontal Picker</string>
+    <string name="today">Today</string>
+
+    <string name="calendar_week_title_sun">일</string>
+    <string name="calendar_week_title_mon">월</string>
+    <string name="calendar_week_title_tue">화</string>
+    <string name="calendar_week_title_wed">수</string>
+    <string name="calendar_week_title_thu">목</string>
+    <string name="calendar_week_title_fri">금</string>
+    <string name="calendar_week_title_sat">토</string>
+
+    <string name="calendar_month">월</string>
+    <string name="calendar_year">년</string>
+</resources>
