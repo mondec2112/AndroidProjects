@@ -84,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
 //        mData.child("subjects").push().setValue(new Subjects("CE407IU","Tall Buildings", "3"));
 //        mData.child("subjects").push().setValue(new Subjects("BM093IU","Tissue Engineering I", "4"));
 
-//        mData.child("courses").child("2017-2018").child("Fall").push().setValue(
+//        mData.child("courses").push().setValue(
 //                new Classes(
 //                        "IT079IU",
+//                        "2018-2019",
+//                        "fall",
 //                        "01",
 //                        "tuesday",
 //                        "A2.203",
@@ -96,8 +98,27 @@ public class MainActivity extends AppCompatActivity {
 //                        "ITIT20N11",
 //                        80,
 //                        75,
-//                        "23/01/2018",
-//                        "28/05/2018"
+//                        "04/09/2018",
+//                        "11/12/2018"
+//                )
+//        );
+//
+//        mData.child("courses").push().setValue(
+//                new Classes(
+//                        "IT097IU",
+//                        "2018-2019",
+//                        "fall",
+//                        "01",
+//                        "monday",
+//                        "A2.507",
+//                        4,
+//                        3,
+//                        "IT01",
+//                        "ITIT16N11",
+//                        50,
+//                        35,
+//                        "03/09/2018",
+//                        "10/12/2018"
 //                )
 //        );
 

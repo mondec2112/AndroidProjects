@@ -19,7 +19,7 @@ public class Classes {
     String end_day;
     String day_of_week;
 
-    public Classes(String subject_id, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day) {
+    public Classes(String subject_id, String year, String semester, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day) {
         this.subject_id = subject_id;
         this.group = group;
         this.day_of_week = day_of_week;

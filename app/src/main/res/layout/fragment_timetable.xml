@@ -11,22 +11,10 @@
         android:id="@+id/pb_timetable"
         android:layout_centerInParent="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
-        android:id="@+id/ln_datePicker">
-        <com.github.jhonnyx2012.horizontalpicker.HorizontalPicker
-            android:id="@+id/datePicker"
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
-    </LinearLayout>
-
     <com.github.tibolte.agendacalendarview.AgendaCalendarView
         android:id="@+id/agenda_calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ln_datePicker"
         agendaCalendar:agendaCurrentDayTextColor="@color/theme_primary"
         agendaCalendar:calendarColor="@color/theme_primary"
         agendaCalendar:calendarCurrentDayTextColor="@color/calendar_text_current_day"

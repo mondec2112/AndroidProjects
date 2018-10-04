@@ -19,6 +19,7 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.main.MainActivity;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
@@ -36,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -43,7 +46,7 @@ import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class TimetableFragment extends Fragment implements DatePickerListener, CalendarPickerController{
+public class TimetableFragment extends Fragment implements CalendarPickerController{
 
     WeekView mWeekView;
     AgendaCalendarView agendaCalendarView;
@@ -68,8 +71,6 @@ public class TimetableFragment extends Fragment implements DatePickerListener, C
 
         initData();
 
-        initPicker(view);
-
 //        initCalendar(view);
 
         return view;
@@ -88,27 +89,31 @@ public class TimetableFragment extends Fragment implements DatePickerListener, C
         minDate.set(Calendar.DAY_OF_MONTH, 1);
         maxDate.add(Calendar.YEAR, 1);
 
-        List<CalendarEvent> eventList = new ArrayList<>();
-        mockList(eventList);
-
-        agendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
+        agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), this);
     }
 
-    private void mockList(List<CalendarEvent> eventList) {
-        Calendar startTime1 = Calendar.getInstance();
-        Calendar endTime1 = Calendar.getInstance();
-        endTime1.add(Calendar.MONTH, 1);
-        BaseCalendarEvent event1 = new BaseCalendarEvent("Thibault travels in Iceland", "A wonderful journey!", "Iceland",
-                getContext().getColor(R.color.color_green), startTime1, endTime1, true);
-        eventList.add(event1);
+    private List<CalendarEvent> mockList(List<Classes> list) {
+        List<CalendarEvent> eventList = new ArrayList<>();
+
+        for(Classes mClass : list){
+            Calendar startTime1 = formatDate(mClass.getStart_day());
+            Calendar endTime1 = formatDate(mClass.getEnd_day());
+//            endTime1.add(Calendar.MONTH, 1);
+//            String subject = mClass.get
+            BaseCalendarEvent event1 = new BaseCalendarEvent("Thibault travels in Iceland \nTime: 8:00 a.m", "A wonderful journey!", "Iceland",
+                    getContext().getColor(R.color.color_green), startTime1, endTime1, true);
+            eventList.add(event1);
+        }
 
         Calendar startTime2 = Calendar.getInstance();
         startTime2.add(Calendar.DAY_OF_YEAR, 1);
         Calendar endTime2 = Calendar.getInstance();
         endTime2.add(Calendar.DAY_OF_YEAR, 3);
-        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík", "A beautiful small town", "Dalvík",
+        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík \nTime: 1:00 p.m", "A beautiful small town", "Dalvík",
                 getContext().getColor(R.color.color_yellow), startTime2, endTime2, true);
         eventList.add(event2);
+
+        return eventList;
 
 //        // Example on how to provide your own layout
 //        Calendar startTime3 = Calendar.getInstance();
@@ -120,6 +125,17 @@ public class TimetableFragment extends Fragment implements DatePickerListener, C
 //        DrawableCalendarEvent event3 = new DrawableCalendarEvent("Visit of Harpa", "", "Dalvík",
 //                ContextCompat.getColor(this, R.color.blue_dark), startTime3, endTime3, false, R.drawable.common_ic_googleplayservices);
 //        eventList.add(event3);
+    }
+
+    private Calendar formatDate(String dateStr){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(dateStr));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal;
     }
 
     private void initData() {
@@ -177,8 +193,6 @@ public class TimetableFragment extends Fragment implements DatePickerListener, C
 
     private void getCourses(){
         mData.child("courses")
-                .child("2017-2018")
-                .child("Fall")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -226,49 +240,35 @@ public class TimetableFragment extends Fragment implements DatePickerListener, C
         });
     }
 
-//    private void setMonthChanged(){
-//        mWeekView.setMonthChangeListener(this);
-//    }
+    private void getSubjectDetail(List<Classes> classList){
+        for(Classes classes : classList){
+            mData.child("subjects").addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Subjects subjects
+                }
 
-//    private void initCalendar(View view){
-//        // Get a reference for the week view in the layout.
-//        mWeekView = (WeekView) view.findViewById(R.id.weekView);
-//
-//// Set an action when any event is clicked.
-////        mWeekView.setOnEventClickListener(mEventClickListener);
-//
-//// The week view has infinite scrolling horizontally. We have to provide the events of a
-//// month every time the month changes on the week view.
-//
-//
-//// Set long press listener for events.
-////        mWeekView.setEventLongPressListener(mEventLongPressListener);
-//
-//    }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-    private void initPicker(View view){
-        HorizontalPicker picker = view.findViewById(R.id.datePicker);
-        picker.setListener(this)
-                .setDays(120)
-                .setOffset(120)
-                .setDateSelectedColor(getResources().getColor(R.color.colorPrimary))
-                .setDateSelectedTextColor(getResources().getColor(R.color.color_white))
-                .setMonthAndYearTextColor(getResources().getColor(R.color.color_black))
-                .setTodayButtonTextColor(Color.DKGRAY)
-                .setTodayDateTextColor(getResources().getColor(R.color.color_white))
-                .setTodayDateBackgroundColor(Color.GRAY)
-//                .setUnselectedDayTextColor(getResources().getColor(R.color.colorPrimaryDark))
-//                .setDayOfWeekTextColor(getResources().getColor(R.color.color_black))
-//                .setUnselectedDayTextColor(getResources().getColor(R.color.primaryTextColor))
-                .showTodayButton(false)
-                .init();
-        picker.setBackgroundColor(Color.LTGRAY);
-        picker.setDate(new DateTime());
-    }
+                }
 
-    @Override
-    public void onDateSelected(DateTime dateSelected) {
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            })
+        }
     }
 
     protected String getEventTitle(Calendar time) {
