@@ -80,38 +80,49 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         pbTimetable = view.findViewById(R.id.pb_timetable);
         agendaCalendarView = view.findViewById(R.id.agenda_calendar_view);
 
-        // minimum and maximum date of our calendar
-        // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
-        Calendar minDate = Calendar.getInstance();
-        Calendar maxDate = Calendar.getInstance();
-
-        minDate.add(Calendar.MONTH, -2);
-        minDate.set(Calendar.DAY_OF_MONTH, 1);
-        maxDate.add(Calendar.YEAR, 1);
-
-        agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), this);
     }
 
     private List<CalendarEvent> mockList(List<Classes> list) {
         List<CalendarEvent> eventList = new ArrayList<>();
 
         for(Classes mClass : list){
-            Calendar startTime1 = formatDate(mClass.getStart_day());
-            Calendar endTime1 = formatDate(mClass.getEnd_day());
-//            endTime1.add(Calendar.MONTH, 1);
-//            String subject = mClass.get
-            BaseCalendarEvent event1 = new BaseCalendarEvent("Thibault travels in Iceland \nTime: 8:00 a.m", "A wonderful journey!", "Iceland",
-                    getContext().getColor(R.color.color_green), startTime1, endTime1, true);
+            int startTime = 0;
+            int endTime = 0;
+            Calendar startTime1 = Calendar.getInstance();
+            if(mClass.getStart_slot() == 1){
+                startTime = 8;
+                startTime1.set(Calendar.HOUR_OF_DAY, startTime);
+                startTime1.set(Calendar.MINUTE, 0);
+            }else if(mClass.getStart_slot() == 4){
+                startTime = 13;
+                startTime1.set(Calendar.HOUR_OF_DAY, startTime);
+                startTime1.set(Calendar.MINUTE, 0);
+            }
+
+            Calendar endTime1 = Calendar.getInstance();
+            if(mClass.getSum_slot() == 3){
+                endTime = startTime*3;
+                endTime1.add(Calendar.HOUR_OF_DAY, endTime);
+                endTime1.add(Calendar.MINUTE, 0);
+            }
+
+            String subject = mClass.getSubject_id();
+
+            BaseCalendarEvent event1 = new BaseCalendarEvent(
+                    subject,
+                    "Time: " + startTime,
+                    mClass.getRoom(),
+                    getContext().getColor(R.color.color_green), startTime1, endTime1, false);
             eventList.add(event1);
         }
 
-        Calendar startTime2 = Calendar.getInstance();
-        startTime2.add(Calendar.DAY_OF_YEAR, 1);
-        Calendar endTime2 = Calendar.getInstance();
-        endTime2.add(Calendar.DAY_OF_YEAR, 3);
-        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík \nTime: 1:00 p.m", "A beautiful small town", "Dalvík",
-                getContext().getColor(R.color.color_yellow), startTime2, endTime2, true);
-        eventList.add(event2);
+//        Calendar startTime2 = Calendar.getInstance();
+//        startTime2.add(Calendar.DAY_OF_YEAR, 1);
+//        Calendar endTime2 = Calendar.getInstance();
+//        endTime2.add(Calendar.DAY_OF_YEAR, 3);
+//        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík \nTime: 1:00 p.m", "A beautiful small town", "Dalvík",
+//                getContext().getColor(R.color.color_yellow), startTime2, endTime2, true);
+//        eventList.add(event2);
 
         return eventList;
 
@@ -129,7 +140,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     private Calendar formatDate(String dateStr){
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         try {
             cal.setTime(sdf.parse(dateStr));
         } catch (ParseException e) {
@@ -231,6 +242,17 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                     Log.e("classList", classes.getClass_id());
                     Log.e("classList", classes.getDay_of_week());
                 }
+
+                // minimum and maximum date of our calendar
+                // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
+                Calendar minDate = Calendar.getInstance();
+                Calendar maxDate = Calendar.getInstance();
+
+                minDate.add(Calendar.MONTH, -2);
+                minDate.set(Calendar.DAY_OF_MONTH, 1);
+                maxDate.add(Calendar.YEAR, 1);
+
+                agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), TimetableFragment.this);
             }
 
             @Override
@@ -245,7 +267,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
             mData.child("subjects").addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Subjects subjects
+
                 }
 
                 @Override
@@ -267,7 +289,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
-            })
+            });
         }
     }
 
