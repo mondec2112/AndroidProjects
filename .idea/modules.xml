@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidProjects.iml" filepath="$PROJECT_DIR$/AndroidProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EduSoft.iml" filepath="$PROJECT_DIR$/EduSoft.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/calendar/calendar.iml" filepath="$PROJECT_DIR$/calendar/calendar.iml" />
       <module fileurl="file://$PROJECT_DIR$/horizontal-picker/horizontal-picker.iml" filepath="$PROJECT_DIR$/horizontal-picker/horizontal-picker.iml" />
     </modules>
   </component>

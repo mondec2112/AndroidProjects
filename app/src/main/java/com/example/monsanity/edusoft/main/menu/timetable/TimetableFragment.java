@@ -34,27 +34,39 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.riontech.calendar.CustomCalendar;
+import com.riontech.calendar.dao.EventData;
+import com.riontech.calendar.dao.dataAboutDate;
+import com.riontech.calendar.utils.CalendarUtils;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class TimetableFragment extends Fragment implements CalendarPickerController{
 
     WeekView mWeekView;
-    AgendaCalendarView agendaCalendarView;
+//    AgendaCalendarView agendaCalendarView;
     DatabaseReference mData;
     SharedPreferences mPref;
     ProgressBar pbTimetable;
     List<RegisteredSubject> subjectList;
     List<Classes> classesList;
+    CustomCalendar customCalendar;
+
 
     public static TimetableFragment newInstance() {
         TimetableFragment timetableFragment = new TimetableFragment();
@@ -71,78 +83,80 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
         initData();
 
-//        initCalendar(view);
-
         return view;
+    }
+
+    private void initCalendar() {
+        for (Classes list : classesList) {
+            DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
+            DateTime startDate = pattern.parseDateTime(list.getStart_day());
+            DateTime endDate = pattern.parseDateTime(list.getEnd_day());
+
+            int dayOfWeek = startDate.getDayOfWeek();
+
+            List<DateTime> fridays = new ArrayList<>();
+            boolean reachedAFriday = false;
+            while (startDate.isBefore(endDate)){
+                if ( startDate.getDayOfWeek() == dayOfWeek){
+                    fridays.add(startDate);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    customCalendar.addAnEvent(dateFormat.format(startDate.toDate()), classesList.size(), getEventDataList(classesList));
+                    reachedAFriday = true;
+                }
+                if ( reachedAFriday ){
+                    startDate = startDate.plusWeeks(1);
+                } else {
+                    startDate = startDate.plusDays(1);
+                }
+            }
+        }
+
     }
 
     private void initView(View view) {
         pbTimetable = view.findViewById(R.id.pb_timetable);
-        agendaCalendarView = view.findViewById(R.id.agenda_calendar_view);
-
+        customCalendar = view.findViewById(R.id.customCalendar);
     }
 
-    private List<CalendarEvent> mockList(List<Classes> list) {
-        List<CalendarEvent> eventList = new ArrayList<>();
+    public ArrayList<EventData> getEventDataList(List<Classes> list) {
+        ArrayList<EventData> eventDataList = new ArrayList();
 
-        for(Classes mClass : list){
-            int startTime = 0;
-            int endTime = 0;
-            Calendar startTime1 = Calendar.getInstance();
-            if(mClass.getStart_slot() == 1){
-                startTime = 8;
-                startTime1.set(Calendar.HOUR_OF_DAY, startTime);
-                startTime1.set(Calendar.MINUTE, 0);
-            }else if(mClass.getStart_slot() == 4){
-                startTime = 13;
-                startTime1.set(Calendar.HOUR_OF_DAY, startTime);
-                startTime1.set(Calendar.MINUTE, 0);
-            }
+        for (Classes classDetail : list) {
+            EventData dateData = new EventData();
+            ArrayList<dataAboutDate> dataAboutDates = new ArrayList();
 
-            Calendar endTime1 = Calendar.getInstance();
-            if(mClass.getSum_slot() == 3){
-                endTime = startTime*3;
-                endTime1.add(Calendar.HOUR_OF_DAY, endTime);
-                endTime1.add(Calendar.MINUTE, 0);
-            }
+            dateData.setSection(classDetail.getClass_id());
+            dataAboutDate dataAboutDate = new dataAboutDate();
 
-            String subject = mClass.getSubject_id();
+            dataAboutDate.setTitle(String.valueOf(getTimeHour(classDetail.getStart_slot())));
+            dataAboutDate.setSubject(classDetail.getRoom());
+            dataAboutDates.add(dataAboutDate);
 
-            BaseCalendarEvent event1 = new BaseCalendarEvent(
-                    subject,
-                    "Time: " + startTime,
-                    mClass.getRoom(),
-                    getContext().getColor(R.color.color_green), startTime1, endTime1, false);
-            eventList.add(event1);
+            dateData.setData(dataAboutDates);
+            eventDataList.add(dateData);
         }
 
-//        Calendar startTime2 = Calendar.getInstance();
-//        startTime2.add(Calendar.DAY_OF_YEAR, 1);
-//        Calendar endTime2 = Calendar.getInstance();
-//        endTime2.add(Calendar.DAY_OF_YEAR, 3);
-//        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík \nTime: 1:00 p.m", "A beautiful small town", "Dalvík",
-//                getContext().getColor(R.color.color_yellow), startTime2, endTime2, true);
-//        eventList.add(event2);
+        return eventDataList;
+    }
 
-        return eventList;
+    public ArrayList<String> getClassDate(List<Classes> list){
+        ArrayList<String> dateList = new ArrayList<>();
+        for (Classes classDetail : list) {
+            dateList.add(classDetail.getStart_day());
+        }
+        return dateList;
+    }
 
-//        // Example on how to provide your own layout
-//        Calendar startTime3 = Calendar.getInstance();
-//        Calendar endTime3 = Calendar.getInstance();
-//        startTime3.set(Calendar.HOUR_OF_DAY, 14);
-//        startTime3.set(Calendar.MINUTE, 0);
-//        endTime3.set(Calendar.HOUR_OF_DAY, 15);
-//        endTime3.set(Calendar.MINUTE, 0);
-//        DrawableCalendarEvent event3 = new DrawableCalendarEvent("Visit of Harpa", "", "Dalvík",
-//                ContextCompat.getColor(this, R.color.blue_dark), startTime3, endTime3, false, R.drawable.common_ic_googleplayservices);
-//        eventList.add(event3);
+    private float getTimeHour(int slot){
+        return 8 + --slot * 0.45f;
     }
 
     private Calendar formatDate(String dateStr){
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         try {
             cal.setTime(sdf.parse(dateStr));
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -252,7 +266,8 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                 minDate.set(Calendar.DAY_OF_MONTH, 1);
                 maxDate.add(Calendar.YEAR, 1);
 
-                agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), TimetableFragment.this);
+//                agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), TimetableFragment.this);
+                initCalendar();
             }
 
             @Override
@@ -291,10 +306,6 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                 }
             });
         }
-    }
-
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override
