@@ -1,5 +1,9 @@
 package com.riontech.calendar.dao;
 
+import org.joda.time.DateTime;
+
+import java.util.List;
+
 /**
  * Created by Dhaval Soneji on 13/5/16.
  */
@@ -8,6 +12,15 @@ public class dataAboutDate {
     private String subject;
     private String title;
     private String remarks;
+    private List<DateTime> dateList;
+
+    public List<DateTime> getDateList() {
+        return dateList;
+    }
+
+    public void setDateList(List<DateTime> dateList) {
+        this.dateList = dateList;
+    }
 
     public String getSubmissionDate() {
         return submissionDate;

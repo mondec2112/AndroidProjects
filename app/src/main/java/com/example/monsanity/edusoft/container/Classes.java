@@ -1,5 +1,7 @@
 package com.example.monsanity.edusoft.container;
 
+import java.util.ArrayList;
+
 /**
  * Created by monsanity on 4/25/18.
  */
@@ -18,8 +20,9 @@ public class Classes {
     String start_day;
     String end_day;
     String day_of_week;
+    ArrayList<String> class_date;
 
-    public Classes(String subject_id, String year, String semester, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day) {
+    public Classes(String subject_id, String year, String semester, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, ArrayList<String> class_date) {
         this.subject_id = subject_id;
         this.group = group;
         this.day_of_week = day_of_week;
@@ -32,6 +35,7 @@ public class Classes {
         this.registered_number = registered_number;
         this.start_day = start_day;
         this.end_day = end_day;
+        this.class_date = class_date;
     }
 
     public Classes() {
@@ -132,5 +136,13 @@ public class Classes {
 
     public void setEnd_day(String end_day) {
         this.end_day = end_day;
+    }
+
+    public ArrayList<String> getClass_date() {
+        return class_date;
+    }
+
+    public void setClass_date(ArrayList<String> class_date) {
+        this.class_date = class_date;
     }
 }

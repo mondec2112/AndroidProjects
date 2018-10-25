@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -56,7 +57,7 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class TimetableFragment extends Fragment implements CalendarPickerController{
+public class TimetableFragment extends Fragment implements CalendarPickerController, MonthLoader.MonthChangeListener {
 
     WeekView mWeekView;
 //    AgendaCalendarView agendaCalendarView;
@@ -66,6 +67,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     List<RegisteredSubject> subjectList;
     List<Classes> classesList;
     CustomCalendar customCalendar;
+    List<DateTime> tempList;
 
 
     public static TimetableFragment newInstance() {
@@ -81,33 +83,44 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
         initView(view);
 
-        initData();
-
         return view;
     }
 
     private void initCalendar() {
-        for (Classes list : classesList) {
-            DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
-            DateTime startDate = pattern.parseDateTime(list.getStart_day());
-            DateTime endDate = pattern.parseDateTime(list.getEnd_day());
+        ArrayList<String> studyDates = getStudyDates();
+        String[] arr = {"2018-10-24", "2018-10-25", "2018-10-27", "2018-10-28", "2018-10-30"};
+        for (int i = 0; i < 5; i++) {
+            int eventCount = 1;
+//            customCalendar.addAnEvent(arr[i], eventCount, getEventDataList());
+        }
 
-            int dayOfWeek = startDate.getDayOfWeek();
+        for(String date : studyDates){
+            int eventCount = 0;
+            ArrayList<EventData> eventDataList = new ArrayList();
+            EventData dateData = new EventData();
+            ArrayList<dataAboutDate> dataAboutDates = new ArrayList();
+            for(Classes classDetail : classesList){
+                for(String classDate : classDetail.getClass_date()){
+                    if(classDate.equals(date)){
+                        dateData.setSection(classDetail.getClass_id());
+                        dataAboutDate dataAboutDate = new dataAboutDate();
 
-            List<DateTime> fridays = new ArrayList<>();
-            boolean reachedAFriday = false;
-            while (startDate.isBefore(endDate)){
-                if ( startDate.getDayOfWeek() == dayOfWeek){
-                    fridays.add(startDate);
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    customCalendar.addAnEvent(dateFormat.format(startDate.toDate()), classesList.size(), getEventDataList(classesList));
-                    reachedAFriday = true;
+                        dataAboutDate.setTitle(String.valueOf(getTimeHour(classDetail.getStart_slot())));
+                        dataAboutDate.setSubject(classDetail.getRoom());
+                        dataAboutDates.add(dataAboutDate);
+
+                        dateData.setData(dataAboutDates);
+                        eventDataList.add(dateData);
+                        eventCount++;
+                        break;
+                    }
                 }
-                if ( reachedAFriday ){
-                    startDate = startDate.plusWeeks(1);
-                } else {
-                    startDate = startDate.plusDays(1);
-                }
+//                if(classDetail.getClass_date().contains(date)){
+//
+//                }
+            }
+            if(eventDataList.size() != 0){
+                customCalendar.addAnEvent(date, eventCount, eventDataList);
             }
         }
 
@@ -115,11 +128,53 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     private void initView(View view) {
         pbTimetable = view.findViewById(R.id.pb_timetable);
-        customCalendar = view.findViewById(R.id.customCalendar);
+        subjectList = new ArrayList<>();
+        classesList = new ArrayList<>();
+//        customCalendar = view.findViewById(R.id.customCalendar);
+        mWeekView = view.findViewById(R.id.weekView);
+        // Set an action when any event is clicked.
+//        mWeekView.setOnEventClickListener(mEventClickListener);
+
+// The week view has infinite scrolling horizontally. We have to provide the events of a
+// month every time the month changes on the week view.
+        mWeekView.setMonthChangeListener(this);
+
+// Set long press listener for events.
+//        mWeekView.setEventLongPressListener(mEventLongPressListener);
+    }
+
+    private ArrayList<String> getStudyDates(){
+        ArrayList<String> studyDates = new ArrayList<>();
+        for(Classes classDetail : classesList){
+            DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
+            DateTime startDate = pattern.parseDateTime(classDetail.getStart_day());
+            DateTime endDate = pattern.parseDateTime(classDetail.getEnd_day());
+
+            int dayOfWeek = startDate.getDayOfWeek();
+
+            boolean chosenDayReached = false;
+            while (startDate.isBefore(endDate)){
+                if ( startDate.getDayOfWeek() == dayOfWeek){
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String strDate = dateFormat.format(startDate.toDate());
+                    if(!studyDates.contains(strDate)){
+                        studyDates.add(strDate);
+                    }
+                    chosenDayReached = true;
+                }
+                if ( chosenDayReached ){
+                    startDate = startDate.plusWeeks(1);
+                } else {
+                    startDate = startDate.plusDays(1);
+                }
+            }
+        }
+        return studyDates;
     }
 
     public ArrayList<EventData> getEventDataList(List<Classes> list) {
         ArrayList<EventData> eventDataList = new ArrayList();
+        tempList = new ArrayList<>();
 
         for (Classes classDetail : list) {
             EventData dateData = new EventData();
@@ -134,6 +189,12 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
             dateData.setData(dataAboutDates);
             eventDataList.add(dateData);
+
+//            for (DateTime eventDate : chosenDayOfWeek){
+//                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                customCalendar.addAnEvent(dateFormat.format(eventDate.toDate()), tempList.size(), eventDataList);
+//            }
+
         }
 
         return eventDataList;
@@ -164,8 +225,6 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     }
 
     private void initData() {
-        subjectList = new ArrayList<>();
-        classesList = new ArrayList<>();
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
         String student_id = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
@@ -257,17 +316,8 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                     Log.e("classList", classes.getDay_of_week());
                 }
 
-                // minimum and maximum date of our calendar
-                // 2 month behind, one year ahead, example: March 2015 <-> May 2015 <-> May 2016
-                Calendar minDate = Calendar.getInstance();
-                Calendar maxDate = Calendar.getInstance();
-
-                minDate.add(Calendar.MONTH, -2);
-                minDate.set(Calendar.DAY_OF_MONTH, 1);
-                maxDate.add(Calendar.YEAR, 1);
-
-//                agendaCalendarView.init(mockList(classesList), minDate, maxDate, Locale.getDefault(), TimetableFragment.this);
-                initCalendar();
+//                initCalendar();
+                mWeekView.notifyDatasetChanged();
             }
 
             @Override
@@ -321,5 +371,47 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     @Override
     public void onScrollToDate(Calendar calendar) {
 
+    }
+
+    @Override
+    public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+        if(classesList.size() == 0){
+            initData();
+            return new ArrayList<WeekViewEvent>();
+        }
+
+        Toast.makeText(getContext(), "Data loaded", Toast.LENGTH_SHORT).show();
+
+        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 3);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.MONTH, newMonth - 1);
+        startTime.set(Calendar.YEAR, newYear);
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add(Calendar.HOUR, 2);
+        endTime.set(Calendar.MONTH, newMonth - 1);
+        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        event.setColor(getResources().getColor(R.color.color_green));
+        events.add(event);
+
+        Calendar startTime1 = Calendar.getInstance();
+        startTime1.set(Calendar.HOUR_OF_DAY, 4);
+        startTime1.set(Calendar.MINUTE, 0);
+        startTime1.set(Calendar.MONTH, newMonth - 1);
+        startTime1.set(Calendar.YEAR, newYear);
+        Calendar endTime1 = (Calendar) startTime1.clone();
+        endTime1.add(Calendar.HOUR, 1);
+        endTime1.set(Calendar.MONTH, newMonth - 1);
+        WeekViewEvent event1 = new WeekViewEvent(1, getEventTitle(startTime1), startTime1, endTime1);
+        event.setColor(getResources().getColor(R.color.color_yellow));
+        events.add(event1);
+
+        return events;
+    }
+
+    protected String getEventTitle(Calendar time) {
+        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 }

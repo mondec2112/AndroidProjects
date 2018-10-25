@@ -87,7 +87,7 @@ public class CalendarGridviewAdapter extends BaseAdapter {
             mPreviousView.findViewById(R.id.llCalendarItem);
             mPreviousView.setBackgroundResource(R.drawable.list_item_background);
 
-            TextView txt = (TextView) mPreviousView.findViewById(R.id.date);
+            TextView txt = (TextView) mPreviousView.findViewById(R.id.dateList);
             txt.setTextColor(Color.BLACK);
 
             ImageView img1 = (ImageView) mPreviousView.findViewById(R.id.date_icon);
@@ -101,7 +101,7 @@ public class CalendarGridviewAdapter extends BaseAdapter {
         mPreviousView = view;
         view.setBackgroundResource(R.drawable.circle_shape_selected);
 
-        TextView txt = (TextView) view.findViewById(R.id.date);
+        TextView txt = (TextView) view.findViewById(R.id.dateList);
         txt.setTextColor(Color.WHITE);
 
         ImageView img1 = (ImageView) view.findViewById(R.id.date_icon);
@@ -132,7 +132,7 @@ public class CalendarGridviewAdapter extends BaseAdapter {
          */
         public CalendarGridViewHolder(View v) {
             setLayoutParam(v);
-            dayView = (TextView) v.findViewById(R.id.date);
+            dayView = (TextView) v.findViewById(R.id.dateList);
             imgDecorator1 = (ImageView) v.findViewById(R.id.date_icon);
             imgDecorator2 = (ImageView) v.findViewById(R.id.date_icon2);
             imgDecorator3 = (ImageView) v.findViewById(R.id.date_icon3);
@@ -176,7 +176,7 @@ public class CalendarGridviewAdapter extends BaseAdapter {
             } else {
                 v.setBackgroundResource(R.drawable.list_item_background);
                 if (content.getDate().equals(Singleton.getInstance().getTodayDate())) {
-                    TextView txtTodayDate = (TextView) v.findViewById(R.id.date);
+                    TextView txtTodayDate = (TextView) v.findViewById(R.id.dateList);
                     txtTodayDate.setTextColor(ContextCompat.getColor(v.getContext(), R.color.colorPrimary));
                 }
             }

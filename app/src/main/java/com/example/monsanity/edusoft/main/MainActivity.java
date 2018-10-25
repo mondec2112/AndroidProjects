@@ -27,7 +27,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 //                        "Le Thanh Son",
 //                        4));
 //        mData.child("schedule").child("2017-2018").child("Fall").child("ITITIU14081").push().child("reg_sub").setValue("IT013IU");
-//        mData.child("schedule").child("2017-2018").child("Fall").child("ITITIU14081").push().child("reg_sub").setValue("IT079IU ");
+//        mData.child("schedule").child("2017-2018").child("Fall").child("ITITIU14081").push().child("reg_sub").setValue("IT033IU ");
 
 //        mData.child("subjects").child("CSE").child("None").push().setValue(new Subjects(
 //                "IT013IU",
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 //                "IT002IU",
 //                "2"
 //                ));
-//        mData.child("subjects").push().setValue(new Subjects("IT013IU","Algorithms & Data Structures", "4"));
+//        mData.child("subjects").push().setValue(new Subjects("IT033IU","Operating System", "4"));
 //        mData.child("subjects").push().setValue(new Subjects("CH013IU","Analytical chemistry", "4"));
 //        mData.child("subjects").push().setValue(new Subjects("CE406IU","Bridge Engineering", "3"));
 //        mData.child("subjects").push().setValue(new Subjects("BTFT408IU","Food product development and marketing", "3"));
@@ -86,23 +92,24 @@ public class MainActivity extends AppCompatActivity {
 
 //        mData.child("courses").push().setValue(
 //                new Classes(
-//                        "IT079IU",
+//                        "IT033IU",
 //                        "2018-2019",
 //                        "fall",
 //                        "01",
 //                        "tuesday",
-//                        "A2.203",
-//                        1,
+//                        "A2.401",
+//                        4,
 //                        3,
-//                        "IT02",
-//                        "ITIT20N11",
+//                        "IT03",
+//                        "ITIT13N11",
 //                        80,
 //                        75,
-//                        "04/09/2018",
-//                        "11/12/2018"
+//                        "2018-09-04",
+//                        "2018-12-11",
+//                        getStudyDates("2018-09-04", "2018-12-11")
 //                )
 //        );
-//
+////
 //        mData.child("courses").push().setValue(
 //                new Classes(
 //                        "IT097IU",
@@ -117,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
 //                        "ITIT16N11",
 //                        50,
 //                        35,
-//                        "03/09/2018",
-//                        "10/12/2018"
+//                        "2018-09-03",
+//                        "2018-12-10",
+//                        getStudyDates("2018-09-03", "2018-12-10")
 //                )
 //        );
 
@@ -189,6 +197,33 @@ public class MainActivity extends AppCompatActivity {
         Date todayDate = new Date();
         String thisDate = currentDate.format(todayDate);
         return thisDate;
+    }
+
+    private ArrayList<String> getStudyDates(String start, String end){
+        ArrayList<String> studyDates = new ArrayList<>();
+        DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime startDate = pattern.parseDateTime(start);
+        DateTime endDate = pattern.parseDateTime(end);
+
+        int dayOfWeek = startDate.getDayOfWeek();
+
+        boolean chosenDayReached = false;
+        while (startDate.isBefore(endDate)){
+            if ( startDate.getDayOfWeek() == dayOfWeek){
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = dateFormat.format(startDate.toDate());
+                if(!studyDates.contains(strDate)){
+                    studyDates.add(strDate);
+                }
+                chosenDayReached = true;
+            }
+            if ( chosenDayReached ){
+                startDate = startDate.plusWeeks(1);
+            } else {
+                startDate = startDate.plusDays(1);
+            }
+        }
+        return studyDates;
     }
 
     @Override
