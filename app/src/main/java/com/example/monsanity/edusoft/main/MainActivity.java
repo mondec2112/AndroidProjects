@@ -56,6 +56,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setControls();
+//        mData.child("lecturer")
+//                .child("CSE")
+//                .push().setValue(
+//                        new Lecturer(
+//                                "IT02",
+//                                "Nguyen Van Sinh",
+//                                "1/2/1970",
+//                                "2008",
+//                                "nvsinh@hcmiu.edu.vn",
+//                                "CSE"
+//                        )
+//        );
+//        mData.child("lecturer")
+//                .child("CSE")
+//                .push().setValue(
+//                new Lecturer(
+//                        "IT03",
+//                        "Ha Viet Uyen Sinh",
+//                        "11/3/1972",
+//                        "2009",
+//                        "hvusinh@hcmiu.edu.vn",
+//                        "CSE"
+//                )
+//        );
 //        mData.child("students").push().setValue(
 //                new Student("Nguyen Nhat Phuong",
 //                        "ITITIU14081",
