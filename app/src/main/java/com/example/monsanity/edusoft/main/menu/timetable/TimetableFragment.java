@@ -1,15 +1,19 @@
 package com.example.monsanity.edusoft.main.menu.timetable;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -86,7 +90,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 //        customCalendar = view.findViewById(R.id.customCalendar);
         mWeekView = view.findViewById(R.id.weekView);
         // Set an action when any event is clicked.
-//        mWeekView.setOnEventClickListener(mEventClickListener);
+        mWeekView.setOnEventClickListener(this);
 
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
@@ -244,6 +248,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                 for(Classes classes : classList){
                     if(classes.getSubject_id().equals(subjects.getId())){
                         subjectsList.add(subjects);
+                        classes.setSubject_name(subjects.getName());
                     }
                 }
 
@@ -292,6 +297,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                 for(Classes classes : classList){
                     if(classes.getInstructor_id().equals(lecturer.getId())){
                         lecturerList.add(lecturer);
+                        classes.setLecturer_name(lecturer.getName());
                     }
                 }
             }
@@ -371,7 +377,13 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                     endTime.set(Calendar.HOUR_OF_DAY, end.getHour());
                     endTime.set(Calendar.MINUTE, end.getHour());
 //                endTime.set(Calendar.MONTH, newMonth - 1);
-                    WeekViewEvent event = new WeekViewEvent(count++, classData.getClass_id(), startTime, endTime);
+                    WeekViewEvent event = new WeekViewEvent(count++,
+                            classData.getClass_id() + "\n"
+                            + classData.getSubject_name() + "\n"
+                            + classData.getLecturer_name() + "\n"
+                            + classData.getSum_slot(),
+                            startTime,
+                            endTime);
                     event.setColor(getResources().getColor(R.color.color_green));
                     events.add(event);
                 }
@@ -384,6 +396,25 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_class_detail);
+        TextView tvClassName = dialog.findViewById(R.id.tv_dialog_class_name);
+        TextView tvClassID = dialog.findViewById(R.id.tv_dialog_class_id);
+        TextView tvClassLecturer = dialog.findViewById(R.id.tv_dialog_class_lecturer);
+        TextView tvClassSumSlot = dialog.findViewById(R.id.tv_dialog_class_sum_slot);
+        TextView tvClassStartTime = dialog.findViewById(R.id.tv_dialog_class_start);
+        TextView tvClassEndTime = dialog.findViewById(R.id.tv_dialog_class_end);
 
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
+        String[] eventData = event.getName().split("\n");
+        tvClassName.setText(eventData[1]);
+        tvClassID.setText("ID: " + eventData[0]);
+        tvClassLecturer.setText("Lecturer: " + eventData[2]);
+        tvClassSumSlot.setText("Sum slot: " + eventData[3]);
+        tvClassStartTime.setText("From: " + dateFormat.format(event.getStartTime().getTime()));
+        tvClassEndTime.setText("To: " + dateFormat.format(event.getEndTime().getTime()));
+
+        dialog.show();
     }
 }

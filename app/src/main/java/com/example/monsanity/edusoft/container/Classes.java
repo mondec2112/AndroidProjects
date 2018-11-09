@@ -21,6 +21,8 @@ public class Classes {
     String end_day;
     String day_of_week;
     ArrayList<String> class_date;
+    String subject_name;
+    String lecturer_name;
 
     public Classes(String subject_id, String year, String semester, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, ArrayList<String> class_date) {
         this.subject_id = subject_id;
@@ -144,5 +146,21 @@ public class Classes {
 
     public void setClass_date(ArrayList<String> class_date) {
         this.class_date = class_date;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
+    }
+
+    public String getLecturer_name() {
+        return lecturer_name;
+    }
+
+    public void setLecturer_name(String lecturer_name) {
+        this.lecturer_name = lecturer_name;
     }
 }
