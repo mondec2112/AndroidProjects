@@ -21,6 +21,7 @@ public class Classes {
     String end_day;
     String day_of_week;
     ArrayList<String> class_date;
+    ArrayList<String> student_list;
     String subject_name;
     String lecturer_name;
 
@@ -42,6 +43,14 @@ public class Classes {
 
     public Classes() {
 
+    }
+
+    public ArrayList<String> getStudent_list() {
+        return student_list;
+    }
+
+    public void setStudent_list(ArrayList<String> student_list) {
+        this.student_list = student_list;
     }
 
     public String getDay_of_week() {

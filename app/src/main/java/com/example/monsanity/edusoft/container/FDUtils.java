@@ -14,5 +14,5 @@ public class FDUtils {
     public static final String STUDENTS = "students";
     public static final String SUB_DONE = "sub_done";
     public static final String SUBJECTS = "subjects";
-
+    public static final String REQUIRED = "required";
 }

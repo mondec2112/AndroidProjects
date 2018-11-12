@@ -13,7 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.monsanity.edusoft.container.Classes;
+import com.example.monsanity.edusoft.container.Courses;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
+import com.example.monsanity.edusoft.container.RequiredSubjects;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.Subjects;
@@ -35,6 +38,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +61,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setControls();
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT033IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT079IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT013IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT001IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT002IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT003IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT004IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT005IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT006IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT007IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT008IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT009IU"));
 //        mData.child("lecturer")
 //                .child("CSE")
 //                .push().setValue(
@@ -114,29 +131,41 @@ public class MainActivity extends AppCompatActivity {
 //        mData.child("subjects").push().setValue(new Subjects("CE407IU","Tall Buildings", "3"));
 //        mData.child("subjects").push().setValue(new Subjects("BM093IU","Tissue Engineering I", "4"));
 
-//        mData.child("courses").push().setValue(
-//                new Classes(
-//                        "IT033IU",
-//                        "2018-2019",
-//                        "fall",
-//                        "01",
-//                        "tuesday",
-//                        "A2.401",
-//                        4,
-//                        3,
-//                        "IT03",
-//                        "ITIT13N11",
-//                        80,
-//                        75,
-//                        "2018-09-04",
-//                        "2018-12-11",
-//                        getStudyDates("2018-09-04", "2018-12-11")
-//                )
-//        );
+//        mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Classes classes = dataSnapshot.getValue(Classes.class);
+//                if(classes.getClass_id().equals("ITIT00N11")){
+//                    classes.getStudent_list().remove("2018-09-24");
+//                    String childKey = dataSnapshot.getKey();
+//                    mData.child(FDUtils.COURSES).child(childKey).child("student_list").setValue(classes.getStudent_list());
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 ////
 //        mData.child("courses").push().setValue(
 //                new Classes(
-//                        "IT097IU",
+//                        "IT111IU",
 //                        "2018-2019",
 //                        "fall",
 //                        "01",
@@ -145,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 //                        4,
 //                        3,
 //                        "IT01",
-//                        "ITIT16N11",
+//                        "ITIT00N11",
 //                        50,
 //                        35,
 //                        "2018-09-03",
