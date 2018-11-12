@@ -2,6 +2,7 @@ package com.example.monsanity.edusoft.main;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.FDUtils;
@@ -39,6 +41,7 @@ public class ProfileFragment extends Fragment {
     TextView tvProfileEmail;
     ImageView ivProfileAva;
     ProgressBar pbProfile;
+    TabLayout tabLayout;
 
     DatabaseReference mData;
     SharedPreferences mPref;
@@ -74,6 +77,30 @@ public class ProfileFragment extends Fragment {
         tvProfileEmail = view.findViewById(R.id.tv_profile_email);
         ivProfileAva = view.findViewById(R.id.iv_profile_ava);
         pbProfile = view.findViewById(R.id.pbProfile);
+        tabLayout = view.findViewById(R.id.tab_profile_subject_list);
+
+        tabLayout.addTab(tabLayout.newTab().setText("On Going"));
+        tabLayout.addTab(tabLayout.newTab().setText("Not Taken"));
+        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Toast.makeText(getContext(), "Tab " + tab.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
     private void initData() {
