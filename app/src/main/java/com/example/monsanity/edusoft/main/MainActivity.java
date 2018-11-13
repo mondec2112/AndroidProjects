@@ -77,31 +77,20 @@ public class MainActivity extends AppCompatActivity {
 //        FirebaseMessaging.getInstance().subscribeToTopic("all");
 
         setControls();
-        setAPIService();
-        Data data = new Data("Title FCM", "Message FCM");
-        Sender sender = new Sender("/topics/all", data);
-        apiService.sendAll(sender).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT033IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT079IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT013IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT001IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT002IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT003IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT004IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT005IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT006IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT007IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT008IU"));
+//        setAPIService();
+//        Data data = new Data("Title FCM", "Message FCM");
+//        Sender sender = new Sender("/topics/all", data);
+//        apiService.sendAll(sender).enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//
+//            }
+//        });
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT009IU"));
 //        mData.child("lecturer")
 //                .child("CSE")
@@ -160,16 +149,30 @@ public class MainActivity extends AppCompatActivity {
 //        mData.child("subjects").push().setValue(new Subjects("IT079IU","Principles of Database Management", "4"));
 //        mData.child("subjects").push().setValue(new Subjects("CE407IU","Tall Buildings", "3"));
 //        mData.child("subjects").push().setValue(new Subjects("BM093IU","Tissue Engineering I", "4"));
+//        mData.child("subjects").push().setValue(new Subjects("IT001IU","Introduction to Computing", "3"));
+//        mData.child("subjects").push().setValue(new Subjects("IT002IU","C/C++ Programming in Unix", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT003IU","Digital Logic Design", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT004IU","Object-Oriented Programming", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT005IU","Software Engineering", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT006IU","Web Application Development", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT007IU","Theoretical Models in Computing", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT008IU","Principles of Programming Languages", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("IT009IU","Software Project Management", "4", "CS", "CSE"));
 
+//        final ArrayList<String> studentList = new ArrayList<>();
+//        studentList.add("ITITIU14001");
+//
 //        mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 //                Classes classes = dataSnapshot.getValue(Classes.class);
-//                if(classes.getClass_id().equals("ITIT00N11")){
-//                    classes.getStudent_list().remove("2018-09-24");
-//                    String childKey = dataSnapshot.getKey();
-//                    mData.child(FDUtils.COURSES).child(childKey).child("student_list").setValue(classes.getStudent_list());
-//                }
+////                if(classes.getClass_id().equals("ITIT20N11")){
+////                    classes.getStudent_list().remove("2018-09-24");
+////                    String childKey = dataSnapshot.getKey();
+////                    mData.child(FDUtils.COURSES).child(childKey).child("student_list").setValue(classes.getStudent_list());
+////                }
+//                String childKey = dataSnapshot.getKey();
+//                mData.child(FDUtils.COURSES).child(childKey).child("student_list").setValue(studentList);
 //            }
 //
 //            @Override

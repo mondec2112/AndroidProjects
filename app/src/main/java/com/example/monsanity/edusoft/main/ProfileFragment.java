@@ -2,8 +2,12 @@ package com.example.monsanity.edusoft.main;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
+import com.example.monsanity.edusoft.adapter.SubjectListAdapter;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
+import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
+import com.example.monsanity.edusoft.container.Subjects;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -42,12 +51,18 @@ public class ProfileFragment extends Fragment {
     ImageView ivProfileAva;
     ProgressBar pbProfile;
     TabLayout tabLayout;
+    RecyclerView rvProfileSubjectList;
 
     DatabaseReference mData;
     SharedPreferences mPref;
 
     String studentID;
     Student studentInfo;
+    ArrayList<Subjects> allSubjectList;
+    ArrayList<RegisteredSubject> registeredSubjects;
+    ArrayList<Subjects> onGoingList;
+    ArrayList<Subjects> notTakenList;
+    SubjectListAdapter adapter;
 
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -77,6 +92,7 @@ public class ProfileFragment extends Fragment {
         tvProfileEmail = view.findViewById(R.id.tv_profile_email);
         ivProfileAva = view.findViewById(R.id.iv_profile_ava);
         pbProfile = view.findViewById(R.id.pbProfile);
+        rvProfileSubjectList = view.findViewById(R.id.rv_profile_subject_list);
         tabLayout = view.findViewById(R.id.tab_profile_subject_list);
 
         tabLayout.addTab(tabLayout.newTab().setText("On Going"));
@@ -87,7 +103,21 @@ public class ProfileFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Toast.makeText(getContext(), "Tab " + tab.getText().toString(), Toast.LENGTH_SHORT).show();
+                switch (tab.getPosition()){
+                    case 0:
+                        adapter.setItems(onGoingList);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        adapter.setItems(notTakenList);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 2:
+                        adapter.setItems(allSubjectList);
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
+                Toast.makeText(getContext(), adapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -193,11 +223,127 @@ public class ProfileFragment extends Fragment {
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pbProfile.setVisibility(View.INVISIBLE);
+                getSubjectList();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getSubjectList(){
+        allSubjectList = new ArrayList<>();
+        onGoingList = new ArrayList<>();
+        notTakenList = new ArrayList<>();
+        registeredSubjects = new ArrayList<>();
+        mData.child(FDUtils.SUBJECTS)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Subjects subject = dataSnapshot.getValue(Subjects.class);
+                        if(subject != null
+                                && subject.getFaculty().equals("CSE")
+                                && subject.getDepartment().equals("CS")){
+                            allSubjectList.add(subject);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getRegisterdSubjects();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getRegisterdSubjects(){
+        mData.child("schedule")
+                .child("2017-2018")
+                .child("Fall")
+                .child(studentID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
+                        if(!registeredSubjects.contains(registeredSubject))
+                            registeredSubjects.add(registeredSubject);
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(RegisteredSubject regSubject : registeredSubjects){
+                    for(Subjects subject : allSubjectList){
+                        if(regSubject.getSubject_id().equals(subject.getId())
+                                && !onGoingList.contains(subject)){
+                            onGoingList.add(subject);
+                        }
+                    }
+                }
+
+                for(Subjects subject : allSubjectList){
+                    if(!onGoingList.contains(subject))
+                        notTakenList.add(subject);
+                }
+
+                adapter = new SubjectListAdapter(onGoingList, getContext());
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                rvProfileSubjectList.setAdapter(adapter);
+                rvProfileSubjectList.setLayoutManager(layoutManager);
+                pbProfile.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

@@ -11,16 +11,34 @@ public class Subjects {
     String credit;
     String pre;
     String level;
+    String department;
+    String faculty;
 
     public Subjects() {
     }
 
-    public Subjects(String id, String name, String credit) {
+    public Subjects(String id, String name, String credit, String department, String faculty) {
         this.id = id;
         this.name = name;
         this.credit = credit;
-//        this.pre = pre;
-//        this.level = level;
+        this.department = department;
+        this.faculty = faculty;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
     }
 
     public String getId() {
