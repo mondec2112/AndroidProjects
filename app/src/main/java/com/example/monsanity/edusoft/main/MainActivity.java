@@ -20,6 +20,10 @@ import com.example.monsanity.edusoft.container.RequiredSubjects;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.service.retrofit.APIService;
+import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
+import com.example.monsanity.edusoft.service.retrofit.FCMUtils.Data;
+import com.example.monsanity.edusoft.service.retrofit.FCMUtils.Sender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -40,6 +45,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,13 +63,34 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pbLogin;
 
     FirebaseAuth.AuthStateListener authStateListener;
+    public static APIService apiService;
+
+    public static void setAPIService(){
+        apiService = ApiUtils.getRetrofitService();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
         setControls();
+        setAPIService();
+        Data data = new Data("Title FCM", "Message FCM");
+        Sender sender = new Sender("/topics/all", data);
+        apiService.sendAll(sender).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT033IU"));
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT079IU"));
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT013IU"));
