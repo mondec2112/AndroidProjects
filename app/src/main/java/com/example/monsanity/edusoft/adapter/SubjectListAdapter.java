@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.MenuListItem;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.main.menu.timetable.TimetableActivity;
@@ -40,6 +41,17 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mSubjectName.setText(items.get(position).getName());
+        switch (items.get(position).getType()){
+            case FDUtils.SUBJECT_NOT_TAKEN:
+                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_blue));
+                break;
+            case FDUtils.SUBJECT_TAKEN:
+                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_green));
+                break;
+            case FDUtils.SUBJECT_ON_GOING:
+                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_orange));
+                break;
+        }
         holder.mSubjectID.setText("ID: " + items.get(position).getId());
         holder.mSubjectCredit.setText("Credit: " + items.get(position).getCredit());
     }
@@ -53,7 +65,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         this.items = items;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mSubjectName;
         private TextView mSubjectID;
@@ -61,21 +73,16 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
         public ViewHolder(View itemView) {
             super(itemView);
-//            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
             mSubjectName = itemView.findViewById(R.id.tv_subject_name);
             mSubjectID = itemView.findViewById(R.id.tv_subject_id);
             mSubjectCredit = itemView.findViewById(R.id.tv_subject_credit);
         }
 
-//        @Override
-//        public void onClick(View v) {
-//            Toast.makeText(context, mTitle.getText(), Toast.LENGTH_SHORT).show();
-//            switch (getAdapterPosition()){
-//                case 1:
-//                    context.startActivity(new Intent(context, TimetableActivity.class));
-//                    break;
-//            }
-//        }
+        @Override
+        public void onClick(View v) {
+//            Toast.makeText(context, items.get(getAdapterPosition()).getType()+"", Toast.LENGTH_SHORT).show();
+        }
     }
 }

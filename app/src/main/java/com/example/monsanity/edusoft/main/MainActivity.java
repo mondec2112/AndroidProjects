@@ -11,19 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.example.monsanity.edusoft.container.Classes;
-import com.example.monsanity.edusoft.container.Courses;
-import com.example.monsanity.edusoft.container.FDUtils;
-import com.example.monsanity.edusoft.container.Lecturer;
-import com.example.monsanity.edusoft.container.RequiredSubjects;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
-import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
-import com.example.monsanity.edusoft.service.retrofit.FCMUtils.Data;
-import com.example.monsanity.edusoft.service.retrofit.FCMUtils.Sender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,7 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -91,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new RequiredSubjects("IT009IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT009IU"));
 //        mData.child("lecturer")
 //                .child("CSE")
 //                .push().setValue(
@@ -227,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 //                        )
 //        );
 
-//        mData.child("sub_done").child("k14").child("ITITIU14081").push().child("subject_id").setValue("IT097IU");
+//        mData.child("sub_done").child("ITITIU14081").push().child("subject_id").setValue("IT001IU");
 
 //        mData.child("announcements").push().setValue(
 //                new HomeListItem("academic",

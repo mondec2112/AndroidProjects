@@ -1,12 +1,12 @@
 package com.example.monsanity.edusoft.container;
 
-public class RequiredSubjects {
+public class TakenSubjects {
     String subject_id;
 
-    public RequiredSubjects() {
+    public TakenSubjects() {
     }
 
-    public RequiredSubjects(String subject_id) {
+    public TakenSubjects(String subject_id) {
         this.subject_id = subject_id;
     }
 

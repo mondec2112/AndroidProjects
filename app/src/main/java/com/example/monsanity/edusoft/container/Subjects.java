@@ -13,8 +13,20 @@ public class Subjects {
     String level;
     String department;
     String faculty;
+    int type;
 
     public Subjects() {
+    }
+
+    public Subjects(String id, String name, String credit, String pre, String level, String department, String faculty, int type) {
+        this.id = id;
+        this.name = name;
+        this.credit = credit;
+        this.pre = pre;
+        this.level = level;
+        this.department = department;
+        this.faculty = faculty;
+        this.type = type;
     }
 
     public Subjects(String id, String name, String credit, String department, String faculty) {
@@ -79,5 +91,13 @@ public class Subjects {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -15,4 +15,8 @@ public class FDUtils {
     public static final String SUB_DONE = "sub_done";
     public static final String SUBJECTS = "subjects";
     public static final String REQUIRED = "required";
+
+    public static final int SUBJECT_NOT_TAKEN = 0;
+    public static final int SUBJECT_ON_GOING = 1;
+    public static final int SUBJECT_TAKEN = 2;
 }

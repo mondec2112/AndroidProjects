@@ -23,6 +23,7 @@ import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.container.TakenSubjects;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,8 +62,13 @@ public class ProfileFragment extends Fragment {
     ArrayList<Subjects> allSubjectList;
     ArrayList<RegisteredSubject> registeredSubjects;
     ArrayList<Subjects> onGoingList;
-    ArrayList<Subjects> notTakenList;
+    ArrayList<Subjects> takenList;
+    ArrayList<String> takenSubjectsList;
     SubjectListAdapter adapter;
+
+    String strOnGoing = "On Going";
+    String strFinished = "Finished";
+    String strAll = "All";
 
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -95,9 +101,9 @@ public class ProfileFragment extends Fragment {
         rvProfileSubjectList = view.findViewById(R.id.rv_profile_subject_list);
         tabLayout = view.findViewById(R.id.tab_profile_subject_list);
 
-        tabLayout.addTab(tabLayout.newTab().setText("On Going"));
-        tabLayout.addTab(tabLayout.newTab().setText("Not Taken"));
-        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText(strOnGoing));
+        tabLayout.addTab(tabLayout.newTab().setText(strFinished));
+        tabLayout.addTab(tabLayout.newTab().setText(strAll));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -109,7 +115,7 @@ public class ProfileFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         break;
                     case 1:
-                        adapter.setItems(notTakenList);
+                        adapter.setItems(takenList);
                         adapter.notifyDataSetChanged();
                         break;
                     case 2:
@@ -117,7 +123,7 @@ public class ProfileFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         break;
                 }
-                Toast.makeText(getContext(), adapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), adapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -236,8 +242,9 @@ public class ProfileFragment extends Fragment {
     private void getSubjectList(){
         allSubjectList = new ArrayList<>();
         onGoingList = new ArrayList<>();
-        notTakenList = new ArrayList<>();
+        takenList = new ArrayList<>();
         registeredSubjects = new ArrayList<>();
+        takenSubjectsList = new ArrayList<>();
         mData.child(FDUtils.SUBJECTS)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
@@ -321,24 +328,88 @@ public class ProfileFragment extends Fragment {
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getTakenSubjects();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getTakenSubjects(){
+        mData.child(FDUtils.SUB_DONE)
+                .child(studentID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        TakenSubjects takenSubjects = dataSnapshot.getValue(TakenSubjects.class);
+                        if(takenSubjects != null){
+                            takenSubjectsList.add(takenSubjects.getSubject_id());
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(RegisteredSubject regSubject : registeredSubjects){
                     for(Subjects subject : allSubjectList){
                         if(regSubject.getSubject_id().equals(subject.getId())
                                 && !onGoingList.contains(subject)){
+                            subject.setType(FDUtils.SUBJECT_ON_GOING);
                             onGoingList.add(subject);
                         }
                     }
                 }
 
+//                for(Subjects subject : allSubjectList){
+//                    if(!onGoingList.contains(subject)){
+//                        subject.setType(FDUtils.SUBJECT_NOT_TAKEN);
+//                        takenList.add(subject);
+//                    }
+//                }
+
                 for(Subjects subject : allSubjectList){
-                    if(!onGoingList.contains(subject))
-                        notTakenList.add(subject);
+                    for(String takenSubjectID : takenSubjectsList){
+                        if(subject.getId().equals(takenSubjectID)
+                                && !takenList.contains(subject)){
+                            subject.setType(FDUtils.SUBJECT_TAKEN);
+                            takenList.add(subject);
+                        }
+                    }
                 }
 
                 adapter = new SubjectListAdapter(onGoingList, getContext());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 rvProfileSubjectList.setAdapter(adapter);
                 rvProfileSubjectList.setLayoutManager(layoutManager);
+
+                tabLayout.getTabAt(0).setText(strOnGoing + " (" + onGoingList.size() + ")");
+                tabLayout.getTabAt(1).setText(strFinished + " (" + takenList.size() + ")");
+                tabLayout.getTabAt(2).setText(strAll + " (" + allSubjectList.size() + ")");
+
                 pbProfile.setVisibility(View.INVISIBLE);
             }
 
