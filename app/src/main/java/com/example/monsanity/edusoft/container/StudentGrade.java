@@ -6,18 +6,19 @@ package com.example.monsanity.edusoft.container;
 
 public class StudentGrade {
     String student_id;
-    int prog_grade;
+    int progress_grade;
     int test_grade;
     int exam_grade;
     int final_grade;
     String rank;
+    String subject_name;
 
     public StudentGrade() {
     }
 
-    public StudentGrade(String student_id, int prog_grade, int test_grade, int exam_grade, int final_grade, String rank) {
+    public StudentGrade(String student_id, int progress_grade, int test_grade, int exam_grade, int final_grade, String rank) {
         this.student_id = student_id;
-        this.prog_grade = prog_grade;
+        this.progress_grade = progress_grade;
         this.test_grade = test_grade;
         this.exam_grade = exam_grade;
         this.final_grade = final_grade;
@@ -32,12 +33,12 @@ public class StudentGrade {
         this.student_id = student_id;
     }
 
-    public int getProg_grade() {
-        return prog_grade;
+    public int getProgress_grade() {
+        return progress_grade;
     }
 
-    public void setProg_grade(int prog_grade) {
-        this.prog_grade = prog_grade;
+    public void setProgress_grade(int progress_grade) {
+        this.progress_grade = progress_grade;
     }
 
     public int getTest_grade() {
@@ -70,5 +71,13 @@ public class StudentGrade {
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
     }
 }

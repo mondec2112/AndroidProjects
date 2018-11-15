@@ -11,8 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.monsanity.edusoft.container.ClassGrade;
+import com.example.monsanity.edusoft.container.FDUtils;
+import com.example.monsanity.edusoft.container.Fee;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
+import com.example.monsanity.edusoft.container.StudentGrade;
+import com.example.monsanity.edusoft.container.SumGrade;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -206,16 +212,56 @@ public class MainActivity extends AppCompatActivity {
 //                )
 //        );
 
-//        mData.child("fee").
-//                child("2017-2018").
-//                child("Fall").
-//                push().setValue(
-//                        new Fee(
-//                                "ITITIU14081",
-//                                19,
-//                                19*58
-//                        )
-//        );
+//        ArrayList<StudentGrade> studentGrades = new ArrayList<>();
+//        studentGrades.add(new StudentGrade(
+//                "ITITIU14036",
+//                -1,
+//                89,
+//                -1,
+//                -1,
+//                "N/A"));
+//        studentGrades.add(new StudentGrade(
+//                "ITITIU14081",
+//                -1,
+//                85,
+//                -1,
+//                -1,
+//                "N/A"));
+//        studentGrades.add(new StudentGrade(
+//                "ITITIU14020",
+//                -1,
+//                77,
+//                -1,
+//                -1,
+//                "N/A"));
+//        ClassGrade classGrade = new ClassGrade(30, 30, 40, "2018-2019", "fall", "ITIT20N11", "IT033IU", studentGrades);
+//        mData.child(FDUtils.GRADE).push().setValue(classGrade);
+
+//        ArrayList<SumGrade> sumGrades = new ArrayList<>();
+//        sumGrades.add(new SumGrade(
+//                "ITITIU14081",
+//                70.0f,
+//                2.8f,
+//                80,
+//                "B+"
+//        ));
+//        sumGrades.add(new SumGrade(
+//                "ITITIU14036",
+//                82.0f,
+//                3.28f,
+//                82,
+//                "A"
+//        ));
+//        sumGrades.add(new SumGrade(
+//                "ITITIU14020",
+//                68.0f,
+//                2.72f,
+//                81,
+//                "B"
+//        ));
+//        mData.child(FDUtils.SUM_GRADE).push().setValue(sumGrades.get(0));
+//        mData.child(FDUtils.SUM_GRADE).push().setValue(sumGrades.get(1));
+//        mData.child(FDUtils.SUM_GRADE).push().setValue(sumGrades.get(2));
 
 //        mData.child("sub_done").child("ITITIU14081").push().child("subject_id").setValue("IT001IU");
 
@@ -227,45 +273,7 @@ public class MainActivity extends AppCompatActivity {
 //                                "Mã lớp: BABA16IU21\n" +
 //                                "Thời gian: 18/04/2018 (thứ 4 - tiết 123)\n" +
 //                                "Phòng: A1.208"));
-//        mData.child("announcements").push().setValue(
-//                new HomeListItem("linking",
-//                        getCurrentDate(),
-//                        "THÔNG BÁO GẶP GỠ ĐẠI DIỆN TRƯỜNG WEST OF ENGLAND",
-//                        "Phòng Đào tạo Đại học thông báo về kế hoạch tổ chức họp với đại diện trường Đại học West of England:\n" +
-//                                "\n" +
-//                                "1. Buổi giới thiệu chương trình trại hè tại Anh quốc 2018:\n" +
-//                                "\n" +
-//                                "- Thời gian: 8:30 - 10:00, thứ 7, ngày 31/3/2018\n" +
-//                                "\n" +
-//                                "- Địa điểm: Phòng họp B.802, cơ sở Pasteur\n" +
-//                                "\n" +
-//                                "- Thành phần:\n" +
-//                                "\n" +
-//                                "   + TS Hoàng Lan Hoa - Trưởng Văn phòng Đại diện UWE tại Việt Nam\n" +
-//                                "\n" +
-//                                "   + Các sinh viên quan tâm."));
-//        mData.child("announcements").push().setValue(
-//                new HomeListItem("examination",
-//                        getCurrentDate(),
-//                        "THÔNG BÁO THỜI GIAN NHẬN BẰNG TỐT NGHIỆP HỌC KỲ 2 NĂM HỌC 2016 - 2017",
-//                        "Để tạo điều kiện thuận lợi và nhanh chóng trong quá trình phát bằng tốt nghiệp cho sinh viên tốt nghiệp đợt 2 năm 2016-2017, Phòng Đào tạo Đại học thông báo lịch phát bằng như sau:\n" +
-//                                "\n" +
-//                                "1/ Thời gian và đối tượng: sinh viên các Khoa/ Bộ môn\n" +
-//                                "\n" +
-//                                "-          Từ ngày 25/12/2017 đến 29/12/2017: Khoa Công nghệ Sinh học,  Khoa Điện tử - Viễn thông, Bộ Môn Kỹ thuật Hệ thống công nghiệp,  Bộ Môn Kỹ thuật Y Sinh, Bộ Môn Kỹ Thuật Xây dựng\n" +
-//                                "\n" +
-//                                "-          Từ ngày 02/01/2018 đến 05/01/2018: Khoa Quản trị Kinh doanh, Khoa Công nghệ thông tin, Bộ môn Toán:\n" +
-//                                "\n" +
-//                                "-          Thời gian nhận bằng: sáng từ 8h30 đến 11h30; chiều: từ 13h00 đến 15h30."));
-//        mData.child("announcements").push().setValue(
-//                new HomeListItem("affairs",
-//                        getCurrentDate(),
-//                        "[CHUYỂN NGÀNH/CHUYỂN CHƯƠNG TRÌNH_172] THÔNG BÁO CHUYỂN NGÀNH/CHUYỂN CHƯƠNG TRÌNH HKII NĂM HỌC 2017-2018 CẬP NHẬT ĐẾN NGÀY 07/02/2018 ",
-//                        "Phòng Đào tạo Đại học thông báo danh sách chuyển ngành/ chuyển chương trình của sinh viên được duyệt và chuyển đổi vào HKII năm 2017 -2018. \n" +
-//                                "\n" +
-//                                "P.ĐTĐH sẽ tiến hành chuyển đổi MSSV của các bạn trong hệ thống trong vòng 1-2 ngày tới nên khi nào các bạn không thể đăng nhập EduWeb bằng MSSV cũ thì sẽ đăng nhập bằng MSSV mới.\n" +
-//                                "\n" +
-//                                "Lưu ý: Sinh viên chuyển từ chương trình trong nước sang chương trình liên kết có thể sẽ đóng thêm phần bù học phí của chương trình liên kết đã được chuyển."));
+
     }
 
     private String getCurrentDate(){

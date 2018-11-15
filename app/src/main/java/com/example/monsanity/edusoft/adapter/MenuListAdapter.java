@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.MenuListItem;
+import com.example.monsanity.edusoft.main.menu.grade.GradeActivity;
 import com.example.monsanity.edusoft.main.menu.timetable.TimetableActivity;
 
 import java.util.List;
@@ -67,6 +68,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 case 1:
                     context.startActivity(new Intent(context, TimetableActivity.class));
                     break;
+                case 4:
+                    context.startActivity(new Intent(context, GradeActivity.class));
             }
         }
     }
