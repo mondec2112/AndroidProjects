@@ -29,23 +29,65 @@ public class GradeListAdapter extends RecyclerView.Adapter<GradeListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grade_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvSubjectName.setText(items.get(position).getSubject_name());
-        holder.tvRank.setText(items.get(position).getRank());
-        holder.tvMidTerm.setText(items.get(position).getTest_grade());
-        holder.tvProgress.setText(items.get(position).getProgress_grade());
-        holder.tvFinal.setText(items.get(position).getExam_grade());
-        holder.tvTotal.setText(items.get(position).getFinal_grade());
+        holder.setIsRecyclable(false);
+        String subjectName = items.get(position).getSubject_name();
+        String rank = items.get(position).getRank();
+        String midTermGrade = String.valueOf(items.get(position).getTest_grade());
+        String progressGrade = String.valueOf(items.get(position).getProgress_grade());
+        String finalGrade = String.valueOf(items.get(position).getExam_grade());
+        String totalGrade = String.valueOf(items.get(position).getFinal_grade());
+
+        holder.tvSubjectName.setText(subjectName);
+        if(!rank.equals("N/A"))
+            setStudentRank(holder, rank);
+        if(!midTermGrade.equals("-1"))
+            holder.tvMidTerm.setText(midTermGrade);
+        if(!progressGrade.equals("-1"))
+            holder.tvProgress.setText(progressGrade);
+        if(!finalGrade.equals("-1"))
+            holder.tvFinal.setText(finalGrade);
+        if(!totalGrade.equals("-1"))
+            holder.tvTotal.setText(totalGrade);
+    }
+
+    private void setStudentRank(ViewHolder holder, String rank){
+        switch (rank){
+            case FDUtils.GRADE_A_PLUS:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_green));
+                break;
+            case FDUtils.GRADE_A:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_light_blue));
+                break;
+            case FDUtils.GRADE_B_PLUS:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_light_orange));
+                break;
+            case FDUtils.GRADE_B:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_orange));
+                break;
+            case FDUtils.GRADE_C:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_yellow));
+                break;
+            default:
+                holder.tvRank.setBackground(context.getResources().getDrawable(R.drawable.rounded_status_red));
+                break;
+        }
+        holder.tvRank.setText(rank);
     }
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public void setItems(List<StudentGrade> items){

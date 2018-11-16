@@ -5,13 +5,17 @@ package com.example.monsanity.edusoft.container;
  */
 
 public class StudentGrade {
-    String student_id;
-    int progress_grade;
-    int test_grade;
-    int exam_grade;
-    int final_grade;
-    String rank;
-    String subject_name;
+    private String student_id;
+    private int progress_grade;
+    private int test_grade;
+    private int exam_grade;
+    private int final_grade;
+    private String rank;
+    private String subject_name;
+    private String course;
+    private int progress_percent;
+    private int test_percent;
+    private int exam_percent;
 
     public StudentGrade() {
     }
@@ -79,5 +83,37 @@ public class StudentGrade {
 
     public void setSubject_name(String subject_name) {
         this.subject_name = subject_name;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public int getProgress_percent() {
+        return progress_percent;
+    }
+
+    public void setProgress_percent(int progress_percent) {
+        this.progress_percent = progress_percent;
+    }
+
+    public int getTest_percent() {
+        return test_percent;
+    }
+
+    public void setTest_percent(int test_percent) {
+        this.test_percent = test_percent;
+    }
+
+    public int getExam_percent() {
+        return exam_percent;
+    }
+
+    public void setExam_percent(int exam_percent) {
+        this.exam_percent = exam_percent;
     }
 }

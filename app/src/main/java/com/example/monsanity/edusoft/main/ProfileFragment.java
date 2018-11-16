@@ -293,15 +293,14 @@ public class ProfileFragment extends Fragment {
 
     private void getRegisterdSubjects(){
         mData.child("schedule")
-                .child("2017-2018")
-                .child("Fall")
                 .child(studentID)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                        if(!registeredSubjects.contains(registeredSubject))
-                            registeredSubjects.add(registeredSubject);
+                        if(registeredSubject != null && !registeredSubjects.contains(registeredSubject))
+                            if (registeredSubject.getCourse().equals("2018-2019") && registeredSubject.getSemester().equals("fall"))
+                                registeredSubjects.add(registeredSubject);
                     }
 
                     @Override

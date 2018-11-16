@@ -20,6 +20,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.Classes;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Subjects;
@@ -145,16 +146,16 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
         String student_id = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
-        mData.child("schedule")
-                .child("2017-2018")
-                .child("Fall")
+        mData.child(FDUtils.SCHEDULE)
                 .child(student_id)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                        if(!registeredSubjects.contains(registeredSubject))
-                            registeredSubjects.add(registeredSubject);
+                        if(registeredSubject != null && !registeredSubjects.contains(registeredSubject)){
+                            if (registeredSubject.getCourse().equals("2018-2019") && registeredSubject.getSemester().equals("fall"))
+                                registeredSubjects.add(registeredSubject);
+                        }
                     }
 
                     @Override

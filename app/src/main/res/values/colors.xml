@@ -29,5 +29,6 @@
     <color name="color_red">#fd0001</color>
     <color name="color_yellow">#fdbf01</color>
     <color name="color_orange">#FF5722</color>
+    <color name="color_light_orange">#FF7F55</color>
     <color name="color_purple">#c553fe</color>
 </resources>

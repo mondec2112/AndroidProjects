@@ -20,4 +20,10 @@ public class FDUtils {
     public static final int SUBJECT_NOT_TAKEN = 0;
     public static final int SUBJECT_ON_GOING = 1;
     public static final int SUBJECT_TAKEN = 2;
+
+    public static final String GRADE_A_PLUS = "A+";
+    public static final String GRADE_A = "A";
+    public static final String GRADE_B_PLUS = "B+";
+    public static final String GRADE_B = "B";
+    public static final String GRADE_C = "C";
 }

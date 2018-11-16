@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.monsanity.edusoft.container.ClassGrade;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Fee;
+import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.StudentGrade;
@@ -127,7 +128,114 @@ public class MainActivity extends AppCompatActivity {
 //                        "Le Thanh Son",
 //                        4));
 //        mData.child("schedule").child("2017-2018").child("Fall").child("ITITIU14081").push().child("reg_sub").setValue("IT013IU");
-//        mData.child("schedule").child("2017-2018").child("Fall").child("ITITIU14081").push().child("reg_sub").setValue("IT033IU ");
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT01N11",
+//                        "IT001IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT02N11",
+//                        "IT002IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT003IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT16N11",
+//                        "IT097IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT20N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14081").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT01N11",
+//                        "IT001IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT02N11",
+//                        "IT002IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT003IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT16N11",
+//                        "IT097IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT20N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14020").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT01N11",
+//                        "IT001IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT02N11",
+//                        "IT002IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT003IU",
+//                        "2017-2018",
+//                        "spring"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT16N11",
+//                        "IT097IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT20N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
+//        mData.child(FDUtils.SCHEDULE).child("ITITIU14036").push().setValue(
+//                new RegisteredSubject(
+//                        "ITIT13N11",
+//                        "IT033IU",
+//                        "2018-2019",
+//                        "fall"));
 
 //        mData.child("subjects").child("CSE").child("None").push().setValue(new Subjects(
 //                "IT013IU",
