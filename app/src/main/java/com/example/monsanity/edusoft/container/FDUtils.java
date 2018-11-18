@@ -16,6 +16,7 @@ public class FDUtils {
     public static final String SUBJECTS = "subjects";
     public static final String REQUIRED = "required";
     public static final String SUM_GRADE = "sum_grade";
+    public static final String COURSE_UTILS = "course_utils";
 
     public static final int SUBJECT_NOT_TAKEN = 0;
     public static final int SUBJECT_ON_GOING = 1;

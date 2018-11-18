@@ -2,9 +2,9 @@ package com.example.monsanity.edusoft.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -12,14 +12,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.monsanity.edusoft.container.ClassGrade;
-import com.example.monsanity.edusoft.container.FDUtils;
-import com.example.monsanity.edusoft.container.Fee;
-import com.example.monsanity.edusoft.container.RegisteredSubject;
-import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.R;
-import com.example.monsanity.edusoft.container.StudentGrade;
-import com.example.monsanity.edusoft.container.SumGrade;
+import com.example.monsanity.edusoft.adapter.CourseUtils;
+import com.example.monsanity.edusoft.container.FDUtils;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,21 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth.AuthStateListener authStateListener;
     public static APIService apiService;
+    public static String studentID;
+    public static String currentSem;
+    public static String currentYear;
 
     public static void setAPIService(){
         apiService = ApiUtils.getRetrofitService();
@@ -74,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
 //        FirebaseMessaging.getInstance().subscribeToTopic("all");
 
         setControls();
+
+        getCourseUtils();
 //        setAPIService();
 //        Data data = new Data("Title FCM", "Message FCM");
 //        Sender sender = new Sender("/topics/all", data);
@@ -88,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+//        mData.child(FDUtils.FEE).child("ITITIU14081").setValue(new StudentFee(12, 12, (float) 12*58, (float) 10*58, (float) 2*58));
+
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT009IU"));
 //        mData.child("lecturer")
 //                .child("CSE")
@@ -384,38 +374,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String getCurrentDate(){
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
-        Date todayDate = new Date();
-        String thisDate = currentDate.format(todayDate);
-        return thisDate;
-    }
-
-    private ArrayList<String> getStudyDates(String start, String end){
-        ArrayList<String> studyDates = new ArrayList<>();
-        DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
-        DateTime startDate = pattern.parseDateTime(start);
-        DateTime endDate = pattern.parseDateTime(end);
-
-        int dayOfWeek = startDate.getDayOfWeek();
-
-        boolean chosenDayReached = false;
-        while (startDate.isBefore(endDate)){
-            if ( startDate.getDayOfWeek() == dayOfWeek){
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String strDate = dateFormat.format(startDate.toDate());
-                if(!studyDates.contains(strDate)){
-                    studyDates.add(strDate);
+    private void getCourseUtils() {
+        mData.child(FDUtils.COURSE_UTILS).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                CourseUtils courseUtils = dataSnapshot.getValue(CourseUtils.class);
+                if(courseUtils != null){
+                    String currentCourse = courseUtils.getCurrent_course();
+                    String data[] = currentCourse.split(" ");
+                    currentSem = data[0];
+                    currentYear = data[1];
                 }
-                chosenDayReached = true;
             }
-            if ( chosenDayReached ){
-                startDate = startDate.plusWeeks(1);
-            } else {
-                startDate = startDate.plusDays(1);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-        }
-        return studyDates;
+        });
     }
 
     @Override
@@ -470,18 +446,18 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Sign In Problem...", Toast.LENGTH_SHORT).show();
                     }else{
                         final Intent intent = new Intent(MainActivity.this, BottomNavigationActivity.class);
-                        mData.child("students").addChildEventListener(new ChildEventListener() {
+                        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 Student student = dataSnapshot.getValue(Student.class);
                                 if(edtUsername.getText().toString().equals(student.getEmail())){
                                     String name = student.getName();
                                     String email = student.getEmail();
-                                    String id = student.getId();
+                                    studentID = student.getId();
                                     editor = mPref.edit();
                                     editor.putString("username", name);
                                     editor.putString("email", email);
-                                    editor.putString("id", id);
+                                    editor.putString("id", studentID);
                                     editor.apply();
                                     pbLogin.setVisibility(View.GONE);
                                     startActivity(intent);

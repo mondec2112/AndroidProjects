@@ -37,6 +37,9 @@ public class GradeListAdapter extends RecyclerView.Adapter<GradeListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
         String subjectName = items.get(position).getSubject_name();
+        String progressPercent = String.valueOf(items.get(position).getProgress_percent());
+        String midtermPercent = String.valueOf(items.get(position).getTest_percent());
+        String finalPercent = String.valueOf(items.get(position).getExam_percent());
         String rank = items.get(position).getRank();
         String midTermGrade = String.valueOf(items.get(position).getTest_grade());
         String progressGrade = String.valueOf(items.get(position).getProgress_grade());
@@ -44,6 +47,10 @@ public class GradeListAdapter extends RecyclerView.Adapter<GradeListAdapter.View
         String totalGrade = String.valueOf(items.get(position).getFinal_grade());
 
         holder.tvSubjectName.setText(subjectName);
+        holder.tvProgressLabel.setText(holder.tvProgressLabel.getText().toString() + " (" + progressPercent + "%)");
+        holder.tvMidTermLabel.setText(holder.tvMidTermLabel.getText().toString() + " (" + midtermPercent + "%)");
+        holder.tvFinalLabel.setText(holder.tvFinalLabel.getText().toString() + " (" + finalPercent + "%)");
+
         if(!rank.equals("N/A"))
             setStudentRank(holder, rank);
         if(!midTermGrade.equals("-1"))
@@ -102,10 +109,16 @@ public class GradeListAdapter extends RecyclerView.Adapter<GradeListAdapter.View
         private TextView tvFinal;
         private TextView tvTotal;
         private TextView tvRank;
+        private TextView tvProgressLabel;
+        private TextView tvMidTermLabel;
+        private TextView tvFinalLabel;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            tvProgressLabel = itemView.findViewById(R.id.tv_grade_progress_label);
+            tvMidTermLabel = itemView.findViewById(R.id.tv_mid_term_label);
+            tvFinalLabel = itemView.findViewById(R.id.tv_grade_final_label);
             tvSubjectName = itemView.findViewById(R.id.tv_grade_subject_name);
             tvProgress = itemView.findViewById(R.id.tv_grade_progress);
             tvMidTerm = itemView.findViewById(R.id.tv_grade_mid_term);

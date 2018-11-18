@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.monsanity.edusoft.adapter.HomeListAdapter;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.HomeListItem;
 import com.example.monsanity.edusoft.R;
 import com.google.firebase.database.ChildEventListener;
@@ -73,7 +74,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getFirebaseData(){
-        mData.child("announcements").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.ANNOUNCEMENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 HomeListItem item = dataSnapshot.getValue(HomeListItem.class);

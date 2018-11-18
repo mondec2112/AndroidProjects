@@ -7,13 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -25,6 +23,7 @@ import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.TimeUtils;
+import com.example.monsanity.edusoft.main.MainActivity;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
 import com.github.tibolte.agendacalendarview.models.CalendarEvent;
 import com.github.tibolte.agendacalendarview.models.DayItem;
@@ -34,11 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.riontech.calendar.CustomCalendar;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -61,7 +55,6 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     List<Classes> classesList;
     List<Subjects> subjectsList;
     List<Lecturer> lecturerList;
-    List<DateTime> tempList;
     int countClass = 0;
 
     public static TimetableFragment newInstance() {
@@ -153,7 +146,8 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
                         if(registeredSubject != null && !registeredSubjects.contains(registeredSubject)){
-                            if (registeredSubject.getCourse().equals("2018-2019") && registeredSubject.getSemester().equals("fall"))
+                            if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                                    && registeredSubject.getSemester().equals(MainActivity.currentSem))
                                 registeredSubjects.add(registeredSubject);
                         }
                     }
@@ -195,7 +189,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     }
 
     private void getCourses(){
-        mData.child("courses")
+        mData.child(FDUtils.COURSES)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -242,7 +236,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     private void getSubjectDetail(final List<Classes> classList){
 
-        mData.child("subjects").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.SUBJECTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Subjects subjects = dataSnapshot.getValue(Subjects.class);
@@ -291,7 +285,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     }
 
     private void getLecturers(final List<Classes> classList){
-        mData.child("lecturer").child("CSE").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.LECTURER).child("CSE").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);

@@ -14,6 +14,7 @@ public class Subjects {
     String department;
     String faculty;
     int type;
+    int fee;
 
     public Subjects() {
     }
@@ -99,5 +100,13 @@ public class Subjects {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 }

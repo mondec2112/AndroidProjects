@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.SubjectListAdapter;
@@ -281,7 +280,7 @@ public class ProfileFragment extends Fragment {
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getRegisterdSubjects();
+                getRegisteredSubjects();
             }
 
             @Override
@@ -291,15 +290,16 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getRegisterdSubjects(){
-        mData.child("schedule")
+    private void getRegisteredSubjects(){
+        mData.child(FDUtils.SCHEDULE)
                 .child(studentID)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
                         if(registeredSubject != null && !registeredSubjects.contains(registeredSubject))
-                            if (registeredSubject.getCourse().equals("2018-2019") && registeredSubject.getSemester().equals("fall"))
+                            if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                                    && registeredSubject.getSemester().equals(MainActivity.currentSem))
                                 registeredSubjects.add(registeredSubject);
                     }
 

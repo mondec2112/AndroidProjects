@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.MenuListItem;
+import com.example.monsanity.edusoft.main.menu.fee.FeeActivity;
 import com.example.monsanity.edusoft.main.menu.grade.GradeActivity;
 import com.example.monsanity.edusoft.main.menu.timetable.TimetableActivity;
 
@@ -63,10 +63,13 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, mTitle.getText(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, mTitle.getText(), Toast.LENGTH_SHORT).show();
             switch (getAdapterPosition()){
                 case 1:
                     context.startActivity(new Intent(context, TimetableActivity.class));
+                    break;
+                case 3:
+                    context.startActivity(new Intent(context, FeeActivity.class));
                     break;
                 case 4:
                     context.startActivity(new Intent(context, GradeActivity.class));
