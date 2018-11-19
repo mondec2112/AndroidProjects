@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.menu.grade.GradeFragment"
-    android:background="@color/color_d4d2d2"
-    android:padding="10dp">
+    android:background="@color/color_background_grey"
+    android:paddingTop="10dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -21,90 +23,100 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Average (100)"
-                    android:textSize="15dp"
-                    android:textColor="@color/color_blue"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_avg_label_100"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_avg_100"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignEnd="@id/tv_avg_label_100"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Average (4)"
-                    android:textSize="15dp"
-                    android:textColor="@color/color_blue"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_avg_label_4"
-                    android:layout_below="@id/tv_avg_100"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_avg_4"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/tv_avg_100"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Credits gained"
-                    android:textSize="15dp"
-                    android:textColor="@color/color_blue"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_credit_gained_label"
-                    android:layout_below="@id/tv_avg_4"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_credit_gained"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/tv_avg_4"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rank"
-                    android:textSize="15dp"
-                    android:textColor="@color/color_blue"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_rank_label"
-                    android:layout_below="@id/tv_credit_gained"
-                    android:padding="2dp"/>
-                <TextView
-                    android:layout_width="40dp"
-                    android:layout_height="25dp"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_rank"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/tv_credit_gained"
-                    android:padding="2dp"/>
+                    android:orientation="vertical"
+                    android:background="@drawable/rounded_status_grey"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Average (100)"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_avg_label_100"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_avg_100"
+                        android:textColor="@color/white"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignEnd="@id/tv_avg_label_100"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Average (4)"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_avg_label_4"
+                        android:layout_below="@id/tv_avg_100"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_avg_4"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/white"
+                        android:layout_below="@id/tv_avg_100"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Credits gained"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_credit_gained_label"
+                        android:layout_below="@id/tv_avg_4"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_credit_gained"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/white"
+                        android:layout_below="@id/tv_avg_4"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rank"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_rank_label"
+                        android:layout_below="@id/tv_credit_gained"
+                        android:padding="2dp"/>
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="25dp"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:id="@+id/tv_rank"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/tv_credit_gained"
+                        android:padding="2dp"/>
 
-            </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
         </android.support.v7.widget.CardView>
     </RelativeLayout>
 

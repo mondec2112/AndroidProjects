@@ -141,8 +141,8 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
                     tvAverage100.setText(avg100);
                     tvAverage4.setText(avg4);
                     tvCreditsGained.setText(String.valueOf(studentSumGrade.getCredits_gained()));
-                    if(!studentSumGrade.getRank().equals("N/A"))
-                        setStudentRank(studentSumGrade.getRank());
+
+                    setStudentRank(studentSumGrade.getRank());
                     getSubjects();
                 }
             }

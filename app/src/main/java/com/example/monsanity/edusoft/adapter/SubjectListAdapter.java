@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,13 +44,13 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         holder.mSubjectName.setText(items.get(position).getName());
         switch (items.get(position).getType()){
             case FDUtils.SUBJECT_NOT_TAKEN:
-                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_blue));
+                holder.lnSubjectName.setBackground(context.getResources().getDrawable(R.color.color_blue));
                 break;
             case FDUtils.SUBJECT_TAKEN:
-                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_green));
+                holder.lnSubjectName.setBackground(context.getResources().getDrawable(R.color.color_green));
                 break;
             case FDUtils.SUBJECT_ON_GOING:
-                holder.mSubjectName.setTextColor(context.getResources().getColor(R.color.color_orange));
+                holder.lnSubjectName.setBackground(context.getResources().getDrawable(R.color.color_light_orange));
                 break;
         }
         holder.mSubjectID.setText("ID: " + items.get(position).getId());
@@ -67,6 +68,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private LinearLayout lnSubjectName;
         private TextView mSubjectName;
         private TextView mSubjectID;
         private TextView mSubjectCredit;
@@ -75,6 +77,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
             super(itemView);
             itemView.setOnClickListener(this);
 
+            lnSubjectName = itemView.findViewById(R.id.ln_subject_name_container);
             mSubjectName = itemView.findViewById(R.id.tv_subject_name);
             mSubjectID = itemView.findViewById(R.id.tv_subject_id);
             mSubjectCredit = itemView.findViewById(R.id.tv_subject_credit);

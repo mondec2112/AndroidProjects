@@ -65,10 +65,6 @@ public class ProfileFragment extends Fragment {
     ArrayList<String> takenSubjectsList;
     SubjectListAdapter adapter;
 
-    String strOnGoing = "On Going";
-    String strFinished = "Finished";
-    String strAll = "All";
-
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
         return profileFragment;
@@ -100,9 +96,9 @@ public class ProfileFragment extends Fragment {
         rvProfileSubjectList = view.findViewById(R.id.rv_profile_subject_list);
         tabLayout = view.findViewById(R.id.tab_profile_subject_list);
 
-        tabLayout.addTab(tabLayout.newTab().setText(strOnGoing));
-        tabLayout.addTab(tabLayout.newTab().setText(strFinished));
-        tabLayout.addTab(tabLayout.newTab().setText(strAll));
+        tabLayout.addTab(tabLayout.newTab().setText(FDUtils.ON_GOING));
+        tabLayout.addTab(tabLayout.newTab().setText(FDUtils.FINISHED));
+        tabLayout.addTab(tabLayout.newTab().setText(FDUtils.ALL));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -405,9 +401,9 @@ public class ProfileFragment extends Fragment {
                 rvProfileSubjectList.setAdapter(adapter);
                 rvProfileSubjectList.setLayoutManager(layoutManager);
 
-                tabLayout.getTabAt(0).setText(strOnGoing + " (" + onGoingList.size() + ")");
-                tabLayout.getTabAt(1).setText(strFinished + " (" + takenList.size() + ")");
-                tabLayout.getTabAt(2).setText(strAll + " (" + allSubjectList.size() + ")");
+                tabLayout.getTabAt(0).setText(FDUtils.ON_GOING + " (" + onGoingList.size() + ")");
+                tabLayout.getTabAt(1).setText(FDUtils.FINISHED + " (" + takenList.size() + ")");
+                tabLayout.getTabAt(2).setText(FDUtils.ALL + " (" + allSubjectList.size() + ")");
 
                 pbProfile.setVisibility(View.INVISIBLE);
             }

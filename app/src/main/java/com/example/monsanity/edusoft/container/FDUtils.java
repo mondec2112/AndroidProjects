@@ -27,4 +27,13 @@ public class FDUtils {
     public static final String GRADE_B_PLUS = "B+";
     public static final String GRADE_B = "B";
     public static final String GRADE_C = "C";
+
+    public static final String ON_GOING = "On Going";
+    public static final String FINISHED = "Finished";
+    public static final String ALL = "All";
+
+    public static final String MID_TERM = "Mid-Term";
+    public static final String FINAL = "FINAL";
+    public static final String EXAM_TYPE_MID = "midterm";
+    public static final String EXAM_TYPE_FINAL = "final";
 }

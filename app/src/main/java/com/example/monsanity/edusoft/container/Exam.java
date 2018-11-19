@@ -11,6 +11,7 @@ public class Exam {
     private String semester;
     private String exam_type;
     private String subject_id;
+    private String subject_name;
     private int combined_exam;
     private int exam_team;
     private int quantity;
@@ -162,5 +163,13 @@ public class Exam {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
     }
 }

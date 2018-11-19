@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rv_list_home"
-        android:background="@color/color_d4d2d2">
+        android:background="@color/color_background_grey">
     </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
