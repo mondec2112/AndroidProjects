@@ -37,10 +37,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Progress"
-                android:textSize="16dp"
+                android:textSize="14dp"
+                android:textStyle="bold"
                 android:textColor="@color/color_grey"
                 android:id="@+id/tv_grade_progress_label"
-                android:layout_below="@id/tv_grade_subject_name"
+                android:layout_below="@id/tv_grade_rank"
                 android:padding="2dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -55,10 +56,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mid-term"
-                android:textSize="16dp"
+                android:textSize="14dp"
+                android:textStyle="bold"
                 android:textColor="@color/color_grey"
                 android:id="@+id/tv_mid_term_label"
-                android:layout_below="@id/tv_grade_progress_label"
+                android:layout_below="@id/tv_grade_progress"
                 android:padding="2dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -73,10 +75,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Final"
-                android:textSize="16dp"
+                android:textSize="14dp"
+                android:textStyle="bold"
                 android:textColor="@color/color_grey"
                 android:id="@+id/tv_grade_final_label"
-                android:layout_below="@id/tv_mid_term_label"
+                android:layout_below="@id/tv_grade_mid_term"
                 android:padding="2dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -91,7 +94,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total"
-                android:textSize="16dp"
+                android:textSize="15dp"
+                android:textStyle="bold"
                 android:textColor="@color/color_grey"
                 android:id="@+id/tv_grade_total_label"
                 android:layout_below="@id/tv_grade_final"
@@ -100,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_below="@id/tv_grade_final"
-                android:background="@color/color_grey"/>
+                android:background="@color/color_d4d2d2"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -30,8 +30,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Average (100)"
-                    android:textSize="16dp"
-                    android:textColor="@color/color_grey"
+                    android:textSize="15dp"
+                    android:textColor="@color/color_blue"
+                    android:textStyle="bold"
                     android:id="@+id/tv_avg_label_100"
                     android:padding="2dp"/>
                 <TextView
@@ -47,10 +48,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Average (4)"
-                    android:textSize="16dp"
-                    android:textColor="@color/color_grey"
+                    android:textSize="15dp"
+                    android:textColor="@color/color_blue"
+                    android:textStyle="bold"
                     android:id="@+id/tv_avg_label_4"
-                    android:layout_below="@id/tv_avg_label_100"
+                    android:layout_below="@id/tv_avg_100"
                     android:padding="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -65,10 +67,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Credits gained"
-                    android:textSize="16dp"
-                    android:textColor="@color/color_grey"
+                    android:textSize="15dp"
+                    android:textColor="@color/color_blue"
+                    android:textStyle="bold"
                     android:id="@+id/tv_credit_gained_label"
-                    android:layout_below="@id/tv_avg_label_4"
+                    android:layout_below="@id/tv_avg_4"
                     android:padding="2dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,10 +86,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rank"
-                    android:textSize="16dp"
-                    android:textColor="@color/color_grey"
+                    android:textSize="15dp"
+                    android:textColor="@color/color_blue"
+                    android:textStyle="bold"
                     android:id="@+id/tv_rank_label"
-                    android:layout_below="@id/tv_credit_gained_label"
+                    android:layout_below="@id/tv_credit_gained"
                     android:padding="2dp"/>
                 <TextView
                     android:layout_width="40dp"

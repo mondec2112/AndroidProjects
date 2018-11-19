@@ -36,6 +36,7 @@
                     android:id="@+id/tv_menu_title"
                     android:layout_below="@+id/imv_menu_logo"
                     android:text="Menu"
+                    android:textStyle="bold"
                     android:textColor="@drawable/selector_text"
                     android:layout_centerHorizontal="true"/>
 

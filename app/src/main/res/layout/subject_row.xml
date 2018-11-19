@@ -26,13 +26,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_subject_id"
                 android:text="subject id"
-                android:textColor="@color/color_black"/>
+                android:textStyle="bold"
+                android:textColor="@color/color_grey"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_subject_credit"
                 android:text="subject credit"
-                android:textColor="@color/color_black"/>
+                android:textStyle="bold"
+                android:textColor="@color/color_grey"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

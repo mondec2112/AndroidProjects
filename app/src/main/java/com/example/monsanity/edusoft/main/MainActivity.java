@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
+import com.example.monsanity.edusoft.container.Exam;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,6 +78,70 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+//        ArrayList<String> studentList = new ArrayList<>();
+//        studentList.add("ITITIU14081");
+//        studentList.add("ITITIU14020");
+//        studentList.add("ITITIU14036");
+//        studentList.add("ITITIU14001");
+//        studentList.add("ITITIU14002");
+//        studentList.add("ITITIU14003");
+//        studentList.add("ITITIU14004");
+//        studentList.add("ITITIU14005");
+//        studentList.add("ITITIU14006");
+//        studentList.add("ITITIU14007");
+//        studentList.add("ITITIU14008");
+//        studentList.add("ITITIU14009");
+//
+//        Exam exam = new Exam();
+//        exam.setCourse("2018-2019");
+//        exam.setCourse("fall");
+//        exam.setExam_type("midterm");
+//        exam.setSubject_id("IT097IU");
+//        exam.setCombined_exam(2);
+//        exam.setExam_team(1);
+//        exam.setQuantity(studentList.size());
+//        exam.setExam_date("2018-11-09");
+//        exam.setStart_hour("08:00");
+//        exam.setNum_minute(90);
+//        exam.setRoom("A2.412");
+//        exam.setExam_week(1);
+//        exam.setStudent_list(studentList);
+//        exam.setProctor_id("IT001");
+//        mData.child(FDUtils.EXAM).push().setValue(exam);
+//
+//        exam = new Exam();
+//        exam.setCourse("2018-2019");
+//        exam.setCourse("fall");
+//        exam.setExam_type("midterm");
+//        exam.setSubject_id("IT079IU");
+//        exam.setCombined_exam(2);
+//        exam.setExam_team(1);
+//        exam.setQuantity(30);
+//        exam.setExam_date("2018-11-10");
+//        exam.setStart_hour("10:15");
+//        exam.setNum_minute(60);
+//        exam.setRoom("A2.503");
+//        exam.setExam_week(1);
+//        exam.setStudent_list(studentList);
+//        exam.setProctor_id("IT002");
+//        mData.child(FDUtils.EXAM).push().setValue(exam);
+//
+//        exam = new Exam();
+//        exam.setCourse("2018-2019");
+//        exam.setCourse("fall");
+//        exam.setExam_type("midterm");
+//        exam.setSubject_id("IT033IU");
+//        exam.setCombined_exam(2);
+//        exam.setExam_team(1);
+//        exam.setQuantity(studentList.size());
+//        exam.setExam_date("2018-11-16");
+//        exam.setStart_hour("01:00");
+//        exam.setNum_minute(120);
+//        exam.setRoom("A1.203");
+//        exam.setExam_week(2);
+//        exam.setStudent_list(studentList);
+//        exam.setProctor_id("IT003");
+//        mData.child(FDUtils.EXAM).push().setValue(exam);
 
 //        mData.child(FDUtils.FEE).child("ITITIU14081").setValue(new StudentFee(12, 12, (float) 12*58, (float) 10*58, (float) 2*58));
 

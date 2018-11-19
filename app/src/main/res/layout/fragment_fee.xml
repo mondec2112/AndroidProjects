@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_fee_credit_label"
                     android:text="Total number of credits"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/color_blue"
                     android:textStyle="bold"/>
                 <TextView
@@ -49,9 +49,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_fee_tuition_credit_label"
-                    android:layout_below="@id/tv_fee_credit_label"
+                    android:layout_below="@id/tv_fee_credit"
                     android:text="Total number of tuition credit"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:textColor="@color/color_blue"
                     android:textStyle="bold"/>
                 <TextView
@@ -67,8 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_fee_sem_fee_label"
-                    android:layout_below="@id/tv_fee_tuition_credit_label"
-                    android:textSize="16dp"
+                    android:layout_below="@id/tv_fee_tuition_credit"
+                    android:textSize="14dp"
                     android:text="Total amount of school fee must be paid"
                     android:textColor="@color/color_blue"
                     android:textStyle="bold"/>
@@ -85,8 +85,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_fee_paid_fee_label"
-                    android:layout_below="@id/tv_fee_sem_fee_label"
-                    android:textSize="16dp"
+                    android:layout_below="@id/tv_fee_sem_fee"
+                    android:textSize="14dp"
                     android:text="Amount paid in semester"
                     android:textColor="@color/color_blue"
                     android:textStyle="bold"/>
@@ -103,8 +103,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_fee_payable_fee_label"
-                    android:layout_below="@id/tv_fee_paid_fee_label"
-                    android:textSize="16dp"
+                    android:layout_below="@id/tv_fee_paid_fee"
+                    android:textSize="14dp"
                     android:text="Total payable fee"
                     android:textColor="@color/color_blue"
                     android:textStyle="bold"/>

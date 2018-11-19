@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.MenuListItem;
+import com.example.monsanity.edusoft.main.menu.exam.ExamActivity;
 import com.example.monsanity.edusoft.main.menu.fee.FeeActivity;
 import com.example.monsanity.edusoft.main.menu.grade.GradeActivity;
 import com.example.monsanity.edusoft.main.menu.timetable.TimetableActivity;
@@ -67,6 +68,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             switch (getAdapterPosition()){
                 case 1:
                     context.startActivity(new Intent(context, TimetableActivity.class));
+                    break;
+                case 2:
+                    context.startActivity(new Intent(context, ExamActivity.class));
                     break;
                 case 3:
                     context.startActivity(new Intent(context, FeeActivity.class));

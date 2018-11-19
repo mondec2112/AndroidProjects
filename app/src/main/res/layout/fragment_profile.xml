@@ -51,14 +51,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Name"/>
+                            android:text="Name"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_name"
-                            android:textSize="18dp"
-                            android:textColor="@color/color_black"
+                            android:textSize="16dp"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -73,13 +74,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ID"/>
+                            android:text="ID"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_id"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -94,13 +96,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Course"/>
+                            android:text="Course"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_course"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -110,18 +113,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="2dp">
+                        android:padding="2dp"
+                        android:textStyle="bold">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Department"/>
+                            android:text="Department"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_department"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -136,13 +141,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Faculty"/>
+                            android:text="Faculty"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_faculty"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -157,13 +163,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Advisor"/>
+                            android:text="Advisor"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_advisor"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -178,13 +185,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Date of birth"/>
+                            android:text="Date of birth"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_profile_dob"
-                            android:textColor="@color/color_black"
+                            android:textColor="@color/color_grey"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"/>
 
@@ -199,7 +207,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Email"/>
+                            android:text="Email"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"

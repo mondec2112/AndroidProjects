@@ -10,6 +10,7 @@
         android:id="@+id/tv_dialog_class_name"
         android:text="class name"
         android:textSize="17sp"
+        android:textStyle="bold"
         android:textColor="@color/color_green"
         android:padding="5dp"/>
 
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_dialog_class_id"
         android:text="id"
-        android:textSize="15sp"
+        android:textStyle="bold"
         android:textColor="@color/color_blue"
         android:padding="5dp"/>
 
@@ -27,7 +28,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_dialog_class_lecturer"
         android:text="lecturer"
-        android:textColor="@color/color_black"
+        android:textStyle="bold"
+        android:textColor="@color/color_grey"
         android:padding="5dp"/>
 
     <TextView
@@ -35,7 +37,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_dialog_class_sum_slot"
         android:text="sum slot"
-        android:textColor="@color/color_black"
+        android:textStyle="bold"
+        android:textColor="@color/color_grey"
         android:padding="5dp"/>
 
     <TextView
@@ -43,7 +46,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_dialog_class_start"
         android:text="from"
-        android:textColor="@color/color_red"
+        android:textStyle="bold"
+        android:textColor="@color/color_light_orange"
         android:padding="5dp"/>
 
     <TextView
@@ -51,7 +55,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_dialog_class_end"
         android:text="to"
-        android:textColor="@color/color_red"
+        android:textStyle="bold"
+        android:textColor="@color/color_light_orange"
         android:padding="5dp"/>
 
 </LinearLayout>
