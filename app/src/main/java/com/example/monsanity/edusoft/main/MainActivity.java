@@ -30,6 +30,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -460,6 +466,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private ArrayList<String> getStudyDates(String start, String end){
+        ArrayList<String> studyDates = new ArrayList<>();
+        DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTime startDate = pattern.parseDateTime(start);
+        DateTime endDate = pattern.parseDateTime(end);
+
+        int dayOfWeek = startDate.getDayOfWeek();
+
+        boolean chosenDayReached = false;
+        while (startDate.isBefore(endDate)){
+            if ( startDate.getDayOfWeek() == dayOfWeek){
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = dateFormat.format(startDate.toDate());
+                if(!studyDates.contains(strDate)){
+                    studyDates.add(strDate);
+                }
+                chosenDayReached = true;
+            }
+            if ( chosenDayReached ){
+                startDate = startDate.plusWeeks(1);
+            } else {
+                startDate = startDate.plusDays(1);
+            }
+        }
+        return studyDates;
+    }
+
 
     @Override
     protected void onStart() {

@@ -45,7 +45,6 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
     private ArrayList<Exam> examList;
     private ArrayList<Exam> midExamList;
     private ArrayList<Exam> finalExamList;
-    private String examType;
     private boolean isDataLoaded;
 
     public static ExamFragment newInstance() {
@@ -75,7 +74,6 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
     }
 
     private void initTab() {
-        examType = FDUtils.EXAM_TYPE_MID;
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.MID_TERM));
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.FINAL));
         tabLayout.setOnTabSelectedListener(this);
