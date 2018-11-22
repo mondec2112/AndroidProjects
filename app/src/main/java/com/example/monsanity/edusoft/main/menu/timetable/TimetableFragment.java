@@ -56,6 +56,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     List<Subjects> subjectsList;
     List<Lecturer> lecturerList;
     int countClass = 0;
+    String student_id;
 
     public static TimetableFragment newInstance() {
         TimetableFragment timetableFragment = new TimetableFragment();
@@ -137,7 +138,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     private void initData() {
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
-        String student_id = mPref.getString("id","");
+        student_id = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
         mData.child(FDUtils.SCHEDULE)
                 .child(student_id)
@@ -195,8 +196,21 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Classes classes = dataSnapshot.getValue(Classes.class);
                         for(RegisteredSubject registeredSubject : registeredSubjects){
-                            if(classes.getClass_id().equals(registeredSubject.getReg_sub())){
+                            if(classes.getClass_id().equals(registeredSubject.getReg_sub())
+                                    && classes.getSemester().equals(MainActivity.currentSem)
+                                    && classes.getCourse().equals(MainActivity.currentYear)){
                                 classesList.add(classes);
+                                if(classes.getLab_lessons() != null){
+                                    ArrayList<Classes> labClasses = classes.getLab_lessons();
+                                    for(Classes labClass : labClasses){
+                                        if(labClass.getStudent_list().contains(student_id)){
+                                            labClass.setClass_id(classes.getClass_id());
+                                            labClass.setSubject_id(classes.getSubject_id());
+                                            labClass.setGroup(classes.getGroup());
+                                            classesList.add(labClass);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -370,13 +384,14 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 //                startTime.set(Calendar.YEAR, newYear);
                     Calendar endTime = (Calendar) startTime.clone();
                     endTime.set(Calendar.HOUR_OF_DAY, end.getHour());
-                    endTime.set(Calendar.MINUTE, end.getHour());
+                    endTime.set(Calendar.MINUTE, end.getMinute());
 //                endTime.set(Calendar.MONTH, newMonth - 1);
                     WeekViewEvent event = new WeekViewEvent(count++,
-                            classData.getClass_id() + "\n"
-                            + classData.getSubject_name() + "\n"
-                            + classData.getLecturer_name() + "\n"
-                            + classData.getSum_slot(),
+                            "ID: " + classData.getClass_id() + "\n"
+                                    + classData.getSubject_name() + "\n"
+                                    + "Room: " +  classData.getRoom() + "\n"
+                            + "Lecturer: " +  classData.getLecturer_name() + "\n"
+                            + "Sum slot: " + classData.getSum_slot(),
                             startTime,
                             endTime);
                     event.setColor(getResources().getColor(R.color.color_green));
@@ -399,14 +414,16 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         TextView tvClassSumSlot = dialog.findViewById(R.id.tv_dialog_class_sum_slot);
         TextView tvClassStartTime = dialog.findViewById(R.id.tv_dialog_class_start);
         TextView tvClassEndTime = dialog.findViewById(R.id.tv_dialog_class_end);
+        TextView tvClassRoom = dialog.findViewById(R.id.tv_dialog_class_room);
 
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
         String[] eventData = event.getName().split("\n");
         tvClassName.setText(eventData[1]);
-        tvClassID.setText("ID: " + eventData[0]);
-        tvClassLecturer.setText("Lecturer: " + eventData[2]);
-        tvClassSumSlot.setText("Sum slot: " + eventData[3]);
+        tvClassID.setText(eventData[0]);
+        tvClassRoom.setText(eventData[2]);
+        tvClassLecturer.setText(eventData[3]);
+        tvClassSumSlot.setText(eventData[4]);
         tvClassStartTime.setText("From: " + dateFormat.format(event.getStartTime().getTime()));
         tvClassEndTime.setText("To: " + dateFormat.format(event.getEndTime().getTime()));
 

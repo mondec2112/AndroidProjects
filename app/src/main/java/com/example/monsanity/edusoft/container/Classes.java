@@ -24,11 +24,13 @@ public class Classes {
     ArrayList<String> student_list;
     String subject_name;
     String lecturer_name;
+    ArrayList<Classes> lab_lessons;
+    String course;
+    String semester;
 
-    public Classes(String subject_id, String year, String semester, String group, String day_of_week, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, ArrayList<String> class_date) {
+    public Classes(String subject_id, String group, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list, String subject_name, String lecturer_name, ArrayList<Classes> lab_lessons, String course, String semester) {
         this.subject_id = subject_id;
         this.group = group;
-        this.day_of_week = day_of_week;
         this.room = room;
         this.start_slot = start_slot;
         this.sum_slot = sum_slot;
@@ -38,7 +40,29 @@ public class Classes {
         this.registered_number = registered_number;
         this.start_day = start_day;
         this.end_day = end_day;
+        this.day_of_week = day_of_week;
         this.class_date = class_date;
+        this.student_list = student_list;
+        this.subject_name = subject_name;
+        this.lecturer_name = lecturer_name;
+        this.lab_lessons = lab_lessons;
+        this.course = course;
+        this.semester = semester;
+    }
+
+    public Classes(String room, int start_slot, int sum_slot, String instructor_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list, String lecturer_name) {
+        this.room = room;
+        this.start_slot = start_slot;
+        this.sum_slot = sum_slot;
+        this.instructor_id = instructor_id;
+        this.class_size = class_size;
+        this.registered_number = registered_number;
+        this.start_day = start_day;
+        this.end_day = end_day;
+        this.day_of_week = day_of_week;
+        this.class_date = class_date;
+        this.student_list = student_list;
+        this.lecturer_name = lecturer_name;
     }
 
     public Classes() {
@@ -171,5 +195,29 @@ public class Classes {
 
     public void setLecturer_name(String lecturer_name) {
         this.lecturer_name = lecturer_name;
+    }
+
+    public ArrayList<Classes> getLab_lessons() {
+        return lab_lessons;
+    }
+
+    public void setLab_lessons(ArrayList<Classes> lab_lessons) {
+        this.lab_lessons = lab_lessons;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
 }
