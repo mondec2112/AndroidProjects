@@ -14,6 +14,7 @@ import com.example.monsanity.edusoft.container.MenuListItem;
 import com.example.monsanity.edusoft.main.menu.exam.ExamActivity;
 import com.example.monsanity.edusoft.main.menu.fee.FeeActivity;
 import com.example.monsanity.edusoft.main.menu.grade.GradeActivity;
+import com.example.monsanity.edusoft.main.menu.registration.RegistrationActivity;
 import com.example.monsanity.edusoft.main.menu.timetable.TimetableActivity;
 
 import java.util.List;
@@ -66,6 +67,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public void onClick(View v) {
 //            Toast.makeText(context, mTitle.getText(), Toast.LENGTH_SHORT).show();
             switch (getAdapterPosition()){
+                case 0:
+                    context.startActivity(new Intent(context, RegistrationActivity.class));
+                    break;
                 case 1:
                     context.startActivity(new Intent(context, TimetableActivity.class));
                     break;

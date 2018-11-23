@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@color/color_background_grey">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl_registration_subject_name_holder"
+                android:background="@color/color_blue"
+                android:orientation="horizontal"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_subject_name"
+                    android:text="subject name"
+                    android:textSize="16dp"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"/>
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_registration"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:buttonTint="@color/white"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_subject_id"
+                    android:text="subject id"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_class_id"
+                    android:text="class id"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_credit"
+                    android:text="credit"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_instructor_name"
+                    android:text="instructor name"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_group"
+                    android:text="group"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_class_size"
+                    android:text="class size"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_registered_number"
+                    android:text="registered number"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_start_slot"
+                    android:text="start slot"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_sum_slot"
+                    android:text="sum slot"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_registration_duration"
+                    android:text="duration"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_grey"
+                    android:padding="2dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

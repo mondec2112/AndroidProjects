@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Classes {
 
     String subject_id;
-    String group;
+    int group;
     String room;
     int start_slot;
     int sum_slot;
@@ -27,8 +27,9 @@ public class Classes {
     ArrayList<Classes> lab_lessons;
     String course;
     String semester;
+    int credit;
 
-    public Classes(String subject_id, String group, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list, String subject_name, String lecturer_name, ArrayList<Classes> lab_lessons, String course, String semester) {
+    public Classes(String subject_id, int group, String room, int start_slot, int sum_slot, String instructor_id, String class_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list, ArrayList<Classes> lab_lessons, String course, String semester) {
         this.subject_id = subject_id;
         this.group = group;
         this.room = room;
@@ -43,14 +44,12 @@ public class Classes {
         this.day_of_week = day_of_week;
         this.class_date = class_date;
         this.student_list = student_list;
-        this.subject_name = subject_name;
-        this.lecturer_name = lecturer_name;
         this.lab_lessons = lab_lessons;
         this.course = course;
         this.semester = semester;
     }
 
-    public Classes(String room, int start_slot, int sum_slot, String instructor_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list, String lecturer_name) {
+    public Classes(String room, int start_slot, int sum_slot, String instructor_id, int class_size, int registered_number, String start_day, String end_day, String day_of_week, ArrayList<String> class_date, ArrayList<String> student_list) {
         this.room = room;
         this.start_slot = start_slot;
         this.sum_slot = sum_slot;
@@ -62,7 +61,6 @@ public class Classes {
         this.day_of_week = day_of_week;
         this.class_date = class_date;
         this.student_list = student_list;
-        this.lecturer_name = lecturer_name;
     }
 
     public Classes() {
@@ -93,11 +91,11 @@ public class Classes {
         this.subject_id = subject_id;
     }
 
-    public String getGroup() {
+    public int getGroup() {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(int group) {
         this.group = group;
     }
 
@@ -219,5 +217,82 @@ public class Classes {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
+
+    public class SubClasses{
+        private Classes classes;
+        private ArrayList<String> class_date;
+        private int class_size;
+        private int instructor_id;
+        private String room;
+        int start_slot;
+        int sum_slot;
+
+        public SubClasses() {
+        }
+
+        public Classes getClasses() {
+            return classes;
+        }
+
+        public void setClasses(Classes classes) {
+            this.classes = classes;
+        }
+
+        public ArrayList<String> getClass_date() {
+            return class_date;
+        }
+
+        public void setClass_date(ArrayList<String> class_date) {
+            this.class_date = class_date;
+        }
+
+        public int getClass_size() {
+            return class_size;
+        }
+
+        public void setClass_size(int class_size) {
+            this.class_size = class_size;
+        }
+
+        public int getInstructor_id() {
+            return instructor_id;
+        }
+
+        public void setInstructor_id(int instructor_id) {
+            this.instructor_id = instructor_id;
+        }
+
+        public String getRoom() {
+            return room;
+        }
+
+        public void setRoom(String room) {
+            this.room = room;
+        }
+
+        public int getStart_slot() {
+            return start_slot;
+        }
+
+        public void setStart_slot(int start_slot) {
+            this.start_slot = start_slot;
+        }
+
+        public int getSum_slot() {
+            return sum_slot;
+        }
+
+        public void setSum_slot(int sum_slot) {
+            this.sum_slot = sum_slot;
+        }
     }
 }

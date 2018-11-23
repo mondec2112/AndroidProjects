@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_announcement"
                 android:textSize="15dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_grey"
                 android:text="hello"/>
 
         </ScrollView>

@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rl_grade_upper"
                 android:padding="5dp"
-                android:background="@color/color_light_grey">
+                android:background="@color/color_blue">
 
                 <TextView
                     android:layout_width="wrap_content"

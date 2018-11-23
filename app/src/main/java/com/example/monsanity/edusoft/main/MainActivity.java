@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
+import com.example.monsanity.edusoft.container.Classes;
+import com.example.monsanity.edusoft.container.CourseRegistration;
 import com.example.monsanity.edusoft.container.Exam;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Student;
@@ -363,25 +365,42 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 ////
-//        mData.child("courses").push().setValue(
-//                new Classes(
-//                        "IT111IU",
-//                        "2018-2019",
-//                        "fall",
-//                        "01",
-//                        "monday",
-//                        "A2.507",
-//                        4,
-//                        3,
-//                        "IT01",
-//                        "ITIT00N11",
-//                        50,
-//                        35,
-//                        "2018-09-03",
-//                        "2018-12-10",
-//                        getStudyDates("2018-09-03", "2018-12-10")
-//                )
-//        );
+//        Classes classes = new Classes();
+//        classes.setSubject_id("IT005IU");
+//        classes.setClass_id("ITIT05N11");
+//        classes.setClass_size(50);
+//        classes.setCourse("2018-2019");
+//        classes.setSemester("spring");
+//        classes.setGroup("01");
+//        classes.setInstructor_id("IT001");
+//        classes.setRoom("A1.402");
+//        classes.setStart_slot(1);
+//        classes.setSum_slot(3);
+//        classes.setClass_date(getStudyDates("2018-02-04", "2018-04-29"));
+//
+//        Classes labClasses1 = new Classes();
+//        labClasses1.setClass_date(getStudyDates("2018-03-04", "2018-04-22"));
+//        labClasses1.setClass_size(25);
+//        labClasses1.setInstructor_id("IT001");
+//        labClasses1.setRoom("LA1.603");
+//        labClasses1.setStart_slot(7);
+//        labClasses1.setSum_slot(3);
+//
+//        Classes labClasses2 = new Classes();
+//        labClasses2.setClass_date(getStudyDates("2018-03-06", "2018-04-24"));
+//        labClasses2.setClass_size(25);
+//        labClasses2.setInstructor_id("IT001");
+//        labClasses2.setRoom("LA1.605");
+//        labClasses2.setStart_slot(1);
+//        labClasses2.setSum_slot(3);
+//
+//        ArrayList<Classes> labLessons = new ArrayList<>();
+//        labLessons.add(labClasses1);
+//        labLessons.add(labClasses2);
+//        classes.setLab_lessons(labLessons);
+//        mData.child(FDUtils.COURSES).push().setValue(classes);
+
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("spring").push().setValue(new CourseRegistration("IT005IU", "ITIT05N11", true));
 
 //        ArrayList<StudentGrade> studentGrades = new ArrayList<>();
 //        studentGrades.add(new StudentGrade(

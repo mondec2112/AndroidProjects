@@ -8,7 +8,7 @@ public class Subjects {
 
     String id;
     String name;
-    String credit;
+    int credit;
     String pre;
     String level;
     String department;
@@ -19,7 +19,7 @@ public class Subjects {
     public Subjects() {
     }
 
-    public Subjects(String id, String name, String credit, String pre, String level, String department, String faculty, int type) {
+    public Subjects(String id, String name, int credit, String pre, String level, String department, String faculty, int type) {
         this.id = id;
         this.name = name;
         this.credit = credit;
@@ -30,7 +30,7 @@ public class Subjects {
         this.type = type;
     }
 
-    public Subjects(String id, String name, String credit, String department, String faculty) {
+    public Subjects(String id, String name, int credit, String department, String faculty) {
         this.id = id;
         this.name = name;
         this.credit = credit;
@@ -70,11 +70,11 @@ public class Subjects {
         this.name = name;
     }
 
-    public String getCredit() {
+    public int getCredit() {
         return credit;
     }
 
-    public void setCredit(String credit) {
+    public void setCredit(int credit) {
         this.credit = credit;
     }
 
