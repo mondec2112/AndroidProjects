@@ -1,5 +1,6 @@
 package com.example.monsanity.edusoft.main;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.TakenSubjects;
+import com.example.monsanity.edusoft.main.setting.SettingActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by monsanity on 7/21/18.
  */
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     TextView tvProfileName;
     TextView tvProfileID;
@@ -49,6 +51,7 @@ public class ProfileFragment extends Fragment {
     TextView tvProfileDOB;
     TextView tvProfileEmail;
     ImageView ivProfileAva;
+    ImageView ivSetting;
     ProgressBar pbProfile;
     TabLayout tabLayout;
     RecyclerView rvProfileSubjectList;
@@ -94,6 +97,8 @@ public class ProfileFragment extends Fragment {
         ivProfileAva = view.findViewById(R.id.iv_profile_ava);
         pbProfile = view.findViewById(R.id.pbProfile);
         rvProfileSubjectList = view.findViewById(R.id.rv_profile_subject_list);
+        ivSetting = view.findViewById(R.id.iv_profile_setting);
+        ivSetting.setOnClickListener(this);
         tabLayout = view.findViewById(R.id.tab_profile_subject_list);
 
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.ON_GOING));
@@ -415,4 +420,12 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_profile_setting:
+                startActivity(new Intent(getContext(), SettingActivity.class));
+                break;
+        }
+    }
 }

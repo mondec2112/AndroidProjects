@@ -14,9 +14,6 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
-import com.example.monsanity.edusoft.container.Classes;
-import com.example.monsanity.edusoft.container.CourseRegistration;
-import com.example.monsanity.edusoft.container.Exam;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
@@ -71,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         setControls();
 
-        getCourseUtils();
+//        getCourseUtils();
 //        setAPIService();
-//        Data data = new Data("Title FCM", "Message FCM");
+//        List<Semester> arrayList = new ArrayList();
+//        arrayList.add(new Semester("AAA"));
+//        arrayList.add(new Semester("BBB"));
+//        arrayList.add(new Semester("CCC"));
+//        Data data = new Data("Title FCM", arrayList);
 //        Sender sender = new Sender("/topics/all", data);
 //        apiService.sendAll(sender).enqueue(new Callback<String>() {
 //            @Override
@@ -563,7 +564,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(!task.isSuccessful()){
-                        Toast.makeText(MainActivity.this, "Sign In Problem...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Something's wrong.\nCheck your email or password again", Toast.LENGTH_SHORT).show();
+                        pbLogin.setVisibility(View.INVISIBLE);
                     }else{
                         final Intent intent = new Intent(MainActivity.this, BottomNavigationActivity.class);
                         mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
@@ -579,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
                                     editor.putString("email", email);
                                     editor.putString("id", studentID);
                                     editor.apply();
-                                    pbLogin.setVisibility(View.GONE);
+                                    pbLogin.setVisibility(View.INVISIBLE);
                                     startActivity(intent);
                                 }
                             }
@@ -604,9 +606,11 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
+
                     }
                 }
             });
         }
     }
+
 }

@@ -28,6 +28,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
+        Log.e("FCM", message.getData().toString());
         if(message.getData().size() > 0){
             Map<String, String> params = message.getData();
             JSONObject object = new JSONObject(params);
@@ -37,7 +38,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
     private void sendMyNotification(String message) {
-
+        Log.e("FCM", message);
+        message = message.replace("\\", "");
         Log.e("FCM", message);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

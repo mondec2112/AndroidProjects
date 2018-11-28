@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.menu.registration.RegistrationActivity"></activity>
+        <activity android:name=".main.setting.SettingActivity"></activity>
+        <activity android:name=".main.menu.registration.RegistrationActivity" />
         <activity android:name=".main.menu.exam.ExamActivity" />
         <activity android:name=".main.menu.fee.FeeActivity" />
         <activity android:name=".main.menu.grade.GradeActivity" />
