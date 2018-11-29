@@ -24,6 +24,7 @@ import com.example.monsanity.edusoft.container.CourseRegistration;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,8 +97,8 @@ public class RegistrationFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Subjects subject = dataSnapshot.getValue(Subjects.class);
                 if(subject != null
-                        && subject.getFaculty().equals("CSE")
-                        && subject.getDepartment().equals("CS")){
+                        && subject.getFaculty().equals(MainActivity.faculty)
+                        && subject.getDepartment().equals(MainActivity.department)){
                     subjectsList.add(subject);
                 }
             }
@@ -332,7 +333,7 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void getLecturerDetail() {
-        mData.child(FDUtils.LECTURER).child("CSE").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.LECTURER).child(MainActivity.faculty).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);

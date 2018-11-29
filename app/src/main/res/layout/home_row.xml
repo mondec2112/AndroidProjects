@@ -24,31 +24,19 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="52dp"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_status"
-                    android:text="status"
+                    android:id="@+id/tv_home_date"
+                    android:text="2018-07-12"
                     android:maxLines="1"
                     android:textSize="13sp"
+                    android:padding="5dp"
                     android:textColor="@color/color_white"
                     android:paddingTop="2.6dp"
                     android:paddingBottom="1.9dp"
                     android:gravity="center"
-                    android:background="@color/color_light_blue"/>
-
-                <TextView
-                    android:layout_width="52dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_vendor"
-                    android:layout_marginLeft="10dp"
-                    android:text="vendor"
-                    android:maxLines="1"
-                    android:textSize="13sp"
-                    android:textColor="@color/color_white"
-                    android:paddingTop="2.6dp"
-                    android:paddingBottom="1.9dp"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_status_blue"/>
+                    android:textStyle="bold"
+                    android:background="@drawable/rounded_status_light_blue"/>
 
             </LinearLayout>
 
@@ -62,29 +50,13 @@
                     android:paddingTop="10dp"
                     android:id="@+id/tv_home_title"
                     android:text="title"
-                    android:textStyle="bold"
-                    android:textColor="@color/color_black"
-                    android:textSize="16sp"/>
+                    android:textColor="@drawable/selector_text"
+                    android:textSize="15sp"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageView
-                    android:layout_width="9.7dp"
-                    android:layout_height="17.3dp"
-                    android:background="@drawable/right_arrow"
-                    android:layout_gravity="center_vertical"
-                    android:scaleType="center"/>
             </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_home_date"
-                android:text="2018-07-12"
-                android:paddingTop="5dp"
-                android:textColor="@color/color_626262"
-                android:textSize="13sp"/>
 
             <TextView
                 android:layout_width="match_parent"

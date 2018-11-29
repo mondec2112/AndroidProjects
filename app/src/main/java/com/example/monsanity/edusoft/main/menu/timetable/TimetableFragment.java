@@ -56,7 +56,9 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     List<Subjects> subjectsList;
     List<Lecturer> lecturerList;
     int countClass = 0;
-    String student_id;
+    String userID;
+    String role;
+    String username;
 
     public static TimetableFragment newInstance() {
         TimetableFragment timetableFragment = new TimetableFragment();
@@ -138,10 +140,81 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
     private void initData() {
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
-        student_id = mPref.getString("id","");
+        userID = mPref.getString("id","");
+        username = mPref.getString("username","");
+        role = mPref.getString("role", "");
         mData = FirebaseDatabase.getInstance().getReference();
+        if(role.equals(FDUtils.ROLE_STUDENT)){
+            getStudentSchedule();
+        }else{
+            getLecturerCourses();
+        }
+    }
+
+    private void getLecturerCourses() {
+        mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Classes classes = dataSnapshot.getValue(Classes.class);
+                if(classes != null
+                    && classes.getSemester().equals(MainActivity.currentSem)
+                        && classes.getCourse().equals(MainActivity.currentYear)){
+                    if(classes.getInstructor_id().equals(userID)){
+                        classes.setLecturer_name(username);
+                        classesList.add(classes);
+                    }
+                    if(classes.getLab_lessons() != null){
+                        ArrayList<Classes> labClasses = classes.getLab_lessons();
+                        for(Classes labClass : labClasses){
+                            if(labClass.getInstructor_id().equals(userID)){
+                                labClass.setLecturer_name(username);
+                                labClass.setClass_id(classes.getClass_id());
+                                labClass.setSubject_id(classes.getSubject_id());
+                                labClass.setGroup(classes.getGroup());
+                                classesList.add(labClass);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getSubjectDetail(classesList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getStudentSchedule(){
         mData.child(FDUtils.SCHEDULE)
-                .child(student_id)
+                .child(userID)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -184,9 +257,6 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 
             }
         });
-
-
-
     }
 
     private void getCourses(){
@@ -203,7 +273,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
                                 if(classes.getLab_lessons() != null){
                                     ArrayList<Classes> labClasses = classes.getLab_lessons();
                                     for(Classes labClass : labClasses){
-                                        if(labClass.getStudent_list().contains(student_id)){
+                                        if(labClass.getStudent_list().contains(userID)){
                                             labClass.setClass_id(classes.getClass_id());
                                             labClass.setSubject_id(classes.getSubject_id());
                                             labClass.setGroup(classes.getGroup());
@@ -287,7 +357,10 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(subjectsList.size() != 0){
-                    getLecturers(classList);
+                    if(role.equals(FDUtils.ROLE_STUDENT))
+                        getLecturers(classList);
+                    else
+                        mWeekView.notifyDatasetChanged();
                 }
             }
 
@@ -299,7 +372,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     }
 
     private void getLecturers(final List<Classes> classList){
-        mData.child(FDUtils.LECTURER).child("CSE").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.LECTURER).child(MainActivity.faculty).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);

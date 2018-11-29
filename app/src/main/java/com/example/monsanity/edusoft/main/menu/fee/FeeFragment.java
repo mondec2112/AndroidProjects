@@ -76,7 +76,7 @@ public class FeeFragment extends Fragment {
 
     private void initData(){
         this.mData = MainActivity.mData;
-        this.studentID = MainActivity.studentID;
+        this.studentID = MainActivity.userID;
 
         mData.child(FDUtils.FEE).child(studentID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

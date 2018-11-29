@@ -68,18 +68,18 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 //            Toast.makeText(context, mTitle.getText(), Toast.LENGTH_SHORT).show();
             switch (getAdapterPosition()){
                 case 0:
-                    context.startActivity(new Intent(context, RegistrationActivity.class));
-                    break;
-                case 1:
                     context.startActivity(new Intent(context, TimetableActivity.class));
                     break;
                 case 2:
-                    context.startActivity(new Intent(context, ExamActivity.class));
+                    context.startActivity(new Intent(context, RegistrationActivity.class));
                     break;
                 case 3:
-                    context.startActivity(new Intent(context, FeeActivity.class));
+                    context.startActivity(new Intent(context, ExamActivity.class));
                     break;
                 case 4:
+                    context.startActivity(new Intent(context, FeeActivity.class));
+                    break;
+                case 5:
                     context.startActivity(new Intent(context, GradeActivity.class));
             }
         }

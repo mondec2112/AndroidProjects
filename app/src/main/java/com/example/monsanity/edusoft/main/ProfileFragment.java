@@ -17,9 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.monsanity.edusoft.R;
+import com.example.monsanity.edusoft.adapter.ProfileDetailAdapter;
 import com.example.monsanity.edusoft.adapter.SubjectListAdapter;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
+import com.example.monsanity.edusoft.container.ProfileDetail;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.Subjects;
@@ -42,31 +44,28 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-    TextView tvProfileName;
-    TextView tvProfileID;
-    TextView tvProfileCourse;
-    TextView tvProfileDepartment;
-    TextView tvProfileFaculty;
-    TextView tvProfileAdvisor;
-    TextView tvProfileDOB;
-    TextView tvProfileEmail;
     ImageView ivProfileAva;
     ImageView ivSetting;
     ProgressBar pbProfile;
     TabLayout tabLayout;
     RecyclerView rvProfileSubjectList;
+    RecyclerView rvProfileDetail;
 
     DatabaseReference mData;
     SharedPreferences mPref;
 
     String studentID;
-    Student studentInfo;
+    String faculty;
+    String department;
+    String role;
     ArrayList<Subjects> allSubjectList;
     ArrayList<RegisteredSubject> registeredSubjects;
     ArrayList<Subjects> onGoingList;
     ArrayList<Subjects> takenList;
     ArrayList<String> takenSubjectsList;
+    ArrayList<ProfileDetail> detailList;
     SubjectListAdapter adapter;
+    ProfileDetailAdapter detailAdapter;
 
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -86,21 +85,48 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View view) {
-        tvProfileName = view.findViewById(R.id.tv_profile_name);
-        tvProfileID = view.findViewById(R.id.tv_profile_id);
-        tvProfileCourse = view.findViewById(R.id.tv_profile_course);
-        tvProfileDepartment = view.findViewById(R.id.tv_profile_department);
-        tvProfileFaculty = view.findViewById(R.id.tv_profile_faculty);
-        tvProfileAdvisor = view.findViewById(R.id.tv_profile_advisor);
-        tvProfileDOB = view.findViewById(R.id.tv_profile_dob);
-        tvProfileEmail = view.findViewById(R.id.tv_profile_email);
         ivProfileAva = view.findViewById(R.id.iv_profile_ava);
         pbProfile = view.findViewById(R.id.pbProfile);
         rvProfileSubjectList = view.findViewById(R.id.rv_profile_subject_list);
-        ivSetting = view.findViewById(R.id.iv_profile_setting);
+        rvProfileDetail = view.findViewById(R.id.rv_profile_detail);
+        ivSetting = view.findViewById(R.id.iv_profile_setting1);
         ivSetting.setOnClickListener(this);
         tabLayout = view.findViewById(R.id.tab_profile_subject_list);
 
+    }
+
+    private void initData() {
+        detailList = new ArrayList<>();
+        mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
+        studentID = mPref.getString("id","");
+        faculty = mPref.getString("faculty","");
+        department = mPref.getString("department","");
+        role = mPref.getString("role","");
+        mData = FirebaseDatabase.getInstance().getReference();
+        if(role.equals(FDUtils.ROLE_STUDENT)){
+            initTabLayout();
+            getLecturer();
+        }else{
+            tabLayout.setVisibility(View.GONE);
+            getLecturerData();
+        }
+    }
+
+    private void getLecturerData(){
+        detailList.add(new ProfileDetail("Name", MainActivity.lecturer.getName()));
+        detailList.add(new ProfileDetail("ID", MainActivity.lecturer.getId()));
+        detailList.add(new ProfileDetail("Faculty", MainActivity.lecturer.getFaculty()));
+        detailList.add(new ProfileDetail("Date of birth", MainActivity.lecturer.getDob()));
+        detailList.add(new ProfileDetail("Joined", MainActivity.lecturer.getJoined()));
+        detailList.add(new ProfileDetail("Email", MainActivity.lecturer.getEmail()));
+        detailAdapter = new ProfileDetailAdapter(detailList, getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvProfileDetail.setAdapter(detailAdapter);
+        rvProfileDetail.setLayoutManager(layoutManager);
+        pbProfile.setVisibility(View.INVISIBLE);
+    }
+
+    private void initTabLayout(){
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.ON_GOING));
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.FINISHED));
         tabLayout.addTab(tabLayout.newTab().setText(FDUtils.ALL));
@@ -123,7 +149,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         adapter.notifyDataSetChanged();
                         break;
                 }
-//                Toast.makeText(getContext(), adapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -136,72 +161,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
-    }
-
-    private void initData() {
-        mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
-        studentID = mPref.getString("id","");
-        mData = FirebaseDatabase.getInstance().getReference();
-        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Student student = dataSnapshot.getValue(Student.class);
-                if(student != null){
-                    if(student.getId().equals(studentID)){
-                        studentInfo = student;
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                getLecturer();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void getLecturer(){
-        mData.child(FDUtils.LECTURER).child("CSE").addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.LECTURER).child(MainActivity.faculty).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
-                if(lecturer != null && lecturer.getId().equals(studentInfo.getAdvisor())){
-                    tvProfileAdvisor.setText(lecturer.getName());
-                    tvProfileName.setText(studentInfo.getName());
-                    tvProfileID.setText(studentInfo.getId());
-                    tvProfileCourse.setText(studentInfo.getCourse());
-                    tvProfileDepartment.setText(studentInfo.getDepartment());
-                    tvProfileFaculty.setText(studentInfo.getFaculty());
-                    tvProfileDOB.setText(studentInfo.getDob());
-                    tvProfileEmail.setText(studentInfo.getEmail());
+                if(lecturer != null && lecturer.getId().equals(MainActivity.student.getAdvisor())){
+                    detailList.add(new ProfileDetail("Name", MainActivity.student.getName()));
+                    detailList.add(new ProfileDetail("ID", MainActivity.student.getId()));
+                    detailList.add(new ProfileDetail("Course", MainActivity.student.getCourse()));
+                    detailList.add(new ProfileDetail("Department", MainActivity.student.getDepartment()));
+                    detailList.add(new ProfileDetail("Faculty", MainActivity.student.getFaculty()));
+                    detailList.add(new ProfileDetail("Advisor", lecturer.getName()));
+                    detailList.add(new ProfileDetail("Date of birth", MainActivity.student.getDob()));
+                    detailList.add(new ProfileDetail("Email", MainActivity.student.getEmail()));
                 }
             }
 
@@ -229,6 +204,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                detailAdapter = new ProfileDetailAdapter(detailList, getContext());
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                rvProfileDetail.setAdapter(detailAdapter);
+                rvProfileDetail.setLayoutManager(layoutManager);
                 getSubjectList();
             }
 
@@ -251,8 +230,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Subjects subject = dataSnapshot.getValue(Subjects.class);
                         if(subject != null
-                                && subject.getFaculty().equals("CSE")
-                                && subject.getDepartment().equals("CS")){
+                                && subject.getFaculty().equals(MainActivity.faculty)
+                                && subject.getDepartment().equals(MainActivity.department)){
                             allSubjectList.add(subject);
                         }
                     }
@@ -423,7 +402,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.iv_profile_setting:
+            case R.id.iv_profile_setting1:
                 startActivity(new Intent(getContext(), SettingActivity.class));
                 break;
         }

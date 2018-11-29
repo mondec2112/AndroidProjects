@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
 import com.example.monsanity.edusoft.container.FDUtils;
+import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
@@ -51,9 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth.AuthStateListener authStateListener;
     public static APIService apiService;
-    public static String studentID;
+    public static String userID;
+    public static String faculty;
+    public static String department;
+    public static String role;
     public static String currentSem;
     public static String currentYear;
+
+    public static Student student;
+    public static Lecturer lecturer;
 
     public static void setAPIService(){
         apiService = ApiUtils.getRetrofitService();
@@ -68,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         setControls();
 
-//        getCourseUtils();
+        getCourseUtils();
 //        setAPIService();
 //        List<Semester> arrayList = new ArrayList();
 //        arrayList.add(new Semester("AAA"));
@@ -554,7 +562,7 @@ public class MainActivity extends AppCompatActivity {
 
         pbLogin.setVisibility(View.VISIBLE);
 
-        String username = edtUsername.getText().toString();
+        final String username = edtUsername.getText().toString();
         String password = edtPassword.getText().toString();
 
         if(TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
@@ -568,45 +576,96 @@ public class MainActivity extends AppCompatActivity {
                         pbLogin.setVisibility(View.INVISIBLE);
                     }else{
                         final Intent intent = new Intent(MainActivity.this, BottomNavigationActivity.class);
-                        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                Student student = dataSnapshot.getValue(Student.class);
-                                if(edtUsername.getText().toString().equals(student.getEmail())){
-                                    String name = student.getName();
-                                    String email = student.getEmail();
-                                    studentID = student.getId();
-                                    editor = mPref.edit();
-                                    editor.putString("username", name);
-                                    editor.putString("email", email);
-                                    editor.putString("id", studentID);
-                                    editor.apply();
-                                    pbLogin.setVisibility(View.INVISIBLE);
-                                    startActivity(intent);
+                        if(username.split("@")[1].equals("hcmiu.edu.vn")){
+                            mData.child(FDUtils.LECTURER).child("CSE").addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                    Lecturer lecturerData = dataSnapshot.getValue(Lecturer.class);
+                                    if(username.equals(lecturerData.getEmail())){
+                                        String name = lecturerData.getName();
+                                        String email = lecturerData.getEmail();
+                                        userID = lecturerData.getId();
+                                        faculty = lecturerData.getFaculty();
+                                        editor = mPref.edit();
+                                        editor.putString("username", name);
+                                        editor.putString("email", email);
+                                        editor.putString("id", userID);
+                                        editor.putString("faculty", faculty);
+                                        editor.putString("role", FDUtils.ROLE_LECTERER);
+                                        editor.apply();
+                                        lecturer = lecturerData;
+                                        pbLogin.setVisibility(View.INVISIBLE);
+                                        startActivity(intent);
+                                    }
+
                                 }
-                            }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                @Override
+                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                @Override
+                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                @Override
+                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }else{
+                            mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    Student studentData = dataSnapshot.getValue(Student.class);
+                                    if(edtUsername.getText().toString().equals(studentData.getEmail())){
+                                        String name = studentData.getName();
+                                        String email = studentData.getEmail();
+                                        userID = studentData.getId();
+                                        faculty = studentData.getFaculty();
+                                        department = studentData.getDepartment();
+                                        editor = mPref.edit();
+                                        editor.putString("username", name);
+                                        editor.putString("email", email);
+                                        editor.putString("id", userID);
+                                        editor.putString("faculty", faculty);
+                                        editor.putString("department", department);
+                                        editor.putString("role", FDUtils.ROLE_STUDENT);
+                                        editor.apply();
+                                        student = studentData;
+                                        pbLogin.setVisibility(View.INVISIBLE);
+                                        startActivity(intent);
+                                    }
+                                }
 
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
                     }
                 }
             });

@@ -88,7 +88,7 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
         finalExamList = new ArrayList<>();
 
         mData = MainActivity.mData;
-        mData.child(FDUtils.SCHEDULE).child(MainActivity.studentID).addChildEventListener(new ChildEventListener() {
+        mData.child(FDUtils.SCHEDULE).child(MainActivity.userID).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);

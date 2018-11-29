@@ -37,4 +37,7 @@ public class FDUtils {
     public static final String FINAL = "FINAL";
     public static final String EXAM_TYPE_MID = "midterm";
     public static final String EXAM_TYPE_FINAL = "final";
+
+    public static final String ROLE_LECTERER = "lecturer";
+    public static final String ROLE_STUDENT = "student";
 }
