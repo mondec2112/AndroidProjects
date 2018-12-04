@@ -36,7 +36,8 @@
                     android:id="@+id/cb_registration"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:buttonTint="@color/white"/>
+                    android:buttonTint="@color/white"
+                    android:clickable="false"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -67,7 +68,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_credit"
                     android:text="credit"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -76,7 +76,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_instructor_name"
                     android:text="instructor name"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -85,7 +84,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_group"
                     android:text="group"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -94,7 +92,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_class_size"
                     android:text="class size"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -103,7 +100,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_registered_number"
                     android:text="registered number"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -112,7 +108,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_start_slot"
                     android:text="start slot"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -121,7 +116,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_sum_slot"
                     android:text="sum slot"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
 
@@ -130,7 +124,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registration_duration"
                     android:text="duration"
-                    android:textStyle="bold"
                     android:textColor="@color/color_grey"
                     android:padding="2dp"/>
             </LinearLayout>

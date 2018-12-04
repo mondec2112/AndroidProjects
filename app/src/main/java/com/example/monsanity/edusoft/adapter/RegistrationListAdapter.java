@@ -2,6 +2,7 @@ package com.example.monsanity.edusoft.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.ClassesRegistration;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.main.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ import java.util.List;
 public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationListAdapter.ViewHolder> {
 
     private List<ClassesRegistration> items;
+    private List<ClassesRegistration> selectedItems = new ArrayList<>();
     private Context context;
 
     public RegistrationListAdapter(List<ClassesRegistration> items, Context context) {
@@ -84,6 +88,12 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
         holder.tvSumSlot.setText("Sum slot: " + sumSlot);
         holder.tvDuration.setText("Duration: " + duration);
 
+        if(items.get(position).getStudent_list().size() >= items.get(position).getClass_size()
+                || items.get(position).getStudent_list().contains(MainActivity.userID)){
+            holder.rlSubjectNameHolder.setClickable(false);
+            holder.cbRegistration.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override
@@ -93,6 +103,10 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
     public void setItems(List<ClassesRegistration> items){
         this.items = items;
+    }
+
+    public List<ClassesRegistration> getSelectedItem(){
+        return selectedItems;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -132,10 +146,19 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
         @Override
         public void onClick(View v) {
-            if(cbRegistration.isChecked())
-                cbRegistration.setChecked(false);
-            else
-                cbRegistration.setChecked(true);
+            switch (v.getId()){
+                case R.id.rl_registration_subject_name_holder:
+                    if(cbRegistration.isChecked())
+                    {
+                        cbRegistration.setChecked(false);
+                        selectedItems.remove(items.get(getAdapterPosition()));
+                    }else{
+                        cbRegistration.setChecked(true);
+                        selectedItems.add(items.get(getAdapterPosition()));
+                    }
+                    Log.e("Registration size", String.valueOf(selectedItems.size()));
+                    break;
+            }
         }
     }
 }

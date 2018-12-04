@@ -8,16 +8,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
 import com.example.monsanity.edusoft.adapter.RegistrationListAdapter;
-import com.example.monsanity.edusoft.adapter.SubjectListAdapter;
 import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.ClassesRegistration;
 import com.example.monsanity.edusoft.container.CourseRegistration;
@@ -40,11 +42,13 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegistrationFragment extends Fragment {
+public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
     ProgressBar pbRegistration;
     TextView tvRegistrationNotFound;
     RecyclerView rvRegistration;
+    ImageView ivBack;
+    ImageView ivSave;
 
     DatabaseReference mData;
     SharedPreferences mPref;
@@ -80,6 +84,10 @@ public class RegistrationFragment extends Fragment {
         pbRegistration = view.findViewById(R.id.pb_registration);
         tvRegistrationNotFound = view.findViewById(R.id.tv_registration_not_found);
         rvRegistration = view.findViewById(R.id.rv_registration_list);
+        ivBack = view.findViewById(R.id.iv_header_back);
+        ivSave = view.findViewById(R.id.iv_header_save);
+        ivBack.setOnClickListener(this);
+        ivSave.setOnClickListener(this);
 
         classesList = new ArrayList<>();
         subjectsList = new ArrayList<>();
@@ -378,6 +386,7 @@ public class RegistrationFragment extends Fragment {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                     rvRegistration.setAdapter(adapter);
                     rvRegistration.setLayoutManager(layoutManager);
+                    adapter.notifyDataSetChanged();
                 }else{
                     tvRegistrationNotFound.setVisibility(View.VISIBLE);
                 }
@@ -391,4 +400,94 @@ public class RegistrationFragment extends Fragment {
         });
     }
 
+    private void registerCourses(){
+        pbRegistration.setVisibility(View.VISIBLE);
+        final List<ClassesRegistration> registrations = adapter.getSelectedItem();
+        if(registrations.size() != 0){
+//            final ArrayList<String> studentList = new ArrayList<>();
+            mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    ArrayList<String> studentList;
+                    Classes classes = dataSnapshot.getValue(Classes.class);
+                    if(classes != null){
+                        String childKey = dataSnapshot.getKey();
+                        for(ClassesRegistration registration : registrations){
+                            if(classes.getLab_lessons() != null){
+                                Classes labLesson = classes.getLab_lessons().get(registration.getGroup()-1);
+                                if(labLesson.getStudent_list() != null){
+                                    if(labLesson.getStudent_list().size() < labLesson.getClass_size()){
+                                        studentList = labLesson.getStudent_list();
+                                        studentList.add(studentID);
+                                        mData.child(FDUtils.COURSES)
+                                                .child(childKey)
+                                                .child("lab_lessons")
+                                                .child(String.valueOf(registration.getGroup()-1))
+                                                .child("student_list")
+                                                .setValue(studentList);
+                                    }else{
+                                        Toast.makeText(getContext(), labLesson.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
+                                        initData();
+                                    }
+                                }else{
+                                    studentList = new ArrayList<>();
+                                    studentList.add(studentID);
+                                    mData.child(FDUtils.COURSES)
+                                            .child(childKey)
+                                            .child("lab_lessons")
+                                            .child(String.valueOf(registration.getGroup()-1))
+                                            .child("student_list")
+                                            .setValue(studentList);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            mData.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    pbRegistration.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_header_back:
+                getActivity().finish();
+                break;
+            case R.id.iv_header_save:
+                registerCourses();
+                break;
+        }
+    }
 }

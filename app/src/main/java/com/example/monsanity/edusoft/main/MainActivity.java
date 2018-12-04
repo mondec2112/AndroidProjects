@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
+import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.Student;
@@ -380,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
 //        classes.setClass_size(50);
 //        classes.setCourse("2018-2019");
 //        classes.setSemester("spring");
-//        classes.setGroup("01");
+////        classes.setGroup("01");
 //        classes.setInstructor_id("IT001");
 //        classes.setRoom("A1.402");
 //        classes.setStart_slot(1);

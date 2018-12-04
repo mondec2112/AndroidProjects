@@ -3,8 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.menu.registration.RegistrationFragment"
-    android:background="@color/color_background_grey">
+    tools:context=".main.menu.registration.RegistrationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:id="@+id/ln_registration_header">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="16dp"
+            android:src="@drawable/back"
+            android:layout_weight="1"
+            android:id="@+id/iv_header_back"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="16dp"
+            android:src="@drawable/save"
+            android:layout_weight="1"
+            android:id="@+id/iv_header_save"/>
+    </LinearLayout>
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -14,7 +40,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/ln_registration_header">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
