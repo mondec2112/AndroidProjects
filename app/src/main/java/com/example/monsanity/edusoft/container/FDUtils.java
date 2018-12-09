@@ -38,6 +38,9 @@ public class FDUtils {
     public static final String EXAM_TYPE_MID = "midterm";
     public static final String EXAM_TYPE_FINAL = "final";
 
-    public static final String ROLE_LECTERER = "lecturer";
+    public static final String ROLE_LECTURER = "lecturer";
     public static final String ROLE_STUDENT = "student";
+
+    public static final String REGISTRATION_NOT_AVAILABLE = "REGISTRATION IS NOT AVAILABLE.";
+    public static final String REGISTRATION_NO_SUBJECTD_REGISTERED = "NO SUBJECTS REGISTERED.";
 }

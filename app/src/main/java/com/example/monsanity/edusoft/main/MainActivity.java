@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
-import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.Student;
@@ -376,18 +375,18 @@ public class MainActivity extends AppCompatActivity {
 //        });
 ////
 //        Classes classes = new Classes();
-//        classes.setSubject_id("IT005IU");
-//        classes.setClass_id("ITIT05N11");
-//        classes.setClass_size(50);
+//        classes.setSubject_id("IT006IU");
+//        classes.setClass_id("ITIT06N11");
+//        classes.setClass_size(40);
 //        classes.setCourse("2018-2019");
 //        classes.setSemester("spring");
 ////        classes.setGroup("01");
-//        classes.setInstructor_id("IT001");
-//        classes.setRoom("A1.402");
-//        classes.setStart_slot(1);
+//        classes.setInstructor_id("IT002");
+//        classes.setRoom("A2.405");
+//        classes.setStart_slot(7);
 //        classes.setSum_slot(3);
-//        classes.setClass_date(getStudyDates("2018-02-04", "2018-04-29"));
-//
+//        classes.setClass_date(getStudyDates("2018-02-06", "2018-05-01"));
+
 //        Classes labClasses1 = new Classes();
 //        labClasses1.setClass_date(getStudyDates("2018-03-04", "2018-04-22"));
 //        labClasses1.setClass_size(25);
@@ -403,14 +402,14 @@ public class MainActivity extends AppCompatActivity {
 //        labClasses2.setRoom("LA1.605");
 //        labClasses2.setStart_slot(1);
 //        labClasses2.setSum_slot(3);
-//
+
 //        ArrayList<Classes> labLessons = new ArrayList<>();
 //        labLessons.add(labClasses1);
 //        labLessons.add(labClasses2);
 //        classes.setLab_lessons(labLessons);
 //        mData.child(FDUtils.COURSES).push().setValue(classes);
 
-//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("spring").push().setValue(new CourseRegistration("IT005IU", "ITIT05N11", true));
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("spring").push().setValue(new CourseRegistration("IT006IU", "ITIT06N11", true));
 
 //        ArrayList<StudentGrade> studentGrades = new ArrayList<>();
 //        studentGrades.add(new StudentGrade(
@@ -592,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
                                         editor.putString("email", email);
                                         editor.putString("id", userID);
                                         editor.putString("faculty", faculty);
-                                        editor.putString("role", FDUtils.ROLE_LECTERER);
+                                        editor.putString("role", FDUtils.ROLE_LECTURER);
                                         editor.apply();
                                         lecturer = lecturerData;
                                         pbLogin.setVisibility(View.INVISIBLE);

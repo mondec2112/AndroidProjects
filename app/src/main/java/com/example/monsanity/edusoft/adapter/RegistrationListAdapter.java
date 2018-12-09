@@ -80,7 +80,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
             sumSlot = String.valueOf(items.get(position).getSum_slot());
             duration = items.get(position).getClass_date().get(0)
                     + " to "
-                    + items.get(position).getClass_date().get(items.get(position).getClass_date().size());
+                    + items.get(position).getClass_date().get(items.get(position).getClass_date().size() - 1);
         }
         holder.tvInstructor.setText("Lecturer: " + lecturer);
         holder.tvRegisteredNumber.setText("Registered: " + items.get(position).getStudent_list().size());

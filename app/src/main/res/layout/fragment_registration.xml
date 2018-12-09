@@ -3,34 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.menu.registration.RegistrationFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.menu.registration.RegistrationFragment"
+    android:background="@color/color_background_grey">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:id="@+id/ln_registration_header">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="16dp"
-            android:src="@drawable/back"
-            android:layout_weight="1"
-            android:id="@+id/iv_header_back"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10"/>
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="16dp"
-            android:src="@drawable/save"
-            android:layout_weight="1"
-            android:id="@+id/iv_header_save"/>
-    </LinearLayout>
+    <include layout="@layout/header_layout"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -38,17 +15,53 @@
         android:id="@+id/pb_registration"
         android:layout_centerInParent="true"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ln_registration_header">
+        android:id="@+id/rl_registration_subjects_container"
+        android:layout_below="@id/ln_registration_header"
+        android:layout_above="@id/cvTab">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ln_registration_header">
 
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rv_registration_list"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_registration_registered_container"
+        android:layout_below="@id/ln_registration_header"
+        android:layout_above="@id/cvTab"
+        android:visibility="invisible">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rv_registration_list"/>
+            android:layout_height="match_parent"
+            android:id="@+id/rv_registration_registered" />
+    </RelativeLayout>
 
-    </LinearLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/cvTab">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            app:tabIndicatorHeight="3dp"
+            app:tabIndicatorColor="@color/color_blue"
+            app:tabTextColor="@color/color_black"/>
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
