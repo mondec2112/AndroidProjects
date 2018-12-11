@@ -43,6 +43,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         holder.tvSubjectName.setText(items.get(position).getSubject_name());
         holder.tvSubjectID.setText("Subject ID: " + items.get(position).getSubject_id());
         holder.tvClassID.setText("Class ID: " + items.get(position).getClass_id());
@@ -89,7 +90,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
         holder.tvDuration.setText("Duration: " + duration);
 
         if(items.get(position).getStudent_list().size() >= items.get(position).getClass_size()
-                || items.get(position).getStudent_list().contains(MainActivity.userID)){
+                || items.get(position).isRegistered()){
             holder.rlSubjectNameHolder.setClickable(false);
             holder.cbRegistration.setVisibility(View.INVISIBLE);
         }
@@ -103,6 +104,11 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
     public void setItems(List<ClassesRegistration> items){
         this.items = items;
+    }
+
+    public void clearItems(){
+        items.clear();
+        notifyDataSetChanged();
     }
 
     public List<ClassesRegistration> getSelectedItem(){

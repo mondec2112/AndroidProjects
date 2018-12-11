@@ -53,6 +53,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     RecyclerView rvRegistered;
     ImageView ivBack;
     ImageView ivSave;
+    ImageView ivHeaderLogo;
     TabLayout tabLayout;
     RelativeLayout rlRegistrationSubjects;
     RelativeLayout rlRegistrationRegistered;
@@ -63,11 +64,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     String nextCourse;
     String nextSemester;
 
-    List<Classes> classesList;
     List<Subjects> subjectsList;
     List<CourseRegistration> registrationList;
     List<ClassesRegistration> classesRegistrationList;
-    List<ClassesRegistration> registeredList;
+    List<ClassesRegistration> classesRegisteredList;
+    List<RegisteredSubject> registeredSubjectList;
     RegistrationListAdapter registrationAdapter;
     RegisteredListAdapter registeredAdapter;
 
@@ -98,14 +99,17 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         rlRegistrationRegistered = view.findViewById(R.id.rl_registration_registered_container);
         ivBack = view.findViewById(R.id.iv_header_back);
         ivSave = view.findViewById(R.id.iv_header_save);
+        ivHeaderLogo = view.findViewById(R.id.iv_header_logo);
+
+        ivHeaderLogo.setImageResource(R.drawable.registration);
         ivBack.setOnClickListener(this);
         ivSave.setOnClickListener(this);
 
-        classesList = new ArrayList<>();
         subjectsList = new ArrayList<>();
         registrationList = new ArrayList<>();
         classesRegistrationList = new ArrayList<>();
-        registeredList = new ArrayList<>();
+        classesRegisteredList = new ArrayList<>();
+        registeredSubjectList = new ArrayList<>();
 
         tabLayout = view.findViewById(R.id.tab_registration);
         tabLayout.addTab(tabLayout.newTab().setText("Available"));
@@ -117,10 +121,22 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     case 0:
                         rlRegistrationSubjects.setVisibility(View.VISIBLE);
                         rlRegistrationRegistered.setVisibility(View.INVISIBLE);
+                        if(registrationList.size() == 0){
+                            tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
+                            tvRegistrationText.setVisibility(View.VISIBLE);
+                        }else{
+                            tvRegistrationText.setVisibility(View.INVISIBLE);
+                        }
                         break;
                     case 1:
                         rlRegistrationSubjects.setVisibility(View.INVISIBLE);
                         rlRegistrationRegistered.setVisibility(View.VISIBLE);
+                        if(classesRegisteredList.size() == 0){
+                            tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
+                            tvRegistrationText.setVisibility(View.VISIBLE);
+                        }else{
+                            tvRegistrationText.setVisibility(View.INVISIBLE);
+                        }
                         break;
                 }
             }
@@ -262,6 +278,52 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getRegisteredSubject();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getRegisteredSubject(){
+        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
+                if(registeredSubject != null
+                        && registeredSubject.getSemester().equals(nextSemester)
+                        && registeredSubject.getCourse().equals(nextCourse)){
+                    registeredSubjectList.add(registeredSubject);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 getRegistrationDetail();
             }
 
@@ -292,7 +354,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                             for(int i = 0; i < labClasses.size(); i++){
                                 classes.setGroup(i + 1);
                                 classes.setClass_size(labClasses.get(i).getClass_size());
-                                classesList.add(classes);
                                 ClassesRegistration registration = new ClassesRegistration();
                                 registration.setSubject_name(classes.getSubject_name());
                                 registration.setSubject_id(classes.getSubject_id());
@@ -318,8 +379,17 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                     registration.setStudent_list(new ArrayList<String>());
                                 }
                                 classesRegistrationList.add(registration);
+                                // check if subject is registered
+                                for(RegisteredSubject registeredSubject : registeredSubjectList){
+                                    if(registeredSubject.getSubject_id().equals(registration.getSubject_id())
+                                            && registeredSubject.getReg_sub().equals(registration.getClass_id())){
+                                        registration.setRegistered(true);
+                                    }
+                                }
+
+                                // check if class contains student
                                 if(registration.getStudent_list().contains(studentID))
-                                    registeredList.add(registration);
+                                    classesRegisteredList.add(registration);
                             }
                         }else{
                             classes.setGroup(1);
@@ -342,10 +412,18 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                             }else{
                                 registration.setStudent_list(new ArrayList<String>());
                             }
-                            classesList.add(classes);
                             classesRegistrationList.add(registration);
+                            // check if subject is registered
+                            for(RegisteredSubject registeredSubject : registeredSubjectList){
+                                if(registeredSubject.getSubject_id().equals(registration.getSubject_id())
+                                        && registeredSubject.getReg_sub().equals(registration.getClass_id())){
+                                    registration.setRegistered(true);
+                                }
+                            }
+
+                            // check if class contains student
                             if(registration.getStudent_list().contains(studentID))
-                                registeredList.add(registration);
+                                classesRegisteredList.add(registration);
                         }
 
                     }
@@ -434,18 +512,18 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     LinearLayoutManager layoutRegistration = new LinearLayoutManager(getContext());
                     rvRegistration.setLayoutManager(layoutRegistration);
                     registrationAdapter.notifyDataSetChanged();
-                }else{
+                }else if (rlRegistrationSubjects.getVisibility() == View.VISIBLE){
                     tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
                     tvRegistrationText.setVisibility(View.VISIBLE);
                 }
 
-                if(registeredList.size() != 0){
-                    registeredAdapter = new RegisteredListAdapter(registeredList, getContext());
+                if(classesRegisteredList.size() != 0){
+                    registeredAdapter = new RegisteredListAdapter(classesRegisteredList, getContext());
                     rvRegistered.setAdapter(registeredAdapter);
                     LinearLayoutManager layoutRegistered = new LinearLayoutManager(getContext());
                     rvRegistered.setLayoutManager(layoutRegistered);
                     registeredAdapter.notifyDataSetChanged();
-                }else{
+                }else if (rlRegistrationRegistered.getVisibility() == View.VISIBLE){
                     tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
                     tvRegistrationText.setVisibility(View.VISIBLE);
                 }
@@ -463,7 +541,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         pbRegistration.setVisibility(View.VISIBLE);
         final List<ClassesRegistration> registrations = registrationAdapter.getSelectedItem();
         if(registrations.size() != 0){
-//            final ArrayList<String> studentList = new ArrayList<>();
             mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -472,14 +549,34 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     if(classes != null){
                         String childKey = dataSnapshot.getKey();
                         for(ClassesRegistration registration : registrations){
-                            // Class contains lab sessions
-                            if(classes.getLab_lessons() != null){
-                                Classes labLesson = classes.getLab_lessons().get(registration.getGroup()-1);
-                                if(labLesson.getStudent_list() != null){
-                                    if(labLesson.getStudent_list().size() < labLesson.getClass_size()){
-                                        studentList = labLesson.getStudent_list();
-                                        if(!studentList.contains(studentID))
-                                            studentList.add(studentID);
+                            if(classes.getSubject_id().equals(registration.getSubject_id())
+                                    && classes.getClass_id().equals(registration.getClass_id())
+                                    && classes.getSemester().equals(registration.getSemester())
+                                    && classes.getCourse().equals(registration.getCourse())){
+
+                                // Class contains lab sessions
+                                if(classes.getLab_lessons() != null){
+                                    Classes labLesson = classes.getLab_lessons().get(registration.getGroup()-1);
+                                    if(labLesson.getStudent_list() != null){
+                                        if(labLesson.getStudent_list().size() < labLesson.getClass_size()){
+                                            studentList = labLesson.getStudent_list();
+                                            if(!studentList.contains(studentID))
+                                                studentList.add(studentID);
+                                            mData.child(FDUtils.COURSES)
+                                                    .child(childKey)
+                                                    .child("lab_lessons")
+                                                    .child(String.valueOf(registration.getGroup()-1))
+                                                    .child("student_list")
+                                                    .setValue(studentList);
+
+                                            addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                        }else{
+                                            Toast.makeText(getContext(), labLesson.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
+                                            initData();
+                                        }
+                                    }else{
+                                        studentList = new ArrayList<>();
+                                        studentList.add(studentID);
                                         mData.child(FDUtils.COURSES)
                                                 .child(childKey)
                                                 .child("lab_lessons")
@@ -488,8 +585,21 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                                 .setValue(studentList);
 
                                         addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                    }
+                                    // Class does not contain lab sessions
+                                }else if(classes.getStudent_list() != null){
+                                    if(classes.getStudent_list().size() < classes.getClass_size()){
+                                        studentList = classes.getStudent_list();
+                                        if(!studentList.contains(studentID))
+                                            studentList.add(studentID);
+                                        mData.child(FDUtils.COURSES)
+                                                .child(childKey)
+                                                .child("student_list")
+                                                .setValue(studentList);
+
+                                        addToSchedule(classes.getSubject_id(), classes.getClass_id());
                                     }else{
-                                        Toast.makeText(getContext(), labLesson.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), classes.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
                                         initData();
                                     }
                                 }else{
@@ -497,39 +607,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                     studentList.add(studentID);
                                     mData.child(FDUtils.COURSES)
                                             .child(childKey)
-                                            .child("lab_lessons")
-                                            .child(String.valueOf(registration.getGroup()-1))
                                             .child("student_list")
                                             .setValue(studentList);
 
                                     addToSchedule(classes.getSubject_id(), classes.getClass_id());
                                 }
-                                // Class does not contain lab sessions
-                            }else if(classes.getStudent_list() != null){
-                                if(classes.getStudent_list().size() < classes.getClass_size()){
-                                    studentList = classes.getStudent_list();
-                                    if(!studentList.contains(studentID))
-                                        studentList.add(studentID);
-                                    mData.child(FDUtils.COURSES)
-                                            .child(childKey)
-                                            .child("student_list")
-                                            .setValue(studentList);
-
-                                    addToSchedule(classes.getSubject_id(), classes.getClass_id());
-                                }else{
-                                    Toast.makeText(getContext(), classes.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
-                                    initData();
-                                }
-                            }else{
-                                studentList = new ArrayList<>();
-                                studentList.add(studentID);
-                                mData.child(FDUtils.COURSES)
-                                        .child(childKey)
-                                        .child("student_list")
-                                        .setValue(studentList);
-
-                                addToSchedule(classes.getSubject_id(), classes.getClass_id());
                             }
+
                         }
                     }
                 }
@@ -558,7 +642,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             mData.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    pbRegistration.setVisibility(View.INVISIBLE);
+                    registrationList.clear();
+                    classesRegistrationList.clear();
+                    classesRegisteredList.clear();
+                    registeredSubjectList.clear();
+                    getRegistrationList();
                 }
 
                 @Override

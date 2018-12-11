@@ -41,6 +41,7 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         holder.tvSubjectName.setText(items.get(position).getSubject_name());
         holder.tvSubjectID.setText("Subject ID: " + items.get(position).getSubject_id());
         holder.tvClassID.setText("Class ID: " + items.get(position).getClass_id());
@@ -84,6 +85,11 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
 
     public void setItems(List<ClassesRegistration> items){
         this.items = items;
+    }
+
+    public void clearItems(){
+        items.clear();
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

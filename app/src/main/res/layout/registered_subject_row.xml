@@ -17,21 +17,33 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ln_registered_subject_name_container"
                 android:background="@color/color_light_orange"
-                android:padding="5dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_registered_subject_name"
                     android:text="subject name"
                     android:textSize="16dp"
                     android:textColor="@color/color_white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:id="@+id/iv_registered_remove"
+                    android:padding="5dp"
+                    android:src="@drawable/cancel"
+                    android:layout_weight="1"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="8dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

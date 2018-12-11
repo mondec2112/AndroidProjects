@@ -27,6 +27,8 @@ public class ClassesRegistration {
     int sum_slot_lab;
     String lecturer_name_lab;
 
+    boolean isRegistered;
+
     public ClassesRegistration() {
     }
 
@@ -204,5 +206,13 @@ public class ClassesRegistration {
 
     public void setLecturer_name_lab(String lecturer_name_lab) {
         this.lecturer_name_lab = lecturer_name_lab;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 }

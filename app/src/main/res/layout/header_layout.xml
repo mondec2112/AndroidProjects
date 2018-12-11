@@ -13,10 +13,13 @@
         android:padding="16dp"
         android:src="@drawable/back" />
 
-    <View
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="10" />
+        android:id="@+id/iv_header_logo"
+        android:layout_weight="10"
+        android:padding="5dp"
+        android:src="@drawable/hcmiu_logo"/>
 
     <ImageView
         android:id="@+id/iv_header_save"
