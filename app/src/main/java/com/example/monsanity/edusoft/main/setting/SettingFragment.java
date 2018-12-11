@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,8 +69,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private void showLogOutDialog() {
         final Dialog dialog = new Dialog(getContext());
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_logout_confirm,null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm,null);
         dialog.setContentView(view);
+        TextView tvLogOutMessage = view.findViewById(R.id.tv_dialog_message);
+        tvLogOutMessage.setText(FDUtils.DIALOG_MSG_LOG_OUT);
         TextView tvLogOutCancel = view.findViewById(R.id.tv_logout_cancel);
         TextView tvLogOutConfirm = view.findViewById(R.id.tv_logout_confirm);
         tvLogOutCancel.setOnClickListener(new View.OnClickListener() {

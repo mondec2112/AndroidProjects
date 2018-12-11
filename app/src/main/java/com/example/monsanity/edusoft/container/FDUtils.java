@@ -43,4 +43,8 @@ public class FDUtils {
 
     public static final String REGISTRATION_NOT_AVAILABLE = "REGISTRATION IS NOT AVAILABLE.";
     public static final String REGISTRATION_NO_SUBJECTD_REGISTERED = "NO SUBJECTS REGISTERED.";
+
+    public static final String DIALOG_MSG_LOG_OUT = "Do you want to log out?";
+    public static final String DIALOG_MSG_REMOVE_SUBJECT = "Remove this subject from your registration?";
+    public static final String DIALOG_MSG_REGISTER_SUBJECT = "Do you want to register selected subject(s)?";
 }

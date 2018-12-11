@@ -1,5 +1,6 @@
 package com.example.monsanity.edusoft.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,13 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.container.ClassesRegistration;
+import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.main.MainActivity;
+import com.example.monsanity.edusoft.main.menu.registration.RegistrationFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +31,12 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
     private List<ClassesRegistration> items;
     private List<ClassesRegistration> selectedItems = new ArrayList<>();
     private Context context;
+    private RegistrationFragment fragment;
 
-    public RegisteredListAdapter(List<ClassesRegistration> items, Context context) {
+    public RegisteredListAdapter(List<ClassesRegistration> items, Context context, RegistrationFragment fragment) {
         this.items = items;
         this.context = context;
+        this.fragment = fragment;
     }
 
     @Override
@@ -92,7 +98,7 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvSubjectName;
         private TextView tvSubjectID;
@@ -101,6 +107,7 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
         private TextView tvStartSlot;
         private TextView tvSumSlot;
         private TextView tvDuration;
+        private ImageView ivRemoveSubject;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -111,6 +118,43 @@ public class RegisteredListAdapter extends RecyclerView.Adapter<RegisteredListAd
             tvStartSlot = itemView.findViewById(R.id.tv_registered_start_slot);
             tvSumSlot = itemView.findViewById(R.id.tv_registered_sum_slot);
             tvDuration = itemView.findViewById(R.id.tv_registered_duration);
+            ivRemoveSubject = itemView.findViewById(R.id.iv_registered_remove);
+            ivRemoveSubject.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.iv_registered_remove:
+                    showRemoveSubjectDialog(items.get(getAdapterPosition()));
+                    break;
+            }
+        }
+    }
+
+    private void showRemoveSubjectDialog(final ClassesRegistration registration) {
+        final Dialog dialog = new Dialog(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_confirm,null);
+        dialog.setContentView(view);
+        TextView tvMessage = view.findViewById(R.id.tv_dialog_message);
+        tvMessage.setText(FDUtils.DIALOG_MSG_REMOVE_SUBJECT);
+        TextView tvCancel = view.findViewById(R.id.tv_logout_cancel);
+        TextView tvConfirm = view.findViewById(R.id.tv_logout_confirm);
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragment.removeSubjectFromSchedule(registration);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }

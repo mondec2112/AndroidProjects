@@ -1,6 +1,7 @@
 package com.example.monsanity.edusoft.main.menu.registration;
 
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -92,6 +93,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     private void initView(View view) {
         pbRegistration = view.findViewById(R.id.pb_registration);
+        pbRegistration.bringToFront();
         tvRegistrationText = view.findViewById(R.id.tv_registration_not_found);
         rvRegistration = view.findViewById(R.id.rv_registration_list);
         rvRegistered = view.findViewById(R.id.rv_registration_registered);
@@ -506,27 +508,26 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(classesRegistrationList.size() != 0){
-                    registrationAdapter = new RegistrationListAdapter(classesRegistrationList, getContext());
-                    rvRegistration.setAdapter(registrationAdapter);
-                    LinearLayoutManager layoutRegistration = new LinearLayoutManager(getContext());
-                    rvRegistration.setLayoutManager(layoutRegistration);
-                    registrationAdapter.notifyDataSetChanged();
-                }else if (rlRegistrationSubjects.getVisibility() == View.VISIBLE){
+                registrationAdapter = new RegistrationListAdapter(classesRegistrationList, getContext());
+                rvRegistration.setAdapter(registrationAdapter);
+                LinearLayoutManager layoutRegistration = new LinearLayoutManager(getContext());
+                rvRegistration.setLayoutManager(layoutRegistration);
+                registrationAdapter.notifyDataSetChanged();
+                if(classesRegistrationList.size() == 0 && rlRegistrationSubjects.getVisibility() == View.VISIBLE){
                     tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
                     tvRegistrationText.setVisibility(View.VISIBLE);
                 }
 
-                if(classesRegisteredList.size() != 0){
-                    registeredAdapter = new RegisteredListAdapter(classesRegisteredList, getContext());
-                    rvRegistered.setAdapter(registeredAdapter);
-                    LinearLayoutManager layoutRegistered = new LinearLayoutManager(getContext());
-                    rvRegistered.setLayoutManager(layoutRegistered);
-                    registeredAdapter.notifyDataSetChanged();
-                }else if (rlRegistrationRegistered.getVisibility() == View.VISIBLE){
+                registeredAdapter = new RegisteredListAdapter(classesRegisteredList, getContext(), RegistrationFragment.this);
+                rvRegistered.setAdapter(registeredAdapter);
+                LinearLayoutManager layoutRegistered = new LinearLayoutManager(getContext());
+                rvRegistered.setLayoutManager(layoutRegistered);
+                registeredAdapter.notifyDataSetChanged();
+                if(classesRegisteredList.size() == 0 && rlRegistrationRegistered.getVisibility() == View.VISIBLE){
                     tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
                     tvRegistrationText.setVisibility(View.VISIBLE);
                 }
+
                 pbRegistration.setVisibility(View.INVISIBLE);
             }
 
@@ -642,10 +643,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             mData.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    registrationList.clear();
-                    classesRegistrationList.clear();
-                    classesRegisteredList.clear();
-                    registeredSubjectList.clear();
+                    clearData();
                     getRegistrationList();
                 }
 
@@ -664,6 +662,168 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 .setValue(new RegisteredSubject(classID, subjectID, nextCourse, nextSemester));
     }
 
+    private void clearData(){
+        registrationList.clear();
+        classesRegistrationList.clear();
+        classesRegisteredList.clear();
+        registeredSubjectList.clear();
+    }
+
+    public void removeSubjectFromSchedule(final ClassesRegistration registration){
+        pbRegistration.setVisibility(View.VISIBLE);
+        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String childKey = dataSnapshot.getKey();
+                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
+                if(childKey != null
+                        && registeredSubject != null
+                        && registeredSubject.getReg_sub().equals(registration.getClass_id())
+                        && registeredSubject.getSubject_id().equals(registration.getSubject_id())
+                        && registeredSubject.getSemester().equals(registration.getSemester())
+                        && registeredSubject.getCourse().equals(registration.getCourse())){
+                    mData.child(FDUtils.SCHEDULE).child(studentID).child(childKey).removeValue();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                removeStudentFromClass(registration);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void removeStudentFromClass(final ClassesRegistration registration){
+        mData.child(FDUtils.COURSES).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String childKey = dataSnapshot.getKey();
+                Classes classes = dataSnapshot.getValue(Classes.class);
+                if(classes != null
+                        && childKey != null
+                        && classes.getClass_id().equals(registration.getClass_id())
+                        && classes.getSubject_id().equals(registration.getSubject_id())
+                        && classes.getSemester().equals(registration.getSemester())
+                        && classes.getCourse().equals(registration.getCourse())){
+                    ArrayList<String> students;
+                    if(classes.getLab_lessons() != null){
+                        ArrayList<Classes> labLessonList = classes.getLab_lessons();
+                        for(int i = 0; i < labLessonList.size(); i++){
+                            if(labLessonList.get(i).getStudent_list() != null
+                                    && labLessonList.get(i).getStudent_list().contains(studentID)){
+                                students = labLessonList.get(i).getStudent_list();
+                                students.remove(studentID);
+                                mData.child(FDUtils.COURSES)
+                                        .child(childKey)
+                                        .child("lab_lessons")
+                                        .child(String.valueOf(i))
+                                        .child("student_list")
+                                        .setValue(students);
+                                break;
+                            }
+                        }
+                    }else{
+                        if(classes.getStudent_list() != null
+                                && classes.getStudent_list().contains(studentID)){
+                            students = classes.getStudent_list();
+                            students.remove(studentID);
+                            mData.child(FDUtils.COURSES)
+                                    .child(childKey)
+                                    .child("student_list")
+                                    .setValue(students);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                clearData();
+                getRegistrationList();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showConfirmSubjectDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm,null);
+        dialog.setContentView(view);
+        TextView tvMessage = view.findViewById(R.id.tv_dialog_message);
+        tvMessage.setText(FDUtils.DIALOG_MSG_REGISTER_SUBJECT);
+        TextView tvCancel = view.findViewById(R.id.tv_logout_cancel);
+        TextView tvConfirm = view.findViewById(R.id.tv_logout_confirm);
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerCourses();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -672,7 +832,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.iv_header_save:
                 if(registrationAdapter.getSelectedItem().size() > 0)
-                    registerCourses();
+                    showConfirmSubjectDialog();
                 break;
         }
     }
