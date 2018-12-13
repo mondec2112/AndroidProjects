@@ -24,6 +24,7 @@ import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.ProfileDetail;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
+import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.TakenSubjects;
 import com.example.monsanity.edusoft.main.setting.SettingActivity;
@@ -35,6 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import javax.security.auth.Subject;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -58,6 +61,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     String faculty;
     String department;
     String role;
+    ArrayList<SubjectIDContainer> allSubjectIDList;
     ArrayList<Subjects> allSubjectList;
     ArrayList<RegisteredSubject> registeredSubjects;
     ArrayList<Subjects> onGoingList;
@@ -208,7 +212,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 rvProfileDetail.setAdapter(detailAdapter);
                 rvProfileDetail.setLayoutManager(layoutManager);
-                getSubjectList();
+                getSubjectIDList();
             }
 
             @Override
@@ -218,21 +222,67 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void getSubjectList(){
+    private void getSubjectIDList(){
+        allSubjectIDList = new ArrayList<>();
         allSubjectList = new ArrayList<>();
         onGoingList = new ArrayList<>();
         takenList = new ArrayList<>();
         registeredSubjects = new ArrayList<>();
         takenSubjectsList = new ArrayList<>();
+        mData.child(FDUtils.REQUIRED).child(MainActivity.faculty).child(MainActivity.department).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SubjectIDContainer subjectID = dataSnapshot.getValue(SubjectIDContainer.class);
+                if(subjectID != null && !allSubjectIDList.contains(subjectID)){
+                    allSubjectIDList.add(subjectID);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getSubjectList();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getSubjectList(){
         mData.child(FDUtils.SUBJECTS)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Subjects subject = dataSnapshot.getValue(Subjects.class);
-                        if(subject != null
-                                && subject.getFaculty().equals(MainActivity.faculty)
-                                && subject.getDepartment().equals(MainActivity.department)){
-                            allSubjectList.add(subject);
+                        for(SubjectIDContainer subjectID : allSubjectIDList){
+                            if(subject != null
+                                    && subject.getId().equals(subjectID.getSubject_id())){
+                                allSubjectList.add(subject);
+                            }
                         }
                     }
 
