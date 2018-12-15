@@ -29,6 +29,7 @@ import com.example.monsanity.edusoft.container.CourseRegistration;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -66,10 +67,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     String nextSemester;
 
     List<Subjects> subjectsList;
+    List<Subjects> qualifiedSubjectsList;
     List<CourseRegistration> registrationList;
     List<ClassesRegistration> classesRegistrationList;
     List<ClassesRegistration> classesRegisteredList;
     List<RegisteredSubject> registeredSubjectList;
+    List<SubjectIDContainer> allSubjectIDList;
     RegistrationListAdapter registrationAdapter;
     RegisteredListAdapter registeredAdapter;
 
@@ -108,10 +111,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         ivSave.setOnClickListener(this);
 
         subjectsList = new ArrayList<>();
+        qualifiedSubjectsList = new ArrayList<>();
         registrationList = new ArrayList<>();
         classesRegistrationList = new ArrayList<>();
         classesRegisteredList = new ArrayList<>();
         registeredSubjectList = new ArrayList<>();
+        allSubjectIDList = new ArrayList<>();
 
         tabLayout = view.findViewById(R.id.tab_registration);
         tabLayout.addTab(tabLayout.newTab().setText("Available"));
@@ -160,14 +165,64 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         studentID = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
 
+        getSubjectIDList();
+
+    }
+
+    private void getSubjectIDList(){
+        mData.child(FDUtils.REQUIRED).child(MainActivity.faculty).child(MainActivity.department).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SubjectIDContainer subjectID = dataSnapshot.getValue(SubjectIDContainer.class);
+                if(subjectID != null && !allSubjectIDList.contains(subjectID)){
+                    allSubjectIDList.add(subjectID);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getSubjectList();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getSubjectList(){
         mData.child(FDUtils.SUBJECTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Subjects subject = dataSnapshot.getValue(Subjects.class);
-                if(subject != null
-                        && subject.getFaculty().equals(MainActivity.faculty)
-                        && subject.getDepartment().equals(MainActivity.department)){
-                    subjectsList.add(subject);
+                for(SubjectIDContainer subjectIDContainer : allSubjectIDList){
+                    if(subject != null
+                            && subject.getId().equals(subjectIDContainer.getSubject_id())){
+                        subjectsList.add(subject);
+                    }
                 }
             }
 
@@ -205,6 +260,10 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         });
     }
 
+    private void getQualifiedSubjects(){
+
+    }
+
     private void getCourseUtils() {
         mData.child(FDUtils.COURSE_UTILS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -215,6 +274,68 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     nextSemester = data[0];
                     nextCourse = data[1];
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getRegisteredSubject();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getRegisteredSubject(){
+        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
+                if(registeredSubject != null){
+                    if(registeredSubject.getSemester().equals(nextSemester)
+                            && registeredSubject.getCourse().equals(nextCourse)) {
+                        registeredSubjectList.add(registeredSubject);
+                    }
+
+                    for(Subjects subject : subjectsList ){
+                        if(subject.getPrerequisite() != null){
+                            if(subject.getPrerequisite().equals(registeredSubject.getSubject_id())) {
+                                if(!registeredSubject.getSemester().equals(nextSemester)
+                                        || !registeredSubject.getCourse().equals(nextCourse)){
+                                    qualifiedSubjectsList.add(subject);
+                                }
+                            }
+
+                        }else{
+                            if(!qualifiedSubjectsList.contains(subject))
+                                qualifiedSubjectsList.add(subject);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -245,7 +366,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         CourseRegistration courseRegistration = dataSnapshot.getValue(CourseRegistration.class);
                         if(courseRegistration != null){
-                            for(Subjects subject : subjectsList){
+                            for(Subjects subject : qualifiedSubjectsList){
                                 if(subject.getId().equals(courseRegistration.getSubject_id())
                                         && courseRegistration.isActive()) {
                                     courseRegistration.setSubject_name(subject.getName());
@@ -276,52 +397,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
                     }
                 });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getRegisteredSubject();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void getRegisteredSubject(){
-        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                if(registeredSubject != null
-                        && registeredSubject.getSemester().equals(nextSemester)
-                        && registeredSubject.getCourse().equals(nextCourse)){
-                    registeredSubjectList.add(registeredSubject);
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -9,7 +9,7 @@ public class Subjects {
     String id;
     String name;
     int credit;
-    String pre;
+    String prerequisite;
     String level;
     String department;
     String faculty;
@@ -19,11 +19,11 @@ public class Subjects {
     public Subjects() {
     }
 
-    public Subjects(String id, String name, int credit, String pre, String level, String department, String faculty, int type) {
+    public Subjects(String id, String name, int credit, String prerequisite, String level, String department, String faculty, int type) {
         this.id = id;
         this.name = name;
         this.credit = credit;
-        this.pre = pre;
+        this.prerequisite = prerequisite;
         this.level = level;
         this.department = department;
         this.faculty = faculty;
@@ -78,12 +78,12 @@ public class Subjects {
         this.credit = credit;
     }
 
-    public String getPre() {
-        return pre;
+    public String getPrerequisite() {
+        return prerequisite;
     }
 
-    public void setPre(String pre) {
-        this.pre = pre;
+    public void setPrerequisite(String prerequisite) {
+        this.prerequisite = prerequisite;
     }
 
     public String getLevel() {
