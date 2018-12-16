@@ -9,13 +9,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
-import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.ClassesRegistration;
-import com.example.monsanity.edusoft.container.Subjects;
-import com.example.monsanity.edusoft.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +86,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
         holder.tvDuration.setText("Duration: " + duration);
 
         if(items.get(position).getStudent_list().size() >= items.get(position).getClass_size()
-                || items.get(position).isRegistered()){
+                || items.get(position).isDisabled()){
             holder.rlSubjectNameHolder.setClickable(false);
             holder.cbRegistration.setVisibility(View.INVISIBLE);
         }

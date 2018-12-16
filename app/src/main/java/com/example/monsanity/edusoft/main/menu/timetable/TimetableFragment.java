@@ -447,18 +447,15 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
             for(Classes classData : classesList){
                 for(String strDate : classData.getClass_date()){
                     Calendar startTime = formatDate(strDate);
-
                     TimeUtils start = getClassTime(classData.getStart_slot());
                     int sumTime = classData.getStart_slot() + classData.getSum_slot();
                     TimeUtils end = getClassTime(sumTime);
                     startTime.set(Calendar.HOUR_OF_DAY, start.getHour());
                     startTime.set(Calendar.MINUTE, start.getMinute());
-//                startTime.set(Calendar.MONTH, newMonth - 1);
-//                startTime.set(Calendar.YEAR, newYear);
+
                     Calendar endTime = (Calendar) startTime.clone();
                     endTime.set(Calendar.HOUR_OF_DAY, end.getHour());
                     endTime.set(Calendar.MINUTE, end.getMinute());
-//                endTime.set(Calendar.MONTH, newMonth - 1);
                     WeekViewEvent event = new WeekViewEvent(count++,
                             "ID: " + classData.getClass_id() + "\n"
                                     + classData.getSubject_name() + "\n"

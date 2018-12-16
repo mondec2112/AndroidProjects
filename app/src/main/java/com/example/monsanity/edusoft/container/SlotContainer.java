@@ -2,14 +2,14 @@ package com.example.monsanity.edusoft.container;
 
 public class SlotContainer {
     private int slot;
-    private boolean isEmpty;
+    private boolean isTaken;
 
     public SlotContainer() {
     }
 
-    public SlotContainer(int slot, boolean isEmpty) {
+    public SlotContainer(int slot, boolean isTaken) {
         this.slot = slot;
-        this.isEmpty = isEmpty;
+        this.isTaken = isTaken;
     }
 
     public int getSlot() {
@@ -20,11 +20,11 @@ public class SlotContainer {
         this.slot = slot;
     }
 
-    public boolean isEmpty() {
-        return isEmpty;
+    public boolean isTaken() {
+        return isTaken;
     }
 
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
+    public void setTaken(boolean taken) {
+        isTaken = taken;
     }
 }

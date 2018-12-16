@@ -29,8 +29,10 @@ import com.example.monsanity.edusoft.container.CourseRegistration;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.SlotContainer;
 import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.container.WeekTime;
 import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -39,8 +41,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -75,6 +81,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     List<SubjectIDContainer> allSubjectIDList;
     RegistrationListAdapter registrationAdapter;
     RegisteredListAdapter registeredAdapter;
+
+    WeekTime mondayTime;
+    WeekTime tuesdayTime;
+    WeekTime wednesdayTime;
+    WeekTime thursdayTime;
+    WeekTime fridayTime;
+    WeekTime saturdayTime;
 
     public static RegistrationFragment newInstance() {
         return new RegistrationFragment();
@@ -165,8 +178,32 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         studentID = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
 
+        initWeekTime();
         getSubjectIDList();
 
+    }
+
+    private void initWeekTime() {
+        mondayTime = new WeekTime();
+        tuesdayTime = new WeekTime();
+        wednesdayTime = new WeekTime();
+        thursdayTime = new WeekTime();
+        fridayTime = new WeekTime();
+        saturdayTime = new WeekTime();
+        initWeek(mondayTime);
+        initWeek(tuesdayTime);
+        initWeek(wednesdayTime);
+        initWeek(thursdayTime);
+        initWeek(fridayTime);
+        initWeek(saturdayTime);
+    }
+
+    private void initWeek(WeekTime times){
+        ArrayList<SlotContainer> slotList = new ArrayList<>();
+        for(int i = 1; i <= 11; i++){
+            slotList.add(new SlotContainer(i, false));
+        }
+        times.setSlotContainers(slotList);
     }
 
     private void getSubjectIDList(){
@@ -258,10 +295,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
             }
         });
-    }
-
-    private void getQualifiedSubjects(){
-
     }
 
     private void getCourseUtils() {
@@ -460,7 +493,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                 for(RegisteredSubject registeredSubject : registeredSubjectList){
                                     if(registeredSubject.getSubject_id().equals(registration.getSubject_id())
                                             && registeredSubject.getReg_sub().equals(registration.getClass_id())){
-                                        registration.setRegistered(true);
+                                        registration.setDisabled(true);
                                     }
                                 }
 
@@ -494,7 +527,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                             for(RegisteredSubject registeredSubject : registeredSubjectList){
                                 if(registeredSubject.getSubject_id().equals(registration.getSubject_id())
                                         && registeredSubject.getReg_sub().equals(registration.getClass_id())){
-                                    registration.setRegistered(true);
+                                    registration.setDisabled(true);
                                 }
                             }
 
@@ -582,28 +615,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                registrationAdapter = new RegistrationListAdapter(classesRegistrationList, getContext());
-                rvRegistration.setAdapter(registrationAdapter);
-                LinearLayoutManager layoutRegistration = new LinearLayoutManager(getContext());
-                rvRegistration.setLayoutManager(layoutRegistration);
-                registrationAdapter.notifyDataSetChanged();
-                if(classesRegistrationList.size() == 0 && rlRegistrationSubjects.getVisibility() == View.VISIBLE){
-                    tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
-                    tvRegistrationText.setVisibility(View.VISIBLE);
-                }
-
-                registeredAdapter = new RegisteredListAdapter(classesRegisteredList, getContext(), RegistrationFragment.this);
-                rvRegistered.setAdapter(registeredAdapter);
-                LinearLayoutManager layoutRegistered = new LinearLayoutManager(getContext());
-                rvRegistered.setLayoutManager(layoutRegistered);
-                registeredAdapter.notifyDataSetChanged();
-                if(classesRegisteredList.size() == 0 && rlRegistrationRegistered.getVisibility() == View.VISIBLE){
-                    tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
-                    tvRegistrationText.setVisibility(View.VISIBLE);
-                }
-
-                pbRegistration.setVisibility(View.INVISIBLE);
+                checkWeekTime();
             }
 
             @Override
@@ -611,6 +623,146 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
             }
         });
+    }
+
+    private void checkWeekTime(){
+        try {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            int startSlot, sumSlot, dayOfWeek;
+
+            for (ClassesRegistration registeredClass : classesRegisteredList) {
+
+                startSlot = registeredClass.getStart_slot();
+                sumSlot = registeredClass.getSum_slot();
+                c.setTime(sdf.parse(registeredClass.getClass_date().get(0)));
+                dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                setWeekTime(dayOfWeek, startSlot, sumSlot);
+
+
+                if(registeredClass.getClass_date_lab() != null){
+                    startSlot = registeredClass.getStart_slot_lab();
+                    sumSlot = registeredClass.getSum_slot_lab();
+                    c.setTime(sdf.parse(registeredClass.getClass_date_lab().get(0)));
+                    dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                    setWeekTime(dayOfWeek, startSlot, sumSlot);
+                }
+
+            }
+
+            for (ClassesRegistration registration : classesRegistrationList) {
+                startSlot = registration.getStart_slot();
+                sumSlot = registration.getSum_slot();
+                c.setTime(sdf.parse(registration.getClass_date().get(0)));
+                dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                checkTimeAvailability(dayOfWeek, startSlot, sumSlot, registration);
+
+                if(registration.getClass_date_lab() != null){
+                    startSlot = registration.getStart_slot_lab();
+                    sumSlot = registration.getSum_slot_lab();
+                    c.setTime(sdf.parse(registration.getClass_date_lab().get(0)));
+                    dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                    checkTimeAvailability(dayOfWeek, startSlot, sumSlot, registration);
+                }
+            }
+
+            setDataToList();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setWeekTime(int dayOfWeek, int startSlot, int sumSlot){
+        for (int i = startSlot; i < startSlot + sumSlot; i++) {
+            switch (dayOfWeek) {
+                case 2:
+                    mondayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+                case 3:
+                    tuesdayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+                case 4:
+                    wednesdayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+                case 5:
+                    thursdayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+                case 6:
+                    fridayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+                case 7:
+                    saturdayTime.getSlotContainers().get(i - 1).setTaken(true);
+                    break;
+            }
+        }
+    }
+
+    private void checkTimeAvailability(int dayOfWeek, int startSlot, int sumSlot, ClassesRegistration registration){
+        for (int i = startSlot; i < startSlot + sumSlot; i++) {
+            switch (dayOfWeek) {
+                case 2:
+                    if (mondayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+                case 3:
+                    if (tuesdayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+                case 4:
+                    if (wednesdayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+                case 5:
+                    if (thursdayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+                case 6:
+                    if (fridayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+                case 7:
+                    if (saturdayTime.getSlotContainers().get(i - 1).isTaken()){
+                        registration.setDisabled(true);
+                        break;
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void setDataToList(){
+        registrationAdapter = new RegistrationListAdapter(classesRegistrationList, getContext());
+        rvRegistration.setAdapter(registrationAdapter);
+        LinearLayoutManager layoutRegistration = new LinearLayoutManager(getContext());
+        rvRegistration.setLayoutManager(layoutRegistration);
+        registrationAdapter.notifyDataSetChanged();
+        if(classesRegistrationList.size() == 0 && rlRegistrationSubjects.getVisibility() == View.VISIBLE){
+            tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
+            tvRegistrationText.setVisibility(View.VISIBLE);
+        }
+
+        registeredAdapter = new RegisteredListAdapter(classesRegisteredList, getContext(), RegistrationFragment.this);
+        rvRegistered.setAdapter(registeredAdapter);
+        LinearLayoutManager layoutRegistered = new LinearLayoutManager(getContext());
+        rvRegistered.setLayoutManager(layoutRegistered);
+        registeredAdapter.notifyDataSetChanged();
+        if(classesRegisteredList.size() == 0 && rlRegistrationRegistered.getVisibility() == View.VISIBLE){
+            tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
+            tvRegistrationText.setVisibility(View.VISIBLE);
+        }
+
+        pbRegistration.setVisibility(View.INVISIBLE);
     }
 
     private void registerCourses(){
@@ -719,7 +871,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     clearData();
-                    getRegistrationList();
+                    initWeekTime();
+                    getRegisteredSubject();
                 }
 
                 @Override
@@ -742,6 +895,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         classesRegistrationList.clear();
         classesRegisteredList.clear();
         registeredSubjectList.clear();
+        qualifiedSubjectsList.clear();
     }
 
     public void removeSubjectFromSchedule(final ClassesRegistration registration){
@@ -863,7 +1017,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 clearData();
-                getRegistrationList();
+                initWeekTime();
+                getRegisteredSubject();
             }
 
             @Override
@@ -911,4 +1066,5 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
 }
