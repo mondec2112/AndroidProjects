@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,10 +22,11 @@ import java.util.List;
  * Created by monsanity on 7/21/18.
  */
 
-public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationListAdapter.ViewHolder> {
+public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationListAdapter.ViewHolder> implements Filterable {
 
     private List<ClassesRegistration> items;
     private List<ClassesRegistration> selectedItems = new ArrayList<>();
+    private List<ClassesRegistration> filteredItems;
     private Context context;
 
     public RegistrationListAdapter(List<ClassesRegistration> items, Context context) {
@@ -109,6 +112,41 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
     public List<ClassesRegistration> getSelectedItem(){
         return selectedItems;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredItems = items;
+                } else {
+                    List<ClassesRegistration> filteredList = new ArrayList<>();
+                    for (ClassesRegistration row : items) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getSubject_name().toLowerCase().contains(charString.toLowerCase()) || row.getSubject_id().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    filteredItems = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredItems;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredItems = (ArrayList<ClassesRegistration>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
