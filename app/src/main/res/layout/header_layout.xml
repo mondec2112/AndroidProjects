@@ -4,28 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:gravity="center_vertical">
     <ImageView
         android:id="@+id/iv_header_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:padding="16dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="2"
+        android:padding="18dp"
         android:src="@drawable/back" />
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/iv_header_logo"
-        android:layout_weight="10"
-        android:padding="5dp"
-        android:src="@drawable/hcmiu_logo"/>
+    <!--<ImageView-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/iv_header_logo"-->
+        <!--android:layout_weight="10"-->
+        <!--android:padding="5dp"-->
+        <!--android:src="@drawable/hcmiu_logo"/>-->
 
-    <ImageView
-        android:id="@+id/iv_header_save"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_weight="1"
-        android:padding="16dp"
-        android:src="@drawable/save" />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="12"
+        android:id="@+id/edt_header_search"
+        android:backgroundTint="@color/white"
+        android:hint="Search for subjects..."
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:foregroundTint="@color/white"
+        android:textCursorDrawable="@null"
+        android:textColorHighlight="@color/color_light_blue"/>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_header_save"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:padding="22dp"-->
+        <!--android:src="@drawable/save" />-->
 </LinearLayout>

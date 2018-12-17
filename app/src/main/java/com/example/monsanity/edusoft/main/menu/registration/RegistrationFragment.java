@@ -6,13 +6,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -53,15 +58,16 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegistrationFragment extends Fragment implements View.OnClickListener {
+public class RegistrationFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     ProgressBar pbRegistration;
     TextView tvRegistrationText;
     RecyclerView rvRegistration;
     RecyclerView rvRegistered;
     ImageView ivBack;
-    ImageView ivSave;
+    FloatingActionButton fabSave;
     ImageView ivHeaderLogo;
+    EditText edtHeaderSearch;
     TabLayout tabLayout;
     RelativeLayout rlRegistrationSubjects;
     RelativeLayout rlRegistrationRegistered;
@@ -116,12 +122,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         rlRegistrationSubjects = view.findViewById(R.id.rl_registration_subjects_container);
         rlRegistrationRegistered = view.findViewById(R.id.rl_registration_registered_container);
         ivBack = view.findViewById(R.id.iv_header_back);
-        ivSave = view.findViewById(R.id.iv_header_save);
-        ivHeaderLogo = view.findViewById(R.id.iv_header_logo);
-
-        ivHeaderLogo.setImageResource(R.drawable.registration);
+        fabSave = view.findViewById(R.id.fabSave);
+        edtHeaderSearch = view.findViewById(R.id.edt_header_search);
+        edtHeaderSearch.addTextChangedListener(this);
         ivBack.setOnClickListener(this);
-        ivSave.setOnClickListener(this);
+        fabSave.setOnClickListener(this);
 
         subjectsList = new ArrayList<>();
         qualifiedSubjectsList = new ArrayList<>();
@@ -140,6 +145,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 switch (tab.getPosition()){
                     case 0:
                         rlRegistrationSubjects.setVisibility(View.VISIBLE);
+                        edtHeaderSearch.setVisibility(View.VISIBLE);
                         rlRegistrationRegistered.setVisibility(View.INVISIBLE);
                         if(registrationList.size() == 0){
                             tvRegistrationText.setText(FDUtils.REGISTRATION_NOT_AVAILABLE);
@@ -150,6 +156,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                         break;
                     case 1:
                         rlRegistrationSubjects.setVisibility(View.INVISIBLE);
+                        edtHeaderSearch.setVisibility(View.INVISIBLE);
                         rlRegistrationRegistered.setVisibility(View.VISIBLE);
                         if(classesRegisteredList.size() == 0){
                             tvRegistrationText.setText(FDUtils.REGISTRATION_NO_SUBJECTD_REGISTERED);
@@ -171,6 +178,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
             }
         });
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void initData(){
@@ -1060,11 +1068,36 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             case R.id.iv_header_back:
                 getActivity().finish();
                 break;
-            case R.id.iv_header_save:
+            case R.id.fabSave:
                 if(registrationAdapter.getSelectedItem().size() > 0)
                     showConfirmSubjectDialog();
                 break;
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(classesRegistrationList != null && classesRegistrationList.size() != 0)
+            filterRegistration(editable.toString());
+    }
+
+    private void filterRegistration(String text){
+        List<ClassesRegistration> filteredList = new ArrayList<>();
+        for(ClassesRegistration registration : classesRegistrationList){
+            if(registration.getSubject_name().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(registration);
+            }
+        }
+        registrationAdapter.setItems(filteredList);
+    }
 }

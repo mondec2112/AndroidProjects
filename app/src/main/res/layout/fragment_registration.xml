@@ -33,6 +33,15 @@
 
         </LinearLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="@dimen/common_50_dp"
+            android:layout_height="@dimen/common_50_dp"
+            android:id="@+id/fabSave"
+            android:src="@drawable/save"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"/>
+
     </RelativeLayout>
 
     <RelativeLayout
