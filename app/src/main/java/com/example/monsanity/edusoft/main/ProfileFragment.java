@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.ProfileDetailAdapter;
@@ -26,7 +25,6 @@ import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
-import com.example.monsanity.edusoft.container.TakenSubjects;
 import com.example.monsanity.edusoft.main.setting.SettingActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,8 +34,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import javax.security.auth.Subject;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -70,6 +66,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     ArrayList<ProfileDetail> detailList;
     SubjectListAdapter adapter;
     ProfileDetailAdapter detailAdapter;
+
+    Student studentData;
 
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -108,12 +106,56 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         role = mPref.getString("role","");
         mData = FirebaseDatabase.getInstance().getReference();
         if(role.equals(FDUtils.ROLE_STUDENT)){
-            initTabLayout();
-            getLecturer();
+            getStudentData();
         }else{
             tabLayout.setVisibility(View.GONE);
             getLecturerData();
         }
+    }
+
+    private void getStudentData(){
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentID)){
+                    studentData = student;
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                initTabLayout();
+                getLecturer();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getLecturerData(){
@@ -172,15 +214,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Lecturer lecturer = dataSnapshot.getValue(Lecturer.class);
-                if(lecturer != null && lecturer.getId().equals(MainActivity.student.getAdvisor())){
-                    detailList.add(new ProfileDetail("Name", MainActivity.student.getName()));
-                    detailList.add(new ProfileDetail("ID", MainActivity.student.getId()));
-                    detailList.add(new ProfileDetail("Course", MainActivity.student.getCourse()));
-                    detailList.add(new ProfileDetail("Department", MainActivity.student.getDepartment()));
-                    detailList.add(new ProfileDetail("Faculty", MainActivity.student.getFaculty()));
+                if(lecturer != null && lecturer.getId().equals(studentData.getAdvisor())){
+                    detailList.add(new ProfileDetail("Name", studentData.getName()));
+                    detailList.add(new ProfileDetail("ID", studentData.getId()));
+                    detailList.add(new ProfileDetail("Course", studentData.getCourse()));
+                    detailList.add(new ProfileDetail("Department", studentData.getDepartment()));
+                    detailList.add(new ProfileDetail("Faculty", studentData.getFaculty()));
                     detailList.add(new ProfileDetail("Advisor", lecturer.getName()));
-                    detailList.add(new ProfileDetail("Date of birth", MainActivity.student.getDob()));
-                    detailList.add(new ProfileDetail("Email", MainActivity.student.getEmail()));
+                    detailList.add(new ProfileDetail("Date of birth", studentData.getDob()));
+                    detailList.add(new ProfileDetail("Email", studentData.getEmail()));
                 }
             }
 
@@ -321,132 +363,53 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getRegisteredSubjects(){
-        mData.child(FDUtils.SCHEDULE)
-                .child(studentID)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                        if(registeredSubject != null && !registeredSubjects.contains(registeredSubject))
-                            if (registeredSubject.getCourse().equals(MainActivity.currentYear)
-                                    && registeredSubject.getSemester().equals(MainActivity.currentSem))
-                                registeredSubjects.add(registeredSubject);
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getTakenSubjects();
+        if(studentData.getSchedule() != null){
+            for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                        && registeredSubject.getSemester().equals(MainActivity.currentSem))
+                    registeredSubjects.add(registeredSubject);
             }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        fetchData();
     }
 
-    private void getTakenSubjects(){
-        mData.child(FDUtils.SUB_DONE)
-                .child(studentID)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        TakenSubjects takenSubjects = dataSnapshot.getValue(TakenSubjects.class);
-                        if(takenSubjects != null){
-                            takenSubjectsList.add(takenSubjects.getSubject_id());
-                        }
-                    }
+    private void fetchData(){
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if(studentData.getSub_done() != null){
+            takenSubjectsList = studentData.getSub_done();
+        }
 
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(RegisteredSubject regSubject : registeredSubjects){
-                    for(Subjects subject : allSubjectList){
-                        if(regSubject.getSubject_id().equals(subject.getId())
-                                && !onGoingList.contains(subject)){
-                            subject.setType(FDUtils.SUBJECT_ON_GOING);
-                            onGoingList.add(subject);
-                        }
-                    }
+        for(RegisteredSubject regSubject : registeredSubjects){
+            for(Subjects subject : allSubjectList){
+                if(regSubject.getSubject_id().equals(subject.getId())
+                        && !onGoingList.contains(subject)){
+                    subject.setType(FDUtils.SUBJECT_ON_GOING);
+                    onGoingList.add(subject);
                 }
+            }
+        }
 
-//                for(Subjects subject : allSubjectList){
-//                    if(!onGoingList.contains(subject)){
-//                        subject.setType(FDUtils.SUBJECT_NOT_TAKEN);
-//                        takenList.add(subject);
-//                    }
-//                }
-
-                for(Subjects subject : allSubjectList){
-                    for(String takenSubjectID : takenSubjectsList){
-                        if(subject.getId().equals(takenSubjectID)
-                                && !takenList.contains(subject)){
-                            subject.setType(FDUtils.SUBJECT_TAKEN);
-                            takenList.add(subject);
-                        }
-                    }
+        for(Subjects subject : allSubjectList){
+            for(String takenSubjectID : takenSubjectsList){
+                if(subject.getId().equals(takenSubjectID)
+                        && !takenList.contains(subject)){
+                    subject.setType(FDUtils.SUBJECT_TAKEN);
+                    takenList.add(subject);
                 }
-
-                adapter = new SubjectListAdapter(onGoingList, getContext());
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                rvProfileSubjectList.setAdapter(adapter);
-                rvProfileSubjectList.setLayoutManager(layoutManager);
-
-                tabLayout.getTabAt(0).setText(FDUtils.ON_GOING + " (" + onGoingList.size() + ")");
-                tabLayout.getTabAt(1).setText(FDUtils.FINISHED + " (" + takenList.size() + ")");
-                tabLayout.getTabAt(2).setText(FDUtils.ALL + " (" + allSubjectList.size() + ")");
-
-                pbProfile.setVisibility(View.INVISIBLE);
             }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        adapter = new SubjectListAdapter(onGoingList, getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvProfileSubjectList.setAdapter(adapter);
+        rvProfileSubjectList.setLayoutManager(layoutManager);
 
-            }
-        });
+        tabLayout.getTabAt(0).setText(FDUtils.ON_GOING + " (" + onGoingList.size() + ")");
+        tabLayout.getTabAt(1).setText(FDUtils.FINISHED + " (" + takenList.size() + ")");
+        tabLayout.getTabAt(2).setText(FDUtils.ALL + " (" + allSubjectList.size() + ")");
+
+        pbProfile.setVisibility(View.INVISIBLE);
     }
 
     @Override

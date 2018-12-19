@@ -17,6 +17,7 @@ import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
+import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
@@ -142,6 +143,47 @@ public class MainActivity extends AppCompatActivity {
 //        exam.setStudent_list(studentList);
 //        exam.setProctor_id("IT002");
 //        mData.child(FDUtils.EXAM).push().setValue(exam);
+
+//        ArrayList<String> subjectDone = new ArrayList<>();
+//        subjectDone.add("IT064IU");
+//        subjectDone.add("IT116IU");
+//        subjectDone.add("MA023IU");
+//        mData.child(FDUtils.STUDENTS).child("-LKuQKLPkQNfwmhnl0h-").child(FDUtils.SUB_DONE).setValue(subjectDone);
+//        mData.child(FDUtils.STUDENTS).child("-LKuPP2ENxbFOXamAUQe").child(FDUtils.SUB_DONE).setValue(subjectDone);
+
+//        ArrayList<RegisteredSubject> registeredSubjects = new ArrayList<>();
+//        registeredSubjects.add(new RegisteredSubject(
+//                "MA023N11"
+//                , "MA023IU"
+//                , "2017-2018"
+//                , "spring"));
+//        registeredSubjects.add(new RegisteredSubject(
+//                "ITIT02N11"
+//                , "IT064IU"
+//                , "2017-2018"
+//                , "spring"));
+//        registeredSubjects.add(new RegisteredSubject(
+//                "ITIT03N11"
+//                , "IT116IU"
+//                , "2017-2018"
+//                , "fall"));
+//        registeredSubjects.add(new RegisteredSubject(
+//                "ITIT16N11"
+//                , "IT013IU"
+//                , "2018-2019"
+//                , "fall"));
+//        registeredSubjects.add(new RegisteredSubject(
+//                "ITIT20N11"
+//                , "IT090IU"
+//                , "2018-2019"
+//                , "fall"));
+//        registeredSubjects.add(new RegisteredSubject(
+//                "ITIT13N11"
+//                , "IT131IU"
+//                , "2018-2019"
+//                , "fall"));
+//        mData.child(FDUtils.STUDENTS).child("-LKuPP2ENxbFOXamAUQe").child("schedule").setValue(registeredSubjects);
+//        mData.child(FDUtils.STUDENTS).child("-LKuQKLPkQNfwmhnl0h-").child("schedule").setValue(registeredSubjects);
 //
 //        exam = new Exam();
 //        exam.setCourse("2018-2019");

@@ -1,5 +1,7 @@
 package com.example.monsanity.edusoft.container;
 
+import java.util.ArrayList;
+
 /**
  * Created by monsanity on 3/13/18.
  */
@@ -18,6 +20,10 @@ public class Student {
     String department;
     String advisor;
     int recommended_year;
+    SumGrade grade;
+    ArrayList<String> sub_done;
+    ArrayList<RegisteredSubject> schedule;
+    StudentFee fee;
 
     public Student() {
     }
@@ -140,5 +146,37 @@ public class Student {
 
     public void setRecommended_year(int recommended_year) {
         this.recommended_year = recommended_year;
+    }
+
+    public SumGrade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(SumGrade grade) {
+        this.grade = grade;
+    }
+
+    public ArrayList<String> getSub_done() {
+        return sub_done;
+    }
+
+    public void setSub_done(ArrayList<String> sub_done) {
+        this.sub_done = sub_done;
+    }
+
+    public ArrayList<RegisteredSubject> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ArrayList<RegisteredSubject> schedule) {
+        this.schedule = schedule;
+    }
+
+    public StudentFee getFee() {
+        return fee;
+    }
+
+    public void setFee(StudentFee fee) {
+        this.fee = fee;
     }
 }

@@ -21,6 +21,7 @@ import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.TimeUtils;
 import com.example.monsanity.edusoft.main.MainActivity;
@@ -59,6 +60,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     String userID;
     String role;
     String username;
+    Student studentData;
 
     public static TimetableFragment newInstance() {
         TimetableFragment timetableFragment = new TimetableFragment();
@@ -145,7 +147,7 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         role = mPref.getString("role", "");
         mData = FirebaseDatabase.getInstance().getReference();
         if(role.equals(FDUtils.ROLE_STUDENT)){
-            getStudentSchedule();
+            getStudentData();
         }else{
             getLecturerCourses();
         }
@@ -212,48 +214,54 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         });
     }
 
-    private void getStudentSchedule(){
-        mData.child(FDUtils.SCHEDULE)
-                .child(userID)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                        if(registeredSubject != null && !registeredSubjects.contains(registeredSubject)){
-                            if (registeredSubject.getCourse().equals(MainActivity.currentYear)
-                                    && registeredSubject.getSemester().equals(MainActivity.currentSem))
-                                registeredSubjects.add(registeredSubject);
-                        }
-                    }
+    private void getStudentData(){
+        studentData = MainActivity.student;
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentData.getId())){
+                    studentData = student;
+                }
+            }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
 
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(studentData.getSchedule() != null){
+                    for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                        if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                                && registeredSubject.getSemester().equals(MainActivity.currentSem))
+                            registeredSubjects.add(registeredSubject);
+                    }
+                }
+
                 getCourses();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

@@ -1,7 +1,6 @@
 package com.example.monsanity.edusoft.container;
 
 public class SumGrade {
-    private String student_id;
     private float average_100;
     private float average_4;
     private int credits_gained;
@@ -10,20 +9,11 @@ public class SumGrade {
     public SumGrade() {
     }
 
-    public SumGrade(String student_id, float average_100, float average_4, int credits_gained, String rank) {
-        this.student_id = student_id;
+    public SumGrade(float average_100, float average_4, int credits_gained, String rank) {
         this.average_100 = average_100;
         this.average_4 = average_4;
         this.credits_gained = credits_gained;
         this.rank = rank;
-    }
-
-    public String getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
     }
 
     public float getAverage_100() {

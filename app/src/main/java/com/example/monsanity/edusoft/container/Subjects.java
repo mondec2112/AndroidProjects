@@ -15,6 +15,7 @@ public class Subjects {
     String faculty;
     int type;
     int fee;
+    int year;
 
     public Subjects() {
     }
@@ -108,5 +109,13 @@ public class Subjects {
 
     public void setFee(int fee) {
         this.fee = fee;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

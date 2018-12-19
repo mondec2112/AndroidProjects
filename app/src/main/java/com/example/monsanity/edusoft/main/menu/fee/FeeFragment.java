@@ -17,6 +17,7 @@ import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.FeeListAdapter;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.StudentFee;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.main.MainActivity;
@@ -46,6 +47,7 @@ public class FeeFragment extends Fragment {
     private String studentID;
     private ArrayList<RegisteredSubject> registeredSubjects;
     private ArrayList<Subjects> subjectsDetailList;
+    private Student studentData;
 
     public static FeeFragment newInstance() {
         return new FeeFragment();
@@ -78,10 +80,58 @@ public class FeeFragment extends Fragment {
         this.mData = MainActivity.mData;
         this.studentID = MainActivity.userID;
 
-        mData.child(FDUtils.FEE).child(studentID).addListenerForSingleValueEvent(new ValueEventListener() {
+        getStudentData();
+    }
+
+    private void getRegisteredSubjects(){
+        registeredSubjects = new ArrayList<>();
+        if(studentData.getSchedule() != null){
+            for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                        && registeredSubject.getSemester().equals(MainActivity.currentSem))
+                    registeredSubjects.add(registeredSubject);
+            }
+        }
+
+        getSubjectDetail();
+    }
+
+    private void getStudentData(){
+        studentData = MainActivity.student;
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentID)){
+                    studentData = student;
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                StudentFee studentFee = dataSnapshot.getValue(StudentFee.class);
+                StudentFee studentFee = studentData.getFee();
                 if(studentFee != null){
                     tvCredit.setText(String.valueOf(studentFee.getCredit()));
                     tvTuitionCredit.setText(String.valueOf(studentFee.getTuition_credit()));
@@ -90,54 +140,6 @@ public class FeeFragment extends Fragment {
                     tvPayableFee.setText(String.valueOf(studentFee.getPayable_fee()));
                     getRegisteredSubjects();
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void getRegisteredSubjects(){
-        registeredSubjects = new ArrayList<>();
-        mData.child(FDUtils.SCHEDULE)
-                .child(studentID)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                        if(registeredSubject != null && !registeredSubjects.contains(registeredSubject))
-                            if (registeredSubject.getCourse().equals(MainActivity.currentYear)
-                                    && registeredSubject.getSemester().equals(MainActivity.currentSem))
-                                registeredSubjects.add(registeredSubject);
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getSubjectDetail();
             }
 
             @Override

@@ -22,9 +22,11 @@ import com.example.monsanity.edusoft.adapter.GradeListAdapter;
 import com.example.monsanity.edusoft.container.ClassGrade;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.StudentGrade;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.SumGrade;
+import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,6 +57,7 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
 
     String studentID;
     SumGrade studentSumGrade;
+    Student studentData;
 
     ArrayList<String> courseList;
     ArrayList<RegisteredSubject> subjectList;
@@ -103,12 +106,22 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
         studentID = mPref.getString("id","");
         mData = FirebaseDatabase.getInstance().getReference();
-        mData.child(FDUtils.SUM_GRADE).addChildEventListener(new ChildEventListener() {
+
+        getStudentData();
+    }
+
+    private void getStudentData(){
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SumGrade sumGrade = dataSnapshot.getValue(SumGrade.class);
-                if(sumGrade != null && sumGrade.getStudent_id().equals(studentID))
-                    studentSumGrade = sumGrade;
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentID)){
+                    studentData = student;
+                    if(studentData.getGrade() != null){
+                        setStudentGrade();
+                        setStudentRank(studentData.getGrade().getRank());
+                    }
+                }
             }
 
             @Override
@@ -131,20 +144,10 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
 
             }
         });
-
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(studentSumGrade != null){
-                    String avg100 = String.format("%.02f", studentSumGrade.getAverage_100());
-                    String avg4 = String.format("%.02f", studentSumGrade.getAverage_4());
-                    tvAverage100.setText(avg100);
-                    tvAverage4.setText(avg4);
-                    tvCreditsGained.setText(String.valueOf(studentSumGrade.getCredits_gained()));
-
-                    setStudentRank(studentSumGrade.getRank());
-                    getSubjects();
-                }
+                getSubjects();
             }
 
             @Override
@@ -152,6 +155,14 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
 
             }
         });
+    }
+
+    private void setStudentGrade(){
+        String avg100 = String.format("%.02f", studentData.getGrade().getAverage_100());
+        String avg4 = String.format("%.02f", studentData.getGrade().getAverage_4());
+        tvAverage100.setText(avg100);
+        tvAverage4.setText(avg4);
+        tvCreditsGained.setText(String.valueOf(studentData.getGrade().getCredits_gained()));
     }
 
     private void setStudentRank(String rank){
@@ -180,51 +191,18 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
 
     private void getSubjects(){
         courseList.add("all");
-        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                if(registeredSubject != null){
-                    String course = registeredSubject.getSemester() + " " + registeredSubject.getCourse();
-                    if(!courseList.contains(course))
-                        courseList.add(course);
-                    if(!subjectList.contains(registeredSubject))
-                        subjectList.add(registeredSubject);
-                }
+        if(studentData.getSchedule() != null){
+            for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                String course = registeredSubject.getSemester() + " " + registeredSubject.getCourse();
+                if(!courseList.contains(course))
+                    courseList.add(course);
+                if(!subjectList.contains(registeredSubject))
+                    subjectList.add(registeredSubject);
             }
+        }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        getSubjectDetail();
 
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getSubjectDetail();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void getSubjectDetail(){

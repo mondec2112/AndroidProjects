@@ -35,6 +35,7 @@ import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.SlotContainer;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.WeekTime;
@@ -77,6 +78,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     String studentID;
     String nextCourse;
     String nextSemester;
+    Student studentData;
+    String studentKey;
 
     List<Subjects> subjectsList;
     List<Subjects> qualifiedSubjectsList;
@@ -265,7 +268,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 Subjects subject = dataSnapshot.getValue(Subjects.class);
                 for(SubjectIDContainer subjectIDContainer : allSubjectIDList){
                     if(subject != null
-                            && subject.getId().equals(subjectIDContainer.getSubject_id())){
+                            && subject.getId().equals(subjectIDContainer.getSubject_id())
+                            && subject.getYear() <= MainActivity.student.getRecommended_year()){
                         subjectsList.add(subject);
                     }
                 }
@@ -326,7 +330,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getRegisteredSubject();
+                getStudentData();
             }
 
             @Override
@@ -336,31 +340,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    private void getRegisteredSubject(){
-        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
+    private void getStudentData(){
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                if(registeredSubject != null){
-                    if(registeredSubject.getSemester().equals(nextSemester)
-                            && registeredSubject.getCourse().equals(nextCourse)) {
-                        registeredSubjectList.add(registeredSubject);
-                    }
-
-                    for(Subjects subject : subjectsList ){
-                        if(subject.getPrerequisite() != null){
-                            if(subject.getPrerequisite().equals(registeredSubject.getSubject_id())) {
-                                if(!registeredSubject.getSemester().equals(nextSemester)
-                                        || !registeredSubject.getCourse().equals(nextCourse)){
-                                    qualifiedSubjectsList.add(subject);
-                                }
-                            }
-
-                        }else{
-                            if(!qualifiedSubjectsList.contains(subject))
-                                qualifiedSubjectsList.add(subject);
-                        }
-                    }
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentID)){
+                    studentKey = dataSnapshot.getKey();
+                    studentData = student;
                 }
             }
 
@@ -388,7 +375,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getRegistrationList();
+                getRegisteredSubject();
             }
 
             @Override
@@ -396,6 +383,37 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
             }
         });
+    }
+
+    private void getRegisteredSubject(){
+        if(studentData.getSchedule() != null){
+            for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                if(registeredSubject != null){
+                    if(registeredSubject.getSemester().equals(nextSemester)
+                            && registeredSubject.getCourse().equals(nextCourse)) {
+                        registeredSubjectList.add(registeredSubject);
+                    }
+
+                    for(Subjects subject : subjectsList ){
+                        if(subject.getPrerequisite() != null){
+                            if(subject.getPrerequisite().equals(registeredSubject.getSubject_id())) {
+                                if(!registeredSubject.getSemester().equals(nextSemester)
+                                        || !registeredSubject.getCourse().equals(nextCourse)){
+                                    qualifiedSubjectsList.add(subject);
+                                }
+                            }
+
+                        }else{
+                            if(!qualifiedSubjectsList.contains(subject))
+                                qualifiedSubjectsList.add(subject);
+                        }
+                    }
+                }
+            }
+        }
+
+        getRegistrationList();
+
     }
 
     private void getRegistrationList() {
@@ -880,7 +898,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     clearData();
                     initWeekTime();
-                    getRegisteredSubject();
+                    getStudentData();
                 }
 
                 @Override
@@ -892,10 +910,9 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     private void addToSchedule(String subjectID, String classID){
-        mData.child(FDUtils.SCHEDULE)
-                .child(studentID)
-                .push()
-                .setValue(new RegisteredSubject(classID, subjectID, nextCourse, nextSemester));
+        ArrayList<RegisteredSubject> list = studentData.getSchedule();
+        list.add(new RegisteredSubject(classID, subjectID, nextCourse, nextSemester));
+        mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.SCHEDULE).setValue(list);
     }
 
     private void clearData(){
@@ -908,53 +925,18 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     public void removeSubjectFromSchedule(final ClassesRegistration registration){
         pbRegistration.setVisibility(View.VISIBLE);
-        mData.child(FDUtils.SCHEDULE).child(studentID).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String childKey = dataSnapshot.getKey();
-                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                if(childKey != null
-                        && registeredSubject != null
-                        && registeredSubject.getReg_sub().equals(registration.getClass_id())
-                        && registeredSubject.getSubject_id().equals(registration.getSubject_id())
-                        && registeredSubject.getSemester().equals(registration.getSemester())
-                        && registeredSubject.getCourse().equals(registration.getCourse())){
-                    mData.child(FDUtils.SCHEDULE).child(studentID).child(childKey).removeValue();
-                }
+        ArrayList<RegisteredSubject> list = studentData.getSchedule();
+        for(RegisteredSubject registeredSubject : list){
+            if(registeredSubject.getReg_sub().equals(registration.getClass_id())
+                    && registeredSubject.getSubject_id().equals(registration.getSubject_id())
+                    && registeredSubject.getSemester().equals(registration.getSemester())
+                    && registeredSubject.getCourse().equals(registration.getCourse())){
+                list.remove(registeredSubject);
+                break;
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        mData.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                removeStudentFromClass(registration);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        }
+        mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.SCHEDULE).setValue(list);
+        removeStudentFromClass(registration);
     }
 
     private void removeStudentFromClass(final ClassesRegistration registration){
@@ -1026,7 +1008,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 clearData();
                 initWeekTime();
-                getRegisteredSubject();
+                getStudentData();
             }
 
             @Override

@@ -19,6 +19,7 @@ import com.example.monsanity.edusoft.adapter.ExamListAdapter;
 import com.example.monsanity.edusoft.container.Exam;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
+import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.main.MainActivity;
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +47,7 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
     private ArrayList<Exam> midExamList;
     private ArrayList<Exam> finalExamList;
     private boolean isDataLoaded;
+    Student studentData;
 
     public static ExamFragment newInstance() {
         return new ExamFragment();
@@ -88,15 +90,17 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
         finalExamList = new ArrayList<>();
 
         mData = MainActivity.mData;
-        mData.child(FDUtils.SCHEDULE).child(MainActivity.userID).addChildEventListener(new ChildEventListener() {
+        getStudentData();
+    }
+
+    private void getStudentData(){
+        studentData = MainActivity.student;
+        mData.child(FDUtils.STUDENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                RegisteredSubject registeredSubject = dataSnapshot.getValue(RegisteredSubject.class);
-                if(registeredSubject != null
-                        && registeredSubject.getCourse().equals(MainActivity.currentYear)
-                        && registeredSubject.getSemester().equals(MainActivity.currentSem)
-                        && !registeredSubjects.contains(registeredSubject)){
-                    registeredSubjects.add(registeredSubject);
+                Student student = dataSnapshot.getValue(Student.class);
+                if(student != null && student.getId().equals(studentData.getId())){
+                    studentData = student;
                 }
             }
 
@@ -124,6 +128,16 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
         mData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(studentData.getSchedule() != null){
+                    for(RegisteredSubject registeredSubject : studentData.getSchedule()){
+                        if(registeredSubject != null
+                                && registeredSubject.getCourse().equals(MainActivity.currentYear)
+                                && registeredSubject.getSemester().equals(MainActivity.currentSem)
+                                && !registeredSubjects.contains(registeredSubject)){
+                            registeredSubjects.add(registeredSubject);
+                        }
+                    }
+                }
                 getSubjectDetail();
             }
 
