@@ -58,13 +58,13 @@ public class MenuFragment extends Fragment {
     private void initData(){
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
         listItems = new ArrayList<>();
-        listItems.add(new MenuListItem("TIMETABLE", R.drawable.timetable));
-        listItems.add(new MenuListItem("MY CLASSES", R.drawable.blackboard));
+        listItems.add(new MenuListItem(FDUtils.TIMETABLE, R.drawable.timetable));
+        listItems.add(new MenuListItem(FDUtils.MY_CLASSES, R.drawable.blackboard));
         if(mPref.getString("role", "").equals(FDUtils.ROLE_STUDENT)){
-            listItems.add(new MenuListItem("COURSE REGISTRATION", R.drawable.registration));
-            listItems.add(new MenuListItem("EXAM SCHEDULE", R.drawable.exam_schedule));
-            listItems.add(new MenuListItem("SCHOOL FEE", R.drawable.school_fee));
-            listItems.add(new MenuListItem("STUDENT MARK", R.drawable.student_mark));
+            listItems.add(new MenuListItem(FDUtils.COURSE_REGISTRATION, R.drawable.registration));
+            listItems.add(new MenuListItem(FDUtils.EXAM_SCHEDULE, R.drawable.exam_schedule));
+            listItems.add(new MenuListItem(FDUtils.SCHOOL_FEE, R.drawable.school_fee));
+            listItems.add(new MenuListItem(FDUtils.MY_GRADE, R.drawable.student_mark));
         }
         listAdapter = new MenuListAdapter(listItems, getActivity());
         rvMenuList.setAdapter(listAdapter);

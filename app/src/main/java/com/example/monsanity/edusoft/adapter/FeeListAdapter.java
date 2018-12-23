@@ -47,6 +47,7 @@ public class FeeListAdapter extends RecyclerView.Adapter<FeeListAdapter.ViewHold
 
     public void setItems(List<Subjects> items){
         this.items = items;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

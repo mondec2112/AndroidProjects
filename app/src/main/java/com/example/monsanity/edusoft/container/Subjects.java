@@ -16,6 +16,7 @@ public class Subjects {
     int type;
     int fee;
     int year;
+    String course;
 
     public Subjects() {
     }
@@ -117,5 +118,13 @@ public class Subjects {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 }

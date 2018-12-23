@@ -36,6 +36,7 @@ import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.SlotContainer;
 import com.example.monsanity.edusoft.container.Student;
+import com.example.monsanity.edusoft.container.StudentFee;
 import com.example.monsanity.edusoft.container.SubjectIDContainer;
 import com.example.monsanity.edusoft.container.Subjects;
 import com.example.monsanity.edusoft.container.WeekTime;
@@ -824,6 +825,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                                     .setValue(studentList);
 
                                             addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                            addToFee(registration);
                                         }else{
                                             Toast.makeText(getContext(), labLesson.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
                                             initData();
@@ -839,6 +841,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                                 .setValue(studentList);
 
                                         addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                        addToFee(registration);
                                     }
                                     // Class does not contain lab sessions
                                 }else if(classes.getStudent_list() != null){
@@ -852,6 +855,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                                 .setValue(studentList);
 
                                         addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                        addToFee(registration);
                                     }else{
                                         Toast.makeText(getContext(), classes.getSubject_name() + " is full!", Toast.LENGTH_SHORT).show();
                                         initData();
@@ -863,8 +867,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                                             .child(childKey)
                                             .child("student_list")
                                             .setValue(studentList);
-
                                     addToSchedule(classes.getSubject_id(), classes.getClass_id());
+                                    addToFee(registration);
                                 }
                             }
 
@@ -915,6 +919,28 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.SCHEDULE).setValue(list);
     }
 
+    private void addToFee(final ClassesRegistration registeredClass){
+        StudentFee currentFee = studentData.getFee();
+        int subjectCredit = registeredClass.getCredit();
+        int subjectFee = registeredClass.getCredit() * MainActivity.credit_unit;
+        currentFee.setCredit(currentFee.getCredit() + subjectCredit);
+        currentFee.setTuition_credit(currentFee.getTuition_credit() + subjectCredit);
+        currentFee.setPayable_fee(currentFee.getPayable_fee() + subjectFee);
+        currentFee.setSem_fee(currentFee.getSem_fee() + subjectFee);
+        mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.FEE).setValue(currentFee);
+    }
+
+    private void decreaseFee(final ClassesRegistration registeredClass){
+        StudentFee currentFee = studentData.getFee();
+        int subjectCredit = registeredClass.getCredit();
+        int subjectFee = registeredClass.getCredit() * MainActivity.credit_unit;
+        currentFee.setCredit(currentFee.getCredit() - subjectCredit);
+        currentFee.setTuition_credit(currentFee.getTuition_credit() - subjectCredit);
+        currentFee.setPayable_fee(currentFee.getPayable_fee() - subjectFee);
+        currentFee.setSem_fee(currentFee.getSem_fee() - subjectFee);
+        mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.FEE).setValue(currentFee);
+    }
+
     private void clearData(){
         registrationList.clear();
         classesRegistrationList.clear();
@@ -936,6 +962,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             }
         }
         mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.SCHEDULE).setValue(list);
+        decreaseFee(registration);
         removeStudentFromClass(registration);
     }
 

@@ -19,6 +19,13 @@ public class FDUtils {
     public static final String COURSE_UTILS = "course_utils";
     public static final String REGISTRATION = "registration";
 
+    public static final String TIMETABLE = "TIMETABLE";
+    public static final String MY_CLASSES = "MY CLASSES";
+    public static final String COURSE_REGISTRATION = "COURSE REGISTRATION";
+    public static final String EXAM_SCHEDULE = "EXAM SCHEDULE";
+    public static final String SCHOOL_FEE = "SCHOOL FEE";
+    public static final String MY_GRADE = "MY GRADE";
+
     public static final int SUBJECT_NOT_TAKEN = 0;
     public static final int SUBJECT_ON_GOING = 1;
     public static final int SUBJECT_TAKEN = 2;

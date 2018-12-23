@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
     public static String role;
     public static String currentSem;
     public static String currentYear;
+    public static String nextSem;
+    public static String nextYear;
+    public static int credit_unit;
+    public static int credit_unit_linking;
 
     public static Student student;
     public static Lecturer lecturer;
@@ -545,6 +549,14 @@ public class MainActivity extends AppCompatActivity {
                     String data[] = currentCourse.split(" ");
                     currentSem = data[0];
                     currentYear = data[1];
+
+                    String nextCourse = courseUtils.getNext_course();
+                    data = nextCourse.split(" ");
+                    nextSem = data[0];
+                    nextYear = data[1];
+
+                    credit_unit = courseUtils.getCredit_unit();
+                    credit_unit_linking = courseUtils.getCredit_unit_linking();
                 }
             }
 

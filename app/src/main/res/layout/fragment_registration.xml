@@ -7,7 +7,7 @@
     tools:context=".main.menu.registration.RegistrationFragment"
     android:background="@color/color_background_grey">
 
-    <include layout="@layout/header_layout"/>
+    <include layout="@layout/header_search_layout"/>
 
     <ProgressBar
         android:layout_width="wrap_content"

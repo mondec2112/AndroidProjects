@@ -10,11 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.FeeListAdapter;
+import com.example.monsanity.edusoft.container.Classes;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
@@ -32,7 +37,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FeeFragment extends Fragment {
+public class FeeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     TextView tvCredit;
     TextView tvTuitionCredit;
@@ -42,12 +47,16 @@ public class FeeFragment extends Fragment {
     RecyclerView rvFeeSubjectList;
     FeeListAdapter feeListAdapter;
     ProgressBar pbFeeLoading;
+    ImageView ivHeaderBack;
+    TextView tvHeaderTitle;
+    Spinner spFee;
 
     private DatabaseReference mData;
     private String studentID;
     private ArrayList<RegisteredSubject> registeredSubjects;
     private ArrayList<Subjects> subjectsDetailList;
     private Student studentData;
+    ArrayList<String> courseList;
 
     public static FeeFragment newInstance() {
         return new FeeFragment();
@@ -74,11 +83,22 @@ public class FeeFragment extends Fragment {
         tvPayableFee = view.findViewById(R.id.tv_fee_payable_fee);
         rvFeeSubjectList = view.findViewById(R.id.rv_fee_subject_list);
         pbFeeLoading = view.findViewById(R.id.pb_fee_loading);
+        ivHeaderBack = view.findViewById(R.id.iv_header_back);
+        tvHeaderTitle = view.findViewById(R.id.tv_header_title);
+        spFee = view.findViewById(R.id.sp_fee);
+
+        tvHeaderTitle.setText(FDUtils.SCHOOL_FEE);
+        ivHeaderBack.setOnClickListener(this);
+        spFee.setOnItemSelectedListener(this);
     }
 
     private void initData(){
         this.mData = MainActivity.mData;
         this.studentID = MainActivity.userID;
+
+        courseList = new ArrayList<>();
+        courseList.add(MainActivity.currentSem + " " + MainActivity.currentYear);
+        courseList.add(MainActivity.nextSem + " " + MainActivity.nextYear);
 
         getStudentData();
     }
@@ -87,8 +107,10 @@ public class FeeFragment extends Fragment {
         registeredSubjects = new ArrayList<>();
         if(studentData.getSchedule() != null){
             for(RegisteredSubject registeredSubject : studentData.getSchedule()){
-                if (registeredSubject.getCourse().equals(MainActivity.currentYear)
+                if ((registeredSubject.getCourse().equals(MainActivity.currentYear)
                         && registeredSubject.getSemester().equals(MainActivity.currentSem))
+                        || (registeredSubject.getCourse().equals(MainActivity.nextYear)
+                        && registeredSubject.getSemester().equals(MainActivity.nextSem)))
                     registeredSubjects.add(registeredSubject);
             }
         }
@@ -159,6 +181,7 @@ public class FeeFragment extends Fragment {
                     for(RegisteredSubject registeredSubject : registeredSubjects){
                         if(subject.getId().equals(registeredSubject.getSubject_id())){
                             subject.setFee(Integer.valueOf(subject.getCredit()) * 58);
+                            subject.setCourse(registeredSubject.getSemester() + " " + registeredSubject.getCourse());
                             subjectsDetailList.add(subject);
                         }
                     }
@@ -194,6 +217,13 @@ public class FeeFragment extends Fragment {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 rvFeeSubjectList.setAdapter(feeListAdapter);
                 rvFeeSubjectList.setLayoutManager(layoutManager);
+
+                // Creating adapter for spinner
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
+                // Drop down layout style - list view with radio button
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spFee.setAdapter(dataAdapter);
+
                 pbFeeLoading.setVisibility(View.INVISIBLE);
             }
 
@@ -204,4 +234,29 @@ public class FeeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_header_back:
+                getActivity().finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String courseFilter = adapterView.getItemAtPosition(i).toString();
+        ArrayList<Subjects> feeList = new ArrayList<>();
+        for(Subjects fee : subjectsDetailList){
+            if(fee.getCourse().equals(courseFilter)){
+                feeList.add(fee);
+            }
+        }
+        feeListAdapter.setItems(feeList);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
