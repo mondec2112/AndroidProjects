@@ -70,16 +70,16 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 case 0:
                     context.startActivity(new Intent(context, TimetableActivity.class));
                     break;
-                case 2:
+                case 1:
                     context.startActivity(new Intent(context, RegistrationActivity.class));
                     break;
-                case 3:
+                case 2:
                     context.startActivity(new Intent(context, ExamActivity.class));
                     break;
-                case 4:
+                case 3:
                     context.startActivity(new Intent(context, FeeActivity.class));
                     break;
-                case 5:
+                case 4:
                     context.startActivity(new Intent(context, GradeActivity.class));
             }
         }

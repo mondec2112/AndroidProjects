@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class TimetableFragment extends Fragment implements CalendarPickerController, MonthLoader.MonthChangeListener, WeekView.EventClickListener {
+public class TimetableFragment extends Fragment implements CalendarPickerController, MonthLoader.MonthChangeListener, WeekView.EventClickListener, View.OnClickListener {
 
     WeekView mWeekView;
 //    AgendaCalendarView agendaCalendarView;
@@ -61,6 +62,9 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
     String role;
     String username;
     Student studentData;
+
+    ImageView ivHeaderBack;
+    TextView tvHeaderTitle;
 
     public static TimetableFragment newInstance() {
         TimetableFragment timetableFragment = new TimetableFragment();
@@ -94,6 +98,11 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
+
+        ivHeaderBack = view.findViewById(R.id.iv_header_back);
+        tvHeaderTitle = view.findViewById(R.id.tv_header_title);
+        ivHeaderBack.setOnClickListener(this);
+        tvHeaderTitle.setText(FDUtils.TIMETABLE);
 
 // Set long press listener for events.
 //        mWeekView.setEventLongPressListener(mEventLongPressListener);
@@ -506,5 +515,14 @@ public class TimetableFragment extends Fragment implements CalendarPickerControl
         tvClassEndTime.setText("To: " + dateFormat.format(event.getEndTime().getTime()));
 
         dialog.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_header_back:
+                getActivity().finish();
+                break;
+        }
     }
 }

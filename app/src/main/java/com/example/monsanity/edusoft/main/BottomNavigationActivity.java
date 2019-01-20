@@ -39,9 +39,9 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 case R.id.navigation_menu:
                     selectedFragment = MenuFragment.newInstance();
                     break;
-                case R.id.navigation_notifications:
-                    selectedFragment = NotificationFragment.newInstance();
-                    break;
+//                case R.id.navigation_notifications:
+//                    selectedFragment = NotificationFragment.newInstance();
+//                    break;
                 case R.id.navigation_profile:
                     selectedFragment = ProfileFragment.newInstance();
                     break;

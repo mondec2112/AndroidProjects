@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedListener {
+public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedListener, View.OnClickListener {
 
     TabLayout tabLayout;
     RecyclerView rvExamList;
@@ -48,6 +49,9 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
     private ArrayList<Exam> finalExamList;
     private boolean isDataLoaded;
     Student studentData;
+
+    ImageView ivHeaderBack;
+    TextView tvHeaderTitle;
 
     public static ExamFragment newInstance() {
         return new ExamFragment();
@@ -71,6 +75,11 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
         rvExamList = view.findViewById(R.id.rv_exam_list);
         tvExamNotFound = view.findViewById(R.id.tv_exam_blank);
         pbExamLoading = view.findViewById(R.id.pb_exam_loading);
+
+        ivHeaderBack = view.findViewById(R.id.iv_header_back);
+        tvHeaderTitle = view.findViewById(R.id.tv_header_title);
+        ivHeaderBack.setOnClickListener(this);
+        tvHeaderTitle.setText(FDUtils.EXAM_SCHEDULE);
 
         initTab();
     }
@@ -298,5 +307,14 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_header_back:
+                getActivity().finish();
+                break;
+        }
     }
 }

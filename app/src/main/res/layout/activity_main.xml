@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.monsanity.edusoft.main.MainActivity">
+    tools:context="com.example.monsanity.edusoft.main.MainActivity"
+    android:paddingLeft="@dimen/common_30_dp"
+    android:paddingRight="@dimen/common_30_dp">
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -23,34 +25,44 @@
 
     <EditText
         android:id="@+id/edtUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="username or email... "
+        android:padding="@dimen/common_10_dp"
+        android:hint="your email... "
         android:text="mondec2312@gmail.com"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edtPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/edtUsername"
         android:layout_below="@+id/edtUsername"
         android:layout_marginTop="28dp"
         android:ems="10"
-        android:hint="password"
+        android:padding="@dimen/common_10_dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="password..."
         android:text="phuong2112"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnSignIn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edtPassword"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_button"
         android:layout_marginTop="81dp"
+        android:padding="@dimen/common_10_dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/common_15_dp"
         android:text="sign in " />
+
+
 </RelativeLayout>

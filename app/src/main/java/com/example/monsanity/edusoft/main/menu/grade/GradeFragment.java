@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GradeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class GradeFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     TextView tvAverage100;
     TextView tvAverage4;
@@ -63,6 +64,9 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
     ArrayList<RegisteredSubject> subjectList;
     ArrayList<Subjects> subjectDetailList;
     ArrayList<StudentGrade> studentGrades;
+
+    ImageView ivHeaderBack;
+    TextView tvHeaderTitle;
 
     public static GradeFragment newInstance() {
         return new GradeFragment();
@@ -93,6 +97,11 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
         pbGradeLoading = view.findViewById(R.id.pb_grade_loading);
 
         spGradeFilter.setOnItemSelectedListener(this);
+
+        ivHeaderBack = view.findViewById(R.id.iv_header_back);
+        tvHeaderTitle = view.findViewById(R.id.tv_header_title);
+        ivHeaderBack.setOnClickListener(this);
+        tvHeaderTitle.setText(FDUtils.MY_GRADE);
 
     }
 
@@ -341,5 +350,14 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.iv_header_back:
+                getActivity().finish();
+                break;
+        }
     }
 }

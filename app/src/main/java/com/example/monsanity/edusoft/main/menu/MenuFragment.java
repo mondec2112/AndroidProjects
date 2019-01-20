@@ -59,7 +59,7 @@ public class MenuFragment extends Fragment {
         mPref = getContext().getSharedPreferences("EduSoft", MODE_PRIVATE);
         listItems = new ArrayList<>();
         listItems.add(new MenuListItem(FDUtils.TIMETABLE, R.drawable.timetable));
-        listItems.add(new MenuListItem(FDUtils.MY_CLASSES, R.drawable.blackboard));
+//        listItems.add(new MenuListItem(FDUtils.MY_CLASSES, R.drawable.blackboard));
         if(mPref.getString("role", "").equals(FDUtils.ROLE_STUDENT)){
             listItems.add(new MenuListItem(FDUtils.COURSE_REGISTRATION, R.drawable.registration));
             listItems.add(new MenuListItem(FDUtils.EXAM_SCHEDULE, R.drawable.exam_schedule));
