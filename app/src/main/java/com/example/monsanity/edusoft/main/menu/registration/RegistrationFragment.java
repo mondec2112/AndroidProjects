@@ -923,10 +923,18 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         StudentFee currentFee = studentData.getFee();
         int subjectCredit = registeredClass.getCredit();
         int subjectFee = registeredClass.getCredit() * MainActivity.credit_unit;
-        currentFee.setCredit(currentFee.getCredit() + subjectCredit);
-        currentFee.setTuition_credit(currentFee.getTuition_credit() + subjectCredit);
-        currentFee.setPayable_fee(currentFee.getPayable_fee() + subjectFee);
-        currentFee.setSem_fee(currentFee.getSem_fee() + subjectFee);
+        if(currentFee != null){
+            currentFee.setCredit(currentFee.getCredit() + subjectCredit);
+            currentFee.setTuition_credit(currentFee.getTuition_credit() + subjectCredit);
+            currentFee.setPayable_fee(currentFee.getPayable_fee() + subjectFee);
+            currentFee.setSem_fee(currentFee.getSem_fee() + subjectFee);
+        }else{
+            currentFee = new StudentFee();
+            currentFee.setCredit(subjectCredit);
+            currentFee.setTuition_credit(subjectCredit);
+            currentFee.setPayable_fee(subjectFee);
+            currentFee.setSem_fee(subjectFee);
+        }
         mData.child(FDUtils.STUDENTS).child(studentKey).child(FDUtils.FEE).setValue(currentFee);
     }
 
