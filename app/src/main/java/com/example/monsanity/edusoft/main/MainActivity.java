@@ -15,10 +15,14 @@ import android.widget.Toast;
 
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
+import com.example.monsanity.edusoft.container.ClassGrade;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
+import com.example.monsanity.edusoft.container.StudentGrade;
+import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.container.TakenSubjects;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -219,14 +223,15 @@ public class MainActivity extends AppCompatActivity {
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT090IU"));
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT017IU"));
 //        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("MA020IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT131IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("MA026IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT079IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT092IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT097IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT082IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT091IU"));
-//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("IT056IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("EN007IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("EN008IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("EN011IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("EN012IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("MA001IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("PT001IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("PT002IU"));
+//        mData.child(FDUtils.REQUIRED).child("CSE").child("CS").push().setValue(new TakenSubjects("PH013IU"));
+
 //        mData.child("lecturer")
 //                .child("CSE")
 //                .push().setValue(
@@ -399,7 +404,15 @@ public class MainActivity extends AppCompatActivity {
 //        mData.child("subjects").push().setValue(new Subjects("IT006IU","Web Application Development", "4", "CS", "CSE"));
 //        mData.child("subjects").push().setValue(new Subjects("IT007IU","Theoretical Models in Computing", "4", "CS", "CSE"));
 //        mData.child("subjects").push().setValue(new Subjects("IT008IU","Principles of Programming Languages", "4", "CS", "CSE"));
-//        mData.child("subjects").push().setValue(new Subjects("IT009IU","Software Project Management", "4", "CS", "CSE"));
+//        mData.child("subjects").push().setValue(new Subjects("EN007IU","Writing AE1", 2, "EN", "EN"));
+//        mData.child("subjects").push().setValue(new Subjects("EN008IU","Listening AE1", 2, "EN", "EN"));
+//        mData.child("subjects").push().setValue(new Subjects("EN011IU","Writing AE2", 2, "EN", "EN"));
+//        mData.child("subjects").push().setValue(new Subjects("EN012IU","Speaking AE2", 2, "EN", "EN"));
+//        mData.child("subjects").push().setValue(new Subjects("MA001IU","Calculus 1", 4, "MA", "MA"));
+//        mData.child("subjects").push().setValue(new Subjects("PT001IU","Physical Training 1", 3, "PT", "PT"));
+//        mData.child("subjects").push().setValue(new Subjects("PT002IU","Physical Training 2", 3, "PT", "PT"));
+//        mData.child("subjects").push().setValue(new Subjects("PH013IU","Physics 1", 2, "PH", "PH"));
+
 
 //        final ArrayList<String> studentList = new ArrayList<>();
 //        studentList.add("ITITIU14001");
@@ -479,25 +492,25 @@ public class MainActivity extends AppCompatActivity {
 //        studentGrades.add(new StudentGrade(
 //                "ITITIU14036",
 //                -1,
-//                89,
-//                -1,
-//                -1,
-//                "N/A"));
+//                80,
+//                100,
+//                98,
+//                "A+"));
 //        studentGrades.add(new StudentGrade(
 //                "ITITIU14081",
 //                -1,
-//                85,
-//                -1,
-//                -1,
-//                "N/A"));
+//                100,
+//                100,
+//                100,
+//                "A+"));
 //        studentGrades.add(new StudentGrade(
 //                "ITITIU14020",
 //                -1,
-//                77,
-//                -1,
-//                -1,
-//                "N/A"));
-//        ClassGrade classGrade = new ClassGrade(30, 30, 40, "2018-2019", "fall", "ITIT20N11", "IT033IU", studentGrades);
+//                100,
+//                80,
+//                82,
+//                "A"));
+//        ClassGrade classGrade = new ClassGrade(0, 20, 80, "2016-2017", "spring", "PT001N11", "PT001IU", studentGrades);
 //        mData.child(FDUtils.GRADE).push().setValue(classGrade);
 
 //        ArrayList<SumGrade> sumGrades = new ArrayList<>();
@@ -698,6 +711,15 @@ public class MainActivity extends AppCompatActivity {
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     Student studentData = dataSnapshot.getValue(Student.class);
                                     if(edtUsername.getText().toString().equals(studentData.getEmail())){
+                                        String key = dataSnapshot.getKey();
+//                                        ArrayList<String> sub_done = studentData.getSub_done();
+//                                        sub_done.add("EN007IU");
+//                                        sub_done.add("EN008IU");
+//                                        sub_done.add("EN011IU");
+//                                        sub_done.add("EN012IU");
+//                                        sub_done.add("MA001IU");
+//                                        sub_done.add("PT001IU");
+//                                        mData.child(FDUtils.STUDENTS).child(key).child("sub_done").setValue(sub_done);
                                         String name = studentData.getName();
                                         String email = studentData.getEmail();
                                         userID = studentData.getId();

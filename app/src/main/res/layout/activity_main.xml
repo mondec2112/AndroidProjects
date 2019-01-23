@@ -33,8 +33,7 @@
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:padding="@dimen/common_10_dp"
-        android:hint="your email... "
-        android:text="mondec2312@gmail.com"
+        android:hint="email"
         android:inputType="textPersonName" />
 
     <EditText
@@ -47,8 +46,7 @@
         android:ems="10"
         android:padding="@dimen/common_10_dp"
         android:background="@drawable/rounded_edittext"
-        android:hint="password..."
-        android:text="phuong2112"
+        android:hint="password"
         android:inputType="textPassword" />
 
     <Button

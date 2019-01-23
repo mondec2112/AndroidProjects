@@ -125,7 +125,13 @@ public class GradeFragment extends Fragment implements AdapterView.OnItemSelecte
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Student student = dataSnapshot.getValue(Student.class);
                 if(student != null && student.getId().equals(studentID)){
+                    String key = dataSnapshot.getKey();
                     studentData = student;
+//                    ArrayList<RegisteredSubject> registeredSubjects = studentData.getSchedule();
+//                    registeredSubjects.add(new RegisteredSubject("EN012N11", "EN012IU", "2016-2017", "spring"));
+//                    registeredSubjects.add(new RegisteredSubject("MA001N11", "MA001IU", "2016-2017", "spring"));
+//                    registeredSubjects.add(new RegisteredSubject("PT001N11", "PT001IU", "2016-2017", "spring"));
+//                    mData.child(FDUtils.STUDENTS).child(key).child("schedule").setValue(registeredSubjects);
                     if(studentData.getGrade() != null){
                         setStudentGrade();
                         setStudentRank(studentData.getGrade().getRank());
