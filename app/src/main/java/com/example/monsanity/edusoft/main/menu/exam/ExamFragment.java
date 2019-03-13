@@ -282,15 +282,19 @@ public class ExamFragment extends Fragment implements TabLayout.OnTabSelectedLis
         if (isDataLoaded){
             switch (tab.getPosition()){
                 case 0:
-                    examListAdapter.setItems(midExamList);
-                    examListAdapter.notifyDataSetChanged();
+                    if(examListAdapter != null){
+                        examListAdapter.setItems(midExamList);
+                        examListAdapter.notifyDataSetChanged();
+                    }
                     if(midExamList.size() == 0){
                         tvExamNotFound.setVisibility(View.VISIBLE);
                     }
                     break;
                 case 1:
-                    examListAdapter.setItems(finalExamList);
-                    examListAdapter.notifyDataSetChanged();
+                    if(examListAdapter != null){
+                        examListAdapter.setItems(finalExamList);
+                        examListAdapter.notifyDataSetChanged();
+                    }
                     if(finalExamList.size() == 0){
                         tvExamNotFound.setVisibility(View.VISIBLE);
                     }

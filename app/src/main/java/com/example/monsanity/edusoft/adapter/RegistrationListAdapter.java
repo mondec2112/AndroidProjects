@@ -42,7 +42,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setIsRecyclable(false);
+        holder.setIsRecyclable(true);
         holder.tvSubjectName.setText(items.get(position).getSubject_name());
         holder.tvSubjectID.setText("Subject ID: " + items.get(position).getSubject_id());
         holder.tvClassID.setText("Class ID: " + items.get(position).getClass_id());

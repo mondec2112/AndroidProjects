@@ -16,12 +16,16 @@ import android.widget.Toast;
 import com.example.monsanity.edusoft.R;
 import com.example.monsanity.edusoft.adapter.CourseUtils;
 import com.example.monsanity.edusoft.container.ClassGrade;
+import com.example.monsanity.edusoft.container.Classes;
+import com.example.monsanity.edusoft.container.CourseRegistration;
+import com.example.monsanity.edusoft.container.Exam;
 import com.example.monsanity.edusoft.container.FDUtils;
 import com.example.monsanity.edusoft.container.Lecturer;
 import com.example.monsanity.edusoft.container.RegisteredSubject;
 import com.example.monsanity.edusoft.container.Student;
 import com.example.monsanity.edusoft.container.StudentGrade;
 import com.example.monsanity.edusoft.container.Subjects;
+import com.example.monsanity.edusoft.container.SumGrade;
 import com.example.monsanity.edusoft.container.TakenSubjects;
 import com.example.monsanity.edusoft.service.retrofit.APIService;
 import com.example.monsanity.edusoft.service.retrofit.ApiUtils;
@@ -120,36 +124,36 @@ public class MainActivity extends AppCompatActivity {
 //
 //        Exam exam = new Exam();
 //        exam.setCourse("2018-2019");
-//        exam.setCourse("fall");
+//        exam.setSemester("spring");
 //        exam.setExam_type("midterm");
-//        exam.setSubject_id("IT097IU");
+//        exam.setSubject_id("IT091IU");
 //        exam.setCombined_exam(2);
 //        exam.setExam_team(1);
-//        exam.setQuantity(studentList.size());
-//        exam.setExam_date("2018-11-09");
+//        exam.setQuantity(30);
+//        exam.setExam_date("2019-03-07");
 //        exam.setStart_hour("08:00");
-//        exam.setNum_minute(90);
+//        exam.setNum_minute(120);
 //        exam.setRoom("A2.412");
 //        exam.setExam_week(1);
 //        exam.setStudent_list(studentList);
-//        exam.setProctor_id("IT001");
+//        exam.setProctor_id("IT01");
 //        mData.child(FDUtils.EXAM).push().setValue(exam);
 //
 //        exam = new Exam();
 //        exam.setCourse("2018-2019");
-//        exam.setCourse("fall");
+//        exam.setSemester("spring");
 //        exam.setExam_type("midterm");
-//        exam.setSubject_id("IT079IU");
+//        exam.setSubject_id("IT056IU");
 //        exam.setCombined_exam(2);
 //        exam.setExam_team(1);
 //        exam.setQuantity(30);
-//        exam.setExam_date("2018-11-10");
-//        exam.setStart_hour("10:15");
-//        exam.setNum_minute(60);
+//        exam.setExam_date("2019-03-09");
+//        exam.setStart_hour("13:00");
+//        exam.setNum_minute(90);
 //        exam.setRoom("A2.503");
 //        exam.setExam_week(1);
 //        exam.setStudent_list(studentList);
-//        exam.setProctor_id("IT002");
+//        exam.setProctor_id("IT02");
 //        mData.child(FDUtils.EXAM).push().setValue(exam);
 
 //        ArrayList<String> subjectDone = new ArrayList<>();
@@ -452,65 +456,68 @@ public class MainActivity extends AppCompatActivity {
 //        });
 ////
 //        Classes classes = new Classes();
-//        classes.setSubject_id("IT006IU");
-//        classes.setClass_id("ITIT06N11");
-//        classes.setClass_size(40);
+//        classes.setSubject_id("MA020IU");
+//        classes.setClass_id("MA020N11");
+//        classes.setClass_size(70);
 //        classes.setCourse("2018-2019");
-//        classes.setSemester("spring");
+//        classes.setSemester("summer");
 ////        classes.setGroup("01");
-//        classes.setInstructor_id("IT002");
-//        classes.setRoom("A2.405");
-//        classes.setStart_slot(7);
+//        classes.setInstructor_id("IT03");
+//        classes.setRoom("A1.412");
+//        classes.setStart_slot(1);
 //        classes.setSum_slot(3);
-//        classes.setClass_date(getStudyDates("2018-02-06", "2018-05-01"));
-
+//        classes.setClass_date(getStudyDates("2019-07-06", "2019-08-31"));
+//
 //        Classes labClasses1 = new Classes();
-//        labClasses1.setClass_date(getStudyDates("2018-03-04", "2018-04-22"));
+//        labClasses1.setClass_date(getStudyDates("2019-07-19", "2019-08-09"));
 //        labClasses1.setClass_size(25);
-//        labClasses1.setInstructor_id("IT001");
-//        labClasses1.setRoom("LA1.603");
-//        labClasses1.setStart_slot(7);
-//        labClasses1.setSum_slot(3);
+//        labClasses1.setInstructor_id("IT02");
+//        labClasses1.setRoom("LA1.601");
+//        labClasses1.setStart_slot(1);
+//        labClasses1.setSum_slot(4);
 //
 //        Classes labClasses2 = new Classes();
-//        labClasses2.setClass_date(getStudyDates("2018-03-06", "2018-04-24"));
+//        labClasses2.setClass_date(getStudyDates("2019-07-19", "2019-08-09"));
 //        labClasses2.setClass_size(25);
-//        labClasses2.setInstructor_id("IT001");
-//        labClasses2.setRoom("LA1.605");
-//        labClasses2.setStart_slot(1);
-//        labClasses2.setSum_slot(3);
-
+//        labClasses2.setInstructor_id("IT02");
+//        labClasses2.setRoom("LA1.602");
+//        labClasses2.setStart_slot(7);
+//        labClasses2.setSum_slot(4);
+//
 //        ArrayList<Classes> labLessons = new ArrayList<>();
 //        labLessons.add(labClasses1);
 //        labLessons.add(labClasses2);
-//        classes.setLab_lessons(labLessons);
+////        classes.setLab_lessons(labLessons);
 //        mData.child(FDUtils.COURSES).push().setValue(classes);
 
-//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("spring").push().setValue(new CourseRegistration("IT006IU", "ITIT06N11", true));
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("summer").push().setValue(new CourseRegistration("EE053IU", "EE053N11", true));
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("summer").push().setValue(new CourseRegistration("IT017IU", "IT017N11", true));
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("summer").push().setValue(new CourseRegistration("EE053IU", "EE053N11", true));
+//        mData.child(FDUtils.REGISTRATION).child("2018-2019").child("summer").push().setValue(new CourseRegistration("MA020IU", "MA020N11", true));
 
 //        ArrayList<StudentGrade> studentGrades = new ArrayList<>();
 //        studentGrades.add(new StudentGrade(
+//                "ITITIU14020",
+//                -1,
+//                67,
+//                -1,
+//                -1,
+//                "N/A"));
+//        studentGrades.add(new StudentGrade(
 //                "ITITIU14036",
 //                -1,
-//                80,
-//                100,
-//                98,
-//                "A+"));
+//                77,
+//                -1,
+//                -1,
+//                "N/A"));
 //        studentGrades.add(new StudentGrade(
 //                "ITITIU14081",
 //                -1,
-//                100,
-//                100,
-//                100,
-//                "A+"));
-//        studentGrades.add(new StudentGrade(
-//                "ITITIU14020",
-//                -1,
-//                100,
 //                80,
-//                82,
-//                "A"));
-//        ClassGrade classGrade = new ClassGrade(0, 20, 80, "2016-2017", "spring", "PT001N11", "PT001IU", studentGrades);
+//                -1,
+//                -1,
+//                "N/A"));
+//        ClassGrade classGrade = new ClassGrade(30, 30, 40, "2018-2019", "spring", "ITIT91N11", "IT091IU", studentGrades);
 //        mData.child(FDUtils.GRADE).push().setValue(classGrade);
 
 //        ArrayList<SumGrade> sumGrades = new ArrayList<>();
